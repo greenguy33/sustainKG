@@ -1,101 +1,140 @@
+<template>
+
+    <div>
+
+        <!--<router-link id="'logo" to="/home">hahaha</router-link>-->
+        <!--<img src="./assets/uci_logo.jpeg" width="100%">-->
+        <el-header style="text-align: right;height: 40px;">
+            <div class="grid-content ">
+                <template >
+                    <el-button type="text" @click="onTapLogin" v-show="showLogin">Login</el-button>
+                    <el-tag v-show="!showLogin">{{username}}</el-tag>
+                    <el-button type="text" @click="logout">Logout</el-button>
+                </template>
+            </div>
+        </el-header>
+
+        <el-dialog
+                title="登陆"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center>
+            <span>用户名<el-input v-model="username" placeholder="请输入用户名"></el-input></span>
+            <br><br>
+            <span>密码<el-input type="password" v-model="password" placeholder="请输入密码"></el-input></span>
+
+            <span slot="footer" class="dialog-footer">
+            <el-button @click.native="centerDialogVisible=false">Cancel</el-button>
+            <el-button type="primary" @click.native="handleShow" >Yes</el-button>
+          </span>
+        </el-dialog>
+
+        <router-view> </router-view>
+
+
+    </div>
+</template>
+
+<script>
+
+    import Img from './assets/uci_logo.jpeg'
+
+    export default {
+        data() {
+            return {
+                username:'',
+                password:'',
+                showLogin:true,
+                centerDialogVisible:false,
+                img:Img
+
+            }
+        },
+
+        methods:{
+            handleShow:function(){
+                let that = this;
+                let user = 'sqy';
+                let pass = '123';
+                if(user === this.username && pass === this.password)
+                {
+                    this.showLogin=false;
+                    this.centerDialogVisible=false;
+                    // this.$router.push({ path: '/home' })
+                    this.$axios({
+                        url:'/getUserGraph',
+                        method:'post',
+                        data:{
+                            user : "some_user"
+                        }
+
+                    }).then(response=>{
+                        console.log(response)
+                    })
+
+                }
+                else{
+                    alert('Wrong username or password')
+                }
+                console.log(this.username,this.password)
+
+            },
+
+            onTapLogin:function () {
+                this.centerDialogVisible=true
+            },
+
+            logout:function () {
+                this.showLogin = true;
+                this.username = '';
+                this.password = '';
+                this.$router.push({ path: '/' })
+            },
 
 
 
+        },
 
-function doubleClick(node,nodes)
-{
+    }
+</script>
 
+<style>
+    .el-button{
+        padding: 10px 15px;
+        margin-left: 0;
+        margin-right: 10px;
+    }
+    .el-button--info{
+        background-color: #50bfff;
+        border-color: #50bfff;
+    }
+    .el-button--info:hover{
+        background-color: rgb(115,204,255);
+        border-color: rgb(115,204,255);
+    }
 
-window.console.log(node.id);
-window.console.log(nodes.length);
-
-const new_node = {'id':nodes.length,
-'factoryCode':'None',
-'label':'Device',
-'linkId':0};
-
-
-const new_link = {
-"source": node.id,
-"target": nodes.length,
-"relation": {
-"relationshipId": 200,
-"relationship": "link test",
-"created": 1574822650825,
-"lineNumber": null,
-"isSelf": false
-}
-};
-// window.console.log(new_node);
-nodes.push(new_node);
-links.push(new_link);
-
-// let new_force = d3.layout.force()//layout将json格式转化为力学图可用的格式
-//     .nodes(nodes)//设定节点数组
-//     .links(links)//设定连线数组
-//     .linkDistance(150)//连接线长度
-//     .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
-//     .on("tick", tick)//指时间间隔，隔一段时间刷新一次画面
-//     .start();//开始转换
-// console.log('force node',force.nodes());
-// console.log('force link',force.links());
-//
-// // let zoom = d3.behavior.zoom()
-// //     .scaleExtent([.4, 2])
-// //     .on("zoom", zoomed);
-//
-// // let svg = d3.select("#graph").append("svg")
-// //     .attr("pointer-event", "all")
-// //     .attr("preserveAspectRatio", "xMidYMid meet")//自适应容器大小
-// //     .attr("viewBox", "0 0 1000 1000")
-// //     // .on("dblclick", doubleClick)
-// //     .call(zoom);
-//
-// let new_circle_g =svg.selectAll("circle")
-//     .data(new_force.nodes())//表示使用force.nodes数据
-//     .enter()
-//     .append("g")
-//     .attr("class",function(node,i){
-//         console.log('new circle',node,i);
-//         return "g_circle_" + i;
-//     })//标记circle的父节点
-//     .style("cursor","pointer")
-//     .call(drag()) //将当前选中的元素传到drag函数中，使顶点可以被拖动
-//     // .on("click", (node, i) => {
-//     //     if (d3.event.defaultPrevented) return;//阻止click事件和拖拽事件冲突
-//     //     circleClick(node, i, this);
-//     // })
-//
-//     .on("dblclick", (node)=>{
-//         console.log('double click',nodes)
-//         doubleClick(node,nodes)
-//     });
-//
-// const new_circle = new_circle_g.append("circle")
-//     .style("stroke-width", "2px")
-//     .attr("r", 25)//设置圆圈半径
-//     .style("fill", function (node) { return getCircleColor(node); });
-//
-// new_circle.append("svg:title").text(function(node) {
-//     switch (node.label) {
-//         case 'Device': return node.factoryCode;
-//     }
-// });
-// let new_text = new_circle_g.append("text")
-//     .attr("dy", ".35em")
-//     .attr("text-anchor", "middle")//在圆圈中加上数据
-//     .style('fill', "#FFFFFF")
-//     .attr('x',function(d){ appendCircleText(d, this); });
-// new_text.append("svg:title").text(function(node) {
-//     switch (node.label) {
-//         case 'Device': return node.factoryCode;
-//
-//     }
-// });
-
-// function drag(){//拖拽函数
-//     return new_force.drag().on("dragstart",function(d){
-//         d3.event.sourceEvent.stopPropagation(); //取消默认事件
-//         d.fixed = false;//拖拽开始后设定被拖拽对象为固定
-//     });
-// }
+    .el-button--success{
+        background-color: #13ce66;
+        border-color: #13ce66;
+    }
+    .el-button--success:hover{
+        background-color: rgb(66,216,133);
+        border-color: rgb(66,216,133);
+    }
+    .el-button--danger{
+        background-color: #ff4949;
+        border-color: #ff4949;
+    }
+    .el-button--danger:hover{
+        background-color: rgb(255,109,109);
+        border-color: rgb(255,109,109);
+    }
+    .el-button--warning{
+        background-color: #f7ba2a;
+        border-color: #f7ba2a;
+    }
+    .el-button--warning:hover{
+        background-color: rgb(249,200,85);
+        border-color: rgb(249,200,85);
+    }
+</style>

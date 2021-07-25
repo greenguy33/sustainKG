@@ -19,7 +19,7 @@ export const getNodeSelfPath = d => {
   }
 };
 
-export const getNodesLine = d => {
+export const getNodesLine = (d,edge_line,defs)=> {
   d.sourceRadius = 26;
   d.targetRadius = 31;
   let tan = Math.abs((d.target.y - d.source.y) / (d.target.x - d.source.x)); //圆心连线tan值
@@ -81,39 +81,67 @@ export const getNodesLine = d => {
   d.y_start = ys;
   d.x_end = xt;
   d.y_end = yt;
+  // console.log('xixixi',edges_line);
+  //   edge_line.attr('marker-end', function(d,i) {
+  //       if (d.x_start < d.x_end) {
+  //           // console.log('source < end')
+  //           return  "url(#end)";
+  //       }
+  //       return ''
+  //   })
+  //       .attr('marker-start', function(d,i) {
+  //           if (d.x_start >= d.x_end) {
+  //               // console.log('source > end')
+  //               return "url(#start)";
+  //           }
+  //           return ''})
 
-  //return 'M' + xs + ' ' + ys + "L" +  + xt + ' ' + yt;//绘制直线
-  let NodesDistance = Math.sqrt(Math.pow(d.source.x - d.target.x, 2) + Math.pow(d.source.y - d.target.y, 2));
-  let rad = 200;
-  if(300 >= NodesDistance && NodesDistance > 150) {
-    rad = 300
-  } else if(450 >= NodesDistance && NodesDistance > 300) {
-    rad = 400
-  } else if (600 >= NodesDistance && NodesDistance > 450) {
-    rad = 500
-  } else if (750 >= NodesDistance && NodesDistance > 600) {
-    rad = 600
-  } else if (900 >= NodesDistance && NodesDistance > 750) {
-    rad = 700
-  } else if (1050 >= NodesDistance && NodesDistance > 900) {
-    rad = 800
-  } else if (1200 >= NodesDistance && NodesDistance > 1050) {
-    rad = 900
+  if(xs<xt) {
+
+      return 'M' + xs + ' ' + ys + "L" + +xt + ' ' + yt;//绘制直线
+  }
+else if(xs>=xt) {
+
+      return 'M' + xt + ' ' + yt + "L" + +xs + ' ' + ys;//绘制直线
+
   }
 
-  if(d.source.x < d.target.x){//绘制曲线
-    if(d.linknum < 0) {
-      return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,0 " + xt + "," + yt;
-    }else {
-      return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,1 " + xt + "," + yt;
-    }
-  } else {
-    if(d.linknum < 0) {
-      return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,1 " + xt + "," + yt;
-    }else {
-      return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,0 " + xt + "," + yt;
-    }
-  }
+
+
+
+
+  // let NodesDistance = Math.sqrt(Math.pow(d.source.x - d.target.x, 2) + Math.pow(d.source.y - d.target.y, 2));
+  // let rad = 200;
+  // if(300 >= NodesDistance && NodesDistance > 150) {
+  //   rad = 300
+  // } else if(450 >= NodesDistance && NodesDistance > 300) {
+  //   rad = 400
+  // } else if (600 >= NodesDistance && NodesDistance > 450) {
+  //   rad = 500
+  // } else if (750 >= NodesDistance && NodesDistance > 600) {
+  //   rad = 600
+  // } else if (900 >= NodesDistance && NodesDistance > 750) {
+  //   rad = 700
+  // } else if (1050 >= NodesDistance && NodesDistance > 900) {
+  //   rad = 800
+  // } else if (1200 >= NodesDistance && NodesDistance > 1050) {
+  //   rad = 900
+  // }
+
+  //
+  // if(d.source.x < d.target.x){//绘制曲线
+  //   if(d.linknum < 0) {
+  //     return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,0 " + xt + "," + yt;
+  //   }else {
+  //     return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,1 " + xt + "," + yt;
+  //   }
+  // } else {
+  //   if(d.linknum < 0) {
+  //     return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,1 " + xt + "," + yt;
+  //   }else {
+  //     return "M" + xs + "," + ys + "A" + rad + "," + rad + " 0 0,0 " + xt + "," + yt;
+  //   }
+  // }
 };
 
 export const setLinkNumber = (group) => {
