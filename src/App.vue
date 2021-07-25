@@ -142,6 +142,8 @@
 
                     Node Name
                 <el-select
+
+                        @keyup.native = "showOption"
                         label-position="right"
                         label-width="86px"
                         style="width: 300px; margin-left:30px;"
@@ -150,14 +152,16 @@
                         placeholder="Please select"
                         clearable
                         filterable
-                        @blur="selectBlur"
+                        @blur="showOption"
                         @clear="selectClear"
                         @change="selectChange"
-                ><el-option
+                >
+                    <div  v-show="optionVisible">
+                    <el-option
                         v-for="(item,index) in node_list"
                         :key="index"
                         :label="item.label"
-                        :value="item.value" ></el-option>
+                        :value="item.value" ></el-option></div>
                 </el-select>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="cancel">
@@ -178,6 +182,7 @@
                 Link Name
 
                 <el-select
+                        @keyup.native = "showOption_link"
                         label-position="right"
                         label-width="86px"
                         style="width: 300px; margin-left:50px;"
@@ -186,14 +191,17 @@
                         placeholder="Please select"
                         clearable
                         filterable
-                        @blur="selectBlur"
+                        @blur="showOption_link"
                         @clear="selectClear"
                         @change="selectChange"
-                ><el-option
+                >
+                    <div  v-show="optionVisible_link">
+                    <el-option
                         v-for="(item,index) in link_list"
                         :key="index"
                         :label="item.label"
-                        :value="item.value" ></el-option>
+                        :value="item.value" ></el-option></div>
+
                 </el-select>
 
 
@@ -212,6 +220,7 @@
 
                 Link Name
                 <el-select
+                        @keyup.native = "showOption_link"
                         label-position="right"
                         label-width="86px"
                         style="width: 300px; margin-left:30px;"
@@ -220,14 +229,16 @@
                         placeholder="Please select"
                         clearable
                         filterable
-                        @blur="selectBlur"
+                        @blur="showOption_link"
                         @clear="selectClear"
                         @change="selectChange"
-                ><el-option
+                >
+                    <div  v-show="optionVisible_link">
+                    <el-option
                         v-for="(item,index) in link_list"
                         :key="index"
                         :label="item.label"
-                        :value="item.value" ></el-option>
+                        :value="item.value" ></el-option></div>
                 </el-select>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="cancel">
@@ -323,6 +334,7 @@
                 //////////////////////////////////////
 
                 // log function parameters
+                current_user:'',
                 username:'',
                 password:'',
                 newUsername:'',
@@ -331,6 +343,9 @@
                 centerDialogVisible:false,
                 dialog_createUser:false,
                 optionVisible:false,
+                optionVisible_link:false,
+                upload_nodes:'',
+                upload_links:'',
 
 
                 //////////////////////////////////////
@@ -556,6 +571,7 @@
                         console.log(change_link_type);
                         this.info.nodes = change_node_type;
                         this.info.links = change_link_type;
+                        this.current_user = response.data.user;
                         // this.info = response.data;
 
                         this.renderGraph(this.info)
@@ -595,9 +611,26 @@
             {
                 let inputContent = document.getElementsByClassName('el-input__inner')[0].value;
                 console.log(inputContent.length);
-
-                this.optionVisible = inputContent.length !== 0;
+                console.log(document.getElementsByClassName('el-input__inner'))
+                this.optionVisible = inputContent.length >=2;
                 console.log('option',this.optionVisible);
+                this.$forceUpdate()
+            },
+
+            showOption_link()
+            {
+                let inputContent = ''
+                if (document.getElementsByClassName('el-input__inner').length === 1) {
+                    inputContent = document.getElementsByClassName('el-input__inner')[0].value;
+                }
+                else{
+                    inputContent = document.getElementsByClassName('el-input__inner')[1].value;
+                }
+                console.log(document.getElementsByClassName('el-input__inner'))
+                console.log(inputContent.length);
+
+                this.optionVisible_link = inputContent.length >=2;
+                console.log('option',this.optionVisible_link);
                 this.$forceUpdate()
             },
 
@@ -619,6 +652,7 @@
                 this.new_node_name = '';
                 this.new_link_name = '';
                 this.optionVisible = false;
+                this.optionVisible_link = false;
                 this.$forceUpdate()
             },
 
@@ -660,6 +694,7 @@
                 this.doubleClick(this.info, this.info.nodes, this.node_value);
                 this.selectClear();
                 this.optionVisible = false;
+                this.optionVisible_link = false;
                 this.btnChangeEnable = true;
 
             },
@@ -669,6 +704,8 @@
                 this.info.nodes[this.node_id].properties.name = this.new_node_name;
                 this.dialogFormVisible_change_node_name = false;
                 this.selectClear();
+                this.optionVisible = false;
+                this.optionVisible_link = false;
                 this.btnChangeEnable = true;
                 this.renderGraph(this.info);
             },
@@ -681,6 +718,8 @@
                 this.dialogFormVisible_change_link_name = false;
                 this.selectClear();
                 this.btnChangeEnable = true;
+                this.optionVisible = false;
+                this.optionVisible_link = false;
                 this.renderGraph(this.info)
             },
 
@@ -700,6 +739,8 @@
                         message: 'Add Links!'
                     });
                 this.btnChangeEnable = true;
+                this.optionVisible = false;
+                this.optionVisible_link = false;
                 this.selectClear()
 
             },
@@ -1509,7 +1550,45 @@
 
             submitData(){
                 console.log('submit data',this.info);
-                alert('Submit Successfully!')
+
+                alert('Submit Successfully!');
+                console.log('current user', this.current_user);
+                console.log(typeof this.info.links);
+
+                this.upload_nodes = this.info.nodes.map(function (element) {
+                    return { "id":element.id,"type": element.type,"label": element.label, "properties": {
+                            "name": element.properties.name
+                        }}
+
+                });
+                //
+                this.upload_links = this.info.links.map(function (element) {
+                    // element.id  = (element.id);
+                    // element.source  = (element.source);
+                    // element.target  = (element.target);
+                    return element.id
+                });
+                //
+                // console.log('nn',upload_nodes);
+                // console.log('nn',typeof upload_nodes);
+                // console.log('ll',upload_links);
+
+                this.$axios({
+                    headers:{
+                        'Content-Type': 'application/json;'
+                    },
+                    url:'/postUserGraph',
+                    method:'post',
+                    data:{
+                        user : this.current_user,
+                        nodes: this.upload_nodes,
+                        links: []
+                    }
+
+                }).then(response=>{
+                    console.log('success',response)
+                    this.renderGraph(this.info)
+                })
             },
 
             reload(){

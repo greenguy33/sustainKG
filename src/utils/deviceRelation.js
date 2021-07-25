@@ -35,13 +35,13 @@ export const getNodesLine = (d,edge_line,defs)=> {
     y1 = d.target.y - d.source.y > 0 ? d.source.y + d.sourceRadius : d.source.y - d.sourceRadius;
     y2 = d.target.y - d.source.y > 0 ? d.target.y - d.targetRadius : d.target.y + d.targetRadius;
   }
-  if (d.linknum === 0) {//设置编号为0的连接线为直线，其他连接线会均分在两边
-    d.x_start = x1;
-    d.y_start = y1;
-    d.x_end = x2;
-    d.y_end = y2;
-    return 'M' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2;
-  }
+  // if (d.linknum === 0) {//设置编号为0的连接线为直线，其他连接线会均分在两边
+  //   d.x_start = x1;
+  //   d.y_start = y1;
+  //   d.x_end = x2;
+  //   d.y_end = y2;
+  //   return 'M' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2;
+  // }
   let a = d.sourceRadius > d.targetRadius ? d.targetRadius * d.linknum / 3 : d.sourceRadius * d.linknum / 3;
   let xm = d.target.x - d.source.x > 0 ? d.source.x + Math.sqrt((d.sourceRadius * d.sourceRadius - a * a) / (1 + tan * tan)) :
     d.source.x - Math.sqrt((d.sourceRadius * d.sourceRadius - a * a) / (1 + tan * tan));
