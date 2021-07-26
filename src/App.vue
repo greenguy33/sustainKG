@@ -39,7 +39,7 @@
                     center>
                 <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
                 <br><br>
-                <span>Password<el-input type="password" v-model="newPassword" placeholder="Please Input Password"></el-input></span>
+                <span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>
                 <span slot="footer" class="dialog-footer">
             <el-button @click.native="dialog_createUser=false">Cancel</el-button>
             <el-button type="primary" @click="createUser" >Yes</el-button>
@@ -71,7 +71,7 @@
                             <el-menu-item-group>
                                 <!--<template slot="title">分组一</template>-->
                                 <el-menu-item index="1-1" @click="submitData()">Submit Data</el-menu-item>
-                                <el-menu-item index="1-2">Upload Data</el-menu-item>
+                                <el-menu-item index="1-2" @click="getWikipedia()">get Articles</el-menu-item>
                                 <el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>
                             </el-menu-item-group>
 
@@ -176,7 +176,7 @@
 
 
             <el-dialog :visible.sync="dialogFormVisible_link"
-
+                       :show-close="false"
                        title="Create Link" center>
 
                 Link Name
@@ -302,26 +302,20 @@
                     {
                         "id": 0,
                         "type" : "node",
-                        // "factoryCode" : "hello",
                         "label" : "Device",
                         "properties":{"name":"hello"}
-                        // "linkId": 1
                     },
                     {
                         "id": 1,
                         "type" : "node",
-                        // "factoryCode": "Will",
                         "label": "Device",
                         "properties":{"name":"will"}
-                        // "linkId": 0
                     },
                     {
                         "id": 2,
                         "type" : "node",
-                        // "factoryCode": "lala",
                         "label": "Device",
                         "properties":{"name":"lala"}
-                        // "linkId": 1
                     },
 
                 ]
@@ -389,12 +383,12 @@
                     }
                 ],
 
-                // info: {
-                //     nodes:[],
-                //     links:[]
-                // },
+                info: {
+                    nodes:[],
+                    links:[]
+                },
 
-                info: info,
+                // info: info,
 
                 ifClicked:false,
 
@@ -530,58 +524,135 @@
                 this.dialog_createUser  = false;
                 console.log('create user function',this.newUsername, this.newPassword)
 
+                this.$axios({
+                    url : '/createNewUser',
+                    method : 'post',
+                    data :
+                        {
+                            "user" : this.newUsername,
+                            "password" : this.newPassword
+                        }
+                }).then(response=>{
+                    this.username = this.newUsername;
+                    this.password = this.newPassword;
+                    this.newPassword = '';
+                    this.newUsername = '';
+                    console.log(response);
+                    if(response.status === 204)
+                    {
+
+                        this.$message(
+
+                            {
+                                type: 'warning',
+                                message: 'The username is existed !'
+                            });
+                        this.showLogin = true;
+                        this.dialog_createUser  = true;
+                        this.username = '';
+                        this.password = '';
+                    }
+                    else {
+
+                        this.$axios({
+                            url: '/getUserGraph',
+                            method: 'post',
+                            data:
+                                {
+                                    user: this.username,
+                                    password: this.password
+
+                                }
+                        }).then(response => {
+
+                            this.showLogin = false;
+                            let user_nodes = response.data.nodes;
+                            let user_links = response.data.links;
+                            let change_node_type = user_nodes.map(function (element) {
+                                element.id = Number(element.id);
+                                return element
+                            });
+                            let change_link_type = user_links.map(function (element) {
+                                element.id = Number(element.id);
+                                element.source = Number(element.source);
+                                element.target = Number(element.target);
+                                return element
+                            });
+
+                            this.info.nodes = change_node_type;
+                            this.info.links = change_link_type;
+                            this.current_user = response.data.user;
+
+                            this.renderGraph(this.info)
+
+
+                        })
+                    }
+                })
 
             },
 
+            getWikipedia:function(){
+                this.$axios({
+
+                    method : 'get',
+                    url : '/getAllWikipediaArticles',
+                    data: {}
+                }).then(response=>{
+                    console.log(response)
+                })
+            },
+
+
             handleShow:function(){
-                let that = this;
-                let user = 'sqy';
-                let pass = '123';
-                if(user === this.username && pass === this.password)
-                {
-                    this.showLogin=false;
+
+
+
+
                     this.centerDialogVisible=false;
-                    // this.$router.push({ path: '/home' })
                     this.$axios({
                         url:'/getUserGraph',
                         method:'post',
                         data:{
-                            user : "some_user"
+                            // user : "some_user",
+                            // password: "my_password"
+                            user : this.username,
+                            password: this.password
                         }
 
                     }).then(response=>{
-                        console.log(response.data);
-                        let user_nodes = response.data.nodes;
-                        let user_links = response.data.links;
-                        // let test = response.data;
+                            this.showLogin=false;
+                            console.log('haha',response.data);
+                            let user_nodes = response.data.nodes;
+                            let user_links = response.data.links;
+                            // let test = response.data;
 
-                        let change_node_type = user_nodes.map(function (element) {
-                             element.id  = Number(element.id);
-                             return element
-                        });
+                            let change_node_type = user_nodes.map(function (element) {
+                                element.id = Number(element.id);
+                                return element
+                            });
 
-                        let change_link_type = user_links.map(function (element) {
-                            element.id  = Number(element.id);
-                            element.source  = Number(element.source);
-                            element.target  = Number(element.target);
-                            return element
-                        });
+                            let change_link_type = user_links.map(function (element) {
+                                element.id = Number(element.id);
+                                element.source = Number(element.source);
+                                element.target = Number(element.target);
+                                return element
+                            });
 
-                        console.log(change_node_type);
-                        console.log(change_link_type);
-                        this.info.nodes = change_node_type;
-                        this.info.links = change_link_type;
-                        this.current_user = response.data.user;
-                        // this.info = response.data;
+                            console.log(change_node_type);
+                            console.log(change_link_type);
+                            this.info.nodes = change_node_type;
+                            this.info.links = change_link_type;
+                            this.current_user = response.data.user;
+                            this.renderGraph(this.info)
 
-                        this.renderGraph(this.info)
+                    }).catch(error=>{
+                        console.log('error',error);
+                        this.showLogin = true;
+                        this.username = '';
+                        this.password = '';
                     })
 
-                }
-                else{
-                    alert('Wrong username or password')
-                }
-                console.log(this.username,this.password)
 
             },
 
@@ -686,6 +757,8 @@
                 this.dialogFormVisible_change_link_name = false;
                 this.selectClear();
                 this.temp.length = 0;
+                this.newPassword = '';
+                this.newUsername = '';
                 this.btnChangeEnable = true;
             },
 
@@ -756,13 +829,6 @@
                 //关系分组
                 setLinkGroup(links);
 
-                //点击节点后弹出的灰色圆圈以及图标的定义，分为三组【1.删除、2.联系、3.解除位置锁定】
-                let [removePath,remove_rect1,remove_rect2,remove_line1,remove_line2,remove_line3] = [null];
-                let [unlockPath,unlock_path1,unlock_rect1,unlock_line1] = [null];
-                let [hidePath,hide_path1,hide_path2,hide_path3,hide_path4,hide_circle1,hide_line1] = [null];
-                let rightArc = d3.svg.arc().outerRadius(60).innerRadius(30).startAngle(0).endAngle(1.85);
-                let leftArc = d3.svg.arc().outerRadius(60).innerRadius(30).startAngle(4.5).endAngle(6.23);
-                let bottomArc = d3.svg.arc().outerRadius(60).innerRadius(30).startAngle(1.9).endAngle(4.45);
 
                 d3.select("#graph").html('');
 
@@ -1087,23 +1153,6 @@
                     });
                 }
 
-                function circleClick(node, i, _this) {
-                    //获取当前节点是否包含圆环
-                    let existedRing = svg.select('.g_circle_' + i).selectAll('.g_circle_path');
-                    //清除上个节点的圆圈以及图标
-                    svg.selectAll('.g_circle_path').remove();
-                    svg.selectAll('.remove_a').remove();
-                    svg.selectAll('.hide_a').remove();
-                    svg.selectAll('.unlock_a').remove();
-                    if(existedRing && existedRing[0].length === 0) {
-                        //showCircleBorderOuterArc(node, i);
-                        //绘制灰色可点击圆圈，分为三部分分别绘制
-                        showRemove(node, i, _this);
-                        showUnlock(node, i, _this);
-                        showHide(node,i, _this);
-                    }
-                }
-
                 function getCircleColor(node) {
                     let color = {
                         'Device': "#FF9D00",
@@ -1174,79 +1223,6 @@
                     })
                     ;
 
-                    // if(circleBorderOuterArcObj !== null) {
-                    //   circleBorderOuterArcObj.attr("transform", function (d){ return "translate("+d.x+","+d.y+")" });
-                    // }
-
-                    //绘制节点删除功能半圆环
-                    // if(removePath !== null) {
-                    //     removePath.attr("transform", function (d){ return "translate("+d.x+","+d.y+")" });
-                    //
-                    //     let r1 = null;
-                    //     remove_rect1.attr('d',function(d) { r1 = d; })
-                    //         .attr("x",r1.x + 33 + 6.75).attr("y",r1.y  - 36 + 9.75).attr("width",5).attr("height",3).attr("rx",1.5).attr("ry",1.5);
-                    //
-                    //     let r2 = null;
-                    //     remove_rect2.attr('d',function(d) { r2 = d; })
-                    //         .attr("x",r2.x + 30 + 6.75).attr("y",r2.y  - 33 + 9.75).attr("width",12).attr("height",14).attr("rx",1.5).attr("ry",1.5);
-                    //
-                    //     let l1 = null;
-                    //     remove_line1.attr('d',function(d) { l1 = d; })
-                    //         .attr("x1",l1.x + 28 + 6.75).attr("y1",l1.y - 33 + 9.75).attr("x2",l1.x + 45 + 6.75).attr("y2",l1.y - 33 + 9.75);
-                    //
-                    //     let l2 = null;
-                    //     remove_line2.attr('d',function(d) { l2 = d; })
-                    //         .attr("x1",l2.x + 34 + 6.75).attr("y1",l2.y - 30 + 9.75).attr("x2",l2.x + 34 + 6.75).attr("y2",l2.y - 23 + 9.75);
-                    //
-                    //     let l3 = null;
-                    //     remove_line3.attr('d',function(d) { l3 = d; })
-                    //         .attr("x1",l3.x + 38 + 6.75).attr("y1",l3.y - 30 + 9.75).attr("x2",l3.x + 38 + 6.75).attr("y2",l3.y - 23 + 9.75);
-                    // }
-
-                    //绘制解除节点位置锁定半圆环
-                    // if(unlockPath !== null) {
-                    //     unlockPath.attr("transform", function (d){ return "translate("+d.x+","+d.y+")" });
-                    //     unlock_path1.attr("transform", function (d){ return "translate("+ (d.x - 45) +","+ (d.y - 23) +")" });
-                    //
-                    //     let r1 = null;
-                    //     unlock_rect1.attr('d',function(d) { r1 = d; })
-                    //         .attr("x",r1.x  - 52 + 6.75).attr("y",r1.y - 30 + 9.75).attr("width",15).attr("height",12).attr("rx",1.5).attr("ry",1.5);
-                    //
-                    //     let l1 = null;
-                    //     unlock_line1.attr('d',function(d) { l1 = d; })
-                    //         .attr("x1",l1.x  - 52 + 15).attr("y1",l1.y  - 30 + 15).attr("x2",l1.x  - 52 +15).attr("y2",l1.y  - 30 + 18);
-                    // }
-
-                    // //绘制隐藏节点和关系半圆环
-                    // if(hidePath !== null) {
-                    //     hidePath.attr("transform", function (d){ return "translate("+d.x+","+d.y+")" });
-                    //
-                    //     hide_path1
-                    //         .attr("d", function(d) {
-                    //             return "M" + (d.x - 13) + "," + (d.y + 42) + "A15,15,0,0,1" + (d.x + 13) + "," + (d.y + 42)
-                    //         });
-                    //     hide_path2
-                    //         .attr("d", function(d) {
-                    //             return "M"+ (d.x - 12 + 10.4) + "," + (d.y + 34 + 10.937) + "A" + 3.749 + "," + 3.749 + ",0,1,1," + (d.x - 12 + 15.338) + "," + (d.y + 33 + 9)
-                    //         });
-                    //     hide_path3
-                    //         .attr("d", function(d) {
-                    //             return "M" + (d.x - 12) + "," + (d.y + 42) + "A20,20,0,0,0" + (d.x - 4) + "," + (d.y + 47)
-                    //         });
-                    //     hide_path4
-                    //         .attr("d", function(d) {
-                    //             return "M" + (d.x + 11) + "," + (d.y + 44) + "A20,20,0,0,0" + (d.x + 13) + "," + (d.y + 42)
-                    //         });
-                    //
-                    //     let c1 = null;
-                    //     hide_circle1.attr('d',function(d) { c1 = d; })
-                    //         .attr("cx",c1.x - 12 + 17.15).attr("cy",c1.y + 33 + 17.25).attr("r",6);
-                    //
-                    //     let l1 = null;
-                    //     hide_line1.attr('d',function(d) { l1 = d; })
-                    //         .attr("x1",l1.x - 12 + 14.15).attr("y1",l1.y + 33 + 17.25).attr("x2",l1.x - 12 + 20.15).attr("y2",l1.y + 33 + 17.25);
-                    //
-                    // }
 
                 }
 
@@ -1258,126 +1234,8 @@
                 function transform2(d) {
                     return "translate(" + (d.x) + "," + d.y + ")";
                 }
-                function showRemove(node, i, _this) {
-                    removePath = d3.select('.g_circle_'+ i).append("path").attr('class', 'g_circle_path')
-                        .attr("transform", "translate(" + node.x + "," + node.y + ")").attr("d", rightArc)
-                        .attr("fill", "rgb(210, 213, 218)")
-                        .style("cursor","pointer")
-                        // .on("click", () => { removeNodeAndPath(node, _this); })
-                        .on("mouseover", function(){ removePath.attr("fill", "rgb(185, 185, 185)") })
-                        .on("mouseout", function() { removePath.attr("fill", "rgb(210, 213, 218)") });
 
-                    d3.select('.g_circle_'+ i).append("g").attr("class","remove_a")
-                        .attr("transform", "translate(" + (node.x + 33) + "," + (node.y - 24) + ") scale(0.7)")
-                        .append("defs").append("style")
-                        .text(".remove_a{fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;}");
 
-                    removePath.append("title").attr("class","remove_a").text("Remove");
-                    remove_rect1 = d3.select('.g_circle_'+ i).append("rect").attr("class","remove_a").attr("x",node.x + 33 + 6.75).attr("y",node.y  - 36 + 9.75)
-                        .attr("width",5).attr("height",3).attr("rx",1.5).attr("ry",1.5);
-                    remove_rect2 = d3.select('.g_circle_'+ i).append("rect").attr("class","remove_a").attr("x",node.x + 30 + 6.75).attr("y",node.y  - 33 + 9.75)
-                        .attr("width",12).attr("height",14).attr("rx",1.5).attr("ry",1.5);
-                    remove_line1 = d3.select('.g_circle_'+ i).append("line").attr("class","remove_a").attr("x1",node.x + 28 + 6.75).attr("y1",node.y - 33 + 9.75).attr("x2",node.x + 45 + 6.75).attr("y2",node.y - 33 + 9.75);
-                    remove_line2 = d3.select('.g_circle_'+ i).append("line").attr("class","remove_a").attr("x1",node.x + 34 + 6.75).attr("y1",node.y - 30 + 9.75).attr("x2",node.x + 34 + 6.75).attr("y2",node.y - 23 + 9.75);
-                    remove_line3 = d3.select('.g_circle_'+ i).append("line").attr("class","remove_a").attr("x1",node.x + 38 + 6.75).attr("y1",node.y - 30 + 9.75).attr("x2",node.x + 38 + 6.75).attr("y2",node.y - 23 + 9.75);
-
-                    // d3.selectAll(".remove_a").on("click", () => { removeNodeAndPath(node, _this); })
-                }
-
-                function showHide(node,i) {
-                    hidePath = d3.select('.g_circle_'+ i).append("path").attr('class', 'g_circle_path')
-                        .attr("transform", "translate(" + node.x + "," + node.y + ")").attr("d", bottomArc)
-                        .attr("fill", "rgb(210, 213, 218)")
-                        .style("cursor","pointer")
-                        // .on("click", function(){ hideNodeAndLinks(node) })
-                        .on("mouseover", function(){ hidePath.attr("fill", "rgb(185, 185, 185)") })
-                        .on("mouseout", function() { hidePath.attr("fill", "rgb(210, 213, 218)") });
-
-                    d3.select('.g_circle_'+ i).append("g").attr("class","hide_a")
-                        .attr("transform", "translate(" + (node.x - 8) + "," + (node.y + 38) + ") scale(0.7)")
-                        .append("defs").append("style")
-                        .text(".hide_a{fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;}");
-
-                    hidePath.append("title").attr("class","hide_a").text("Hide");
-
-                    hide_path1 = d3.select('.g_circle_'+ i).append("path").attr("class","hide_a")
-                        .attr("d", function(d) {
-                            return "M" + (d.x - 13) + "," + (d.y + 42) + "A15,15,0,0,1" + (d.x + 13) + "," + (d.y + 42)
-                        });
-                    hide_path2 = d3.select('.g_circle_'+ i).append("path").attr("class","hide_a")
-                        .attr("d", function(d) {
-                            return "M"+ (d.x - 12 + 10.4) + "," + (d.y + 34 + 10.937) + "A" + 3.749 + "," +  3.749 + ",0,1,1," + (d.x - 12 + 15.338) + "," + (d.y + 33 + 9)
-                        });
-                    hide_path3 = d3.select('.g_circle_'+ i).append("path").attr("class","hide_a")
-                        .attr("d", function(d) {
-                            return "M" + (d.x - 12) + "," + (d.y + 42) + "A20,20,0,0,0" + (d.x - 4) + "," + (d.y + 47)
-                        });
-                    hide_path4 = d3.select('.g_circle_'+ i).append("path").attr("class","hide_a")
-                        .attr("d", function(d) {
-                            return "M" + (d.x + 11) + "," + (d.y + 44) + "A20,20,0,0,0" + (d.x + 13) + "," + (d.y + 42)
-                        });
-                    hide_circle1 = d3.select('.g_circle_'+ i).append("circle").attr("class","hide_a").attr("cx",node.x - 12 + 17.15).attr("cy",node.y + 33 + 17.25).attr("r",6);
-                    hide_line1 = d3.select('.g_circle_'+ i).append("line").attr("class","hide_a").attr("x1",node.x - 12 + 14.15).attr("y1",node.y + 33 + 17.25).attr("x2",node.x - 12 + 20.15).attr("y2",node.y + 33 + 17.25);
-
-                    // d3.selectAll(".hide_a").on("click", (d) => { hideNodeAndLinks(d); })
-                }
-                function showUnlock(node, i) {
-                    unlockPath = d3.select('.g_circle_'+ i).append("path").attr('class', 'g_circle_path')
-                        .attr("transform", "translate(" + node.x + "," + node.y + ")").attr("d", leftArc)
-                        .attr("fill", "rgb(210, 213, 218)").style("cursor","pointer")
-                        // .on("click", function(d){ unlockNodeFixed(d); })
-                        .on("mouseover", function(){ unlockPath.attr("fill", "rgb(185, 185, 185)") })
-                        .on("mouseout", function() { unlockPath.attr("fill", "rgb(210, 213, 218)") });
-
-                    d3.select('.g_circle_'+ i).append("g").attr("class","unlock_a")
-                        .attr("transform", "translate(" + (node.x - 52) + "," + (node.y - 30) + ") scale(0.7)")
-                        .append("defs").append("style")
-                        .text(".unlock_a{fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;}");
-
-                    unlockPath.append("title").attr("class","unlock_a").text("Unlock");
-                    unlock_path1 = d3.select('.g_circle_'+ i).append("path").attr("class","unlock_a")
-                        .attr("transform", "translate(" + (node.x - 45) + "," + (node.y - 23) + ")")
-                        .attr("d", d3.svg.arc().outerRadius(5.3).innerRadius(5).startAngle(-1.8).endAngle(1.8))
-                        .attr("fill", "#FFFFFF");
-
-                    unlock_rect1 = d3.select('.g_circle_'+ i).append("rect").attr("class","unlock_a").attr("x",node.x - 52 + 6.75).attr("y",node.y  - 30 + 9.75)
-                        .attr("width",15).attr("height",12).attr("rx",1.5).attr("ry",1.5);
-                    unlock_line1 = d3.select('.g_circle_'+ i).append("line").attr("class","unlock_a").attr("x1",node.x  - 52 + 15).attr("y1",node.y - 30 + 15).attr("x2",node.x  - 52 + 15).attr("y2",node.y - 30 + 18);
-
-                    // d3.selectAll(".unlock_a").on("click", (d) => { unlockNodeFixed(d); })
-
-                }
-                function hideNodeAndLinks(node) {
-                    d3.event.stopPropagation();
-                    circle_g.attr('node', function(n) {
-                        if(n.id === node.id) {
-                            d3.select(this).remove();
-                        }
-                    });
-                    edges_line.attr('d', function(d) {
-                        if(d.source.id === node.id || d.target.id === node.id) {
-                            d3.select(this).remove();
-                        }
-                    });
-                }
-                function removeNodeAndPath(node, _this){
-                    d3.event.stopPropagation();
-                    alert('delete this '+ node + ',' + _this );
-                }
-                // function showNodeInfo(node, _this) {
-                //     window.console.log(node);
-                //     window.console.log(_this);
-                //
-                // }
-                function unlockNodeFixed(d) {
-                    d3.event.stopPropagation();
-                    d3.select(this).classed("fixed", d.fixed = false);//解除节点位置锁定
-                    //清除上个节点的圆圈以及图标
-                    svg.selectAll('.g_circle_path').remove();
-                    svg.selectAll('.remove_a').remove();
-                    svg.selectAll('.hide_a').remove();
-                    svg.selectAll('.unlock_a').remove();
-                }
 
                 function Menu (menu, openCallback) {
 
@@ -1449,35 +1307,6 @@
                 info.nodes.push(new_node);
                 this.renderGraph(info);
 
-                // this.$prompt(
-                //     'Please input node name：',
-                //     'Tips',
-                //     {
-                //         confirmButtonText: 'Yes',
-                //         cancelButtonText: 'No',
-                //         inputValue: 'New Node',
-                //         inputErrorMessage: 'Input cannot be none',
-                //         inputValidator: (value) => {       // 点击按钮时，对文本框里面的值进行验证
-                //             if(!value) {
-                //                 return 'Input cannot be none';
-                //             }
-                //         },
-                //
-                //     }).then(({value}) => {
-                //
-                //         let new_node = {
-                //             'id': nodes.length,
-                //             "type": "node",
-                //             'properties': {'name': value}
-                //         };
-                //
-                //         console.log('6. add node');
-                //         info.nodes.push(new_node);
-                //         this.renderGraph(info);
-                //
-                // }).catch((err) => {
-                //     console.log(err);
-                // });
 
             },
 
@@ -1491,25 +1320,6 @@
                 if(this.temp.length ===2 && this.temp[0] !== this.temp[1] )
                 {
 
-                    // this.$prompt("Add links?", "Tips", {
-                    //     confirmButtonText: "Yes",
-                    //     cancelButtonText: "No",
-                    //     inputValue: 'New Link',
-                    //     inputErrorMessage: 'Input cannot be none',
-                    //     inputValidator: (value) => {       // 点击按钮时，对文本框里面的值进行验证
-                    //         if(!value) {
-                    //             return 'Input cannot be none';
-                    //         }
-                    //     },
-                    //
-                    // }).then(({value}) => {
-                    //     this.$message(
-                    //
-                    //         {
-                    //         type: 'success',
-                    //         message: 'Add Links!'
-                    //     });
-                    //     console.log('new link added',info.links);
 
                     let new_link = {
                         "source": this.temp[0],
@@ -1525,13 +1335,6 @@
                     this.temp.length = 0;
                     this.renderGraph(info)
 
-                    // }).catch(() => {
-                    //     temp.length = 0;
-                    //     this.$message({
-                    //         type: 'info',
-                    //         message: 'Cancel!'
-                    //     })
-                    // });
                 }
                 else if(this.temp.length ===2 && this.temp[0] === this.temp[1] )
                 {
@@ -1553,25 +1356,28 @@
 
                 alert('Submit Successfully!');
                 console.log('current user', this.current_user);
-                console.log(typeof this.info.links);
+                console.log(this.info.nodes);
+                console.log(this.info.links);
 
                 this.upload_nodes = this.info.nodes.map(function (element) {
-                    return { "id":element.id,"type": element.type,"label": element.label, "properties": {
+                    return { "id":String(element.id),"type": element.type,"label": element.label, "properties": {
                             "name": element.properties.name
                         }}
 
                 });
                 //
                 this.upload_links = this.info.links.map(function (element) {
-                    // element.id  = (element.id);
-                    // element.source  = (element.source);
-                    // element.target  = (element.target);
-                    return element.id
+
+                    return {"type":element.type, "id":String(element.id), "label": element.label,
+                        "source":String(element.source.id), "target":String(element.target.id),
+                        "properties":element.properties}
                 });
                 //
-                // console.log('nn',upload_nodes);
-                // console.log('nn',typeof upload_nodes);
+                console.log('nn',JSON.stringify(this.upload_nodes));
+                console.log('nn',JSON.stringify(this.upload_links));
                 // console.log('ll',upload_links);
+
+
 
                 this.$axios({
                     headers:{
@@ -1582,8 +1388,36 @@
                     data:{
                         user : this.current_user,
                         nodes: this.upload_nodes,
-                        links: []
+                        // nodes:[
+                        //     {
+                        //         "type": "node",
+                        //         "id": "0",
+                        //         "label": "Concept",
+                        //         "properties": {
+                        //             "name": "Innovation"
+                        //         }
+                        //     },
+                        //     {
+                        //         "type": "node",
+                        //         "id": "1",
+                        //         "label": "Concept",
+                        //         "properties": {
+                        //             "name": "Globalization"
+                        //         }
+                        //     }],
+                        links: this.upload_links
+                        // links:  [
+                        //     {
+                        //         "type": "link",
+                        //         "id": "0",
+                        //         "label": "benefits",
+                        //         "source": "0",
+                        //         "target": "1",
+                        //         "properties": {}
+                        //     }
+                        // ]
                     }
+
 
                 }).then(response=>{
                     console.log('success',response)
