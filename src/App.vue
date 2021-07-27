@@ -73,6 +73,8 @@
                                 <el-menu-item index="1-1" @click="submitData()">Submit Data</el-menu-item>
                                 <el-menu-item index="1-2" @click="getWikipedia()">get Articles</el-menu-item>
                                 <el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>
+                                <el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>
+
                             </el-menu-item-group>
 
 
@@ -93,6 +95,49 @@
 
             </el-row>
 
+            <el-dialog :visible.sync="dialogFormVisible_initGraph"
+                       title="Create Start Node" center
+
+            >
+
+                Node Name
+                <el-select ref="init"
+
+                        @keyup.native = "showOption_init_nodes"
+                        label-position="right"
+                        label-width="86px"
+                        style="width: 300px; margin-left:50px;"
+
+                        v-model="init_node_value"
+                        placeholder="Please select"
+                        clearable
+                        filterable
+                        @blur="showOption_init_nodes"
+                        @clear="selectClear"
+                        @change="selectChange"
+                >
+                    <div  v-show="optionVisible_init_nodes">
+                        <el-option
+
+                                v-for="(item,index) in node_list"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value" ></el-option>
+                    </div>
+
+                </el-select>
+
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="cancel">
+                        No
+                    </el-button>
+                    <el-button type="primary" :disabled="btnChangeEnable" @click="InitGraph">
+                        Yes
+                    </el-button>
+                </div>
+            </el-dialog>
+
+
 
 
             <el-dialog :visible.sync="dialogFormVisible"
@@ -101,8 +146,8 @@
 
                 Node Name
                 <el-select
-
-                        @keyup.native = "showOption"
+                        ref="addNode"
+                        @keyup.native = "showOption_add_nodes"
                         label-position="right"
                         label-width="86px"
                         style="width: 300px; margin-left:50px;"
@@ -111,13 +156,13 @@
                         placeholder="Please select"
                         clearable
                         filterable
-                        @blur="showOption"
+                        @blur="showOption_add_nodes"
                         @clear="selectClear"
                         @change="selectChange"
                 >
-                    <div  v-show="optionVisible">
+                    <div  v-show="optionVisible_add_nodes">
                     <el-option
-
+                            class="bar"
                         v-for="(item,index) in node_list"
                         :key="index"
                         :label="item.label"
@@ -142,8 +187,8 @@
 
                     Node Name
                 <el-select
-
-                        @keyup.native = "showOption"
+                        ref="changeNodeName"
+                        @keyup.native = "showOption_change_nodes"
                         label-position="right"
                         label-width="86px"
                         style="width: 300px; margin-left:30px;"
@@ -152,11 +197,11 @@
                         placeholder="Please select"
                         clearable
                         filterable
-                        @blur="showOption"
+                        @blur="showOption_change_nodes"
                         @clear="selectClear"
                         @change="selectChange"
                 >
-                    <div  v-show="optionVisible">
+                    <div  v-show="optionVisible_change_nodes">
                     <el-option
                         v-for="(item,index) in node_list"
                         :key="index"
@@ -182,7 +227,8 @@
                 Link Name
 
                 <el-select
-                        @keyup.native = "showOption_link"
+                        ref="addLink"
+                        @keyup.native = "showOption_add_link"
                         label-position="right"
                         label-width="86px"
                         style="width: 300px; margin-left:50px;"
@@ -191,11 +237,11 @@
                         placeholder="Please select"
                         clearable
                         filterable
-                        @blur="showOption_link"
+                        @blur="showOption_add_link"
                         @clear="selectClear"
                         @change="selectChange"
                 >
-                    <div  v-show="optionVisible_link">
+                    <div  v-show="optionVisible_add_link">
                     <el-option
                         v-for="(item,index) in link_list"
                         :key="index"
@@ -220,7 +266,8 @@
 
                 Link Name
                 <el-select
-                        @keyup.native = "showOption_link"
+                        ref="changeLinkName"
+                        @keyup.native = "showOption_change_link"
                         label-position="right"
                         label-width="86px"
                         style="width: 300px; margin-left:30px;"
@@ -229,11 +276,11 @@
                         placeholder="Please select"
                         clearable
                         filterable
-                        @blur="showOption_link"
+                        @blur="showOption_change_link"
                         @clear="selectClear"
                         @change="selectChange"
                 >
-                    <div  v-show="optionVisible_link">
+                    <div  v-show="optionVisible_change_link">
                     <el-option
                         v-for="(item,index) in link_list"
                         :key="index"
@@ -339,16 +386,24 @@
                 showLogin:true,
                 centerDialogVisible:false,
                 dialog_createUser:false,
-                optionVisible:false,
-                optionVisible_link:false,
+
+                optionVisible_init_nodes:false,
+                optionVisible_add_nodes:false,
+                optionVisible_change_nodes:false,
+                optionVisible_add_link:false,
+                optionVisible_change_link:false,
+
+
                 upload_nodes:'',
                 upload_links:'',
-
+                disable_initGraph:true,
+                dialogFormVisible_initGraph:false,
 
                 //////////////////////////////////////
 
                 node_value: '',
                 link_value:'',
+                init_node_value:'',
                 btnChangeEnable: true,
                 node_list: [
                     {
@@ -522,6 +577,7 @@
             ////////////////////////////////////////////////////////////
             // login functions
 
+
             createUser:function(){
 
                 this.dialog_createUser  = false;
@@ -674,26 +730,54 @@
             },
 
             ////////////////////////////////////////////////////////////
+            // optionVisible_init_nodes:false,
+            // optionVisible_add_nodes:false,
+            // optionVisible_change_nodes:false,
+            // optionVisible_add_link:false,
+            // optionVisible_change_link:false,
 
-            showOption()
+            showOption_add_nodes()
             {
-                let inputContent = document.getElementsByClassName('el-input__inner')[0].value;
 
-                this.optionVisible = inputContent.length >=2;
+
+                let inputContent = this.$refs.addNode.$children[0].value;
+                this.optionVisible_add_nodes = inputContent.length >=2;
+
                 this.$forceUpdate()
             },
 
-            showOption_link()
+            showOption_init_nodes()
             {
-                let inputContent = ''
-                if (document.getElementsByClassName('el-input__inner').length === 1) {
-                    inputContent = document.getElementsByClassName('el-input__inner')[0].value;
-                }
-                else{
-                    inputContent = document.getElementsByClassName('el-input__inner')[1].value;
-                }
+                let inputContent = this.$refs.init.$children[0].value;
 
-                this.optionVisible_link = inputContent.length >=2;
+                this.optionVisible_init_nodes = inputContent.length >=2;
+
+                this.$forceUpdate()
+            },
+
+            showOption_change_nodes()
+            {
+                let inputContent = this.$refs.changeNodeName.$children[0].value;
+                this.optionVisible_change_nodes = inputContent.length >=2;
+
+                this.$forceUpdate()
+            },
+
+
+            showOption_add_link()
+            {
+                let inputContent = this.$refs.addLink.$children[0].value;
+
+                this.optionVisible_add_link = inputContent.length >=2;
+                this.$forceUpdate()
+            },
+
+            showOption_change_link()
+            {
+
+                let inputContent = this.$refs.changeLinkName.$children[0].value;
+                this.optionVisible_change_link = inputContent.length >=2;
+
                 this.$forceUpdate()
             },
 
@@ -713,8 +797,21 @@
                 this.link_value = '';
                 this.new_node_name = '';
                 this.new_link_name = '';
-                this.optionVisible = false;
-                this.optionVisible_link = false;
+
+                this.optionVisible_init_nodes=false;
+                this.optionVisible_add_nodes=false;
+                this.optionVisible_change_nodes=false;
+                this.optionVisible_add_link=false;
+                this.optionVisible_change_link=false;
+
+
+
+                // let elements = document.getElementsByClassName('el-input__inner');
+                // elements[0].parentNode.removeChild(elements[0]);
+                // while(elements.length > 0){
+                //     elements[0].parentNode.removeChild(elements[0]);
+                // }
+
                 this.$forceUpdate()
             },
 
@@ -736,6 +833,9 @@
                 else if(this.dialogFormVisible === true){
                     this.node_value = val;
                 }
+                else if(this.dialogFormVisible_initGraph === true){
+                    this.init_node_value = val;
+                }
                 this.$forceUpdate()
             },
 
@@ -746,20 +846,53 @@
                 this.dialogFormVisible_link = false;
                 this.dialogFormVisible_change_node_name = false;
                 this.dialogFormVisible_change_link_name = false;
-                this.selectClear();
+
                 this.temp.length = 0;
                 this.newPassword = '';
                 this.newUsername = '';
                 this.btnChangeEnable = true;
+                this.dialogFormVisible_initGraph = false;
+
+                this.selectClear();
+
+            },
+            showInitGraph:function(){
+                this.dialogFormVisible_initGraph = true;
+            },
+            InitGraph:function()
+            {
+                console.log(this.info);
+                console.log(document.getElementById('init'));
+
+                console.log('add a start node');
+                let init_node= {
+                    "id": 0,
+                    "type" : "node",
+                    "label" : "Device",
+                    "properties":{"name":this.init_node_value}
+                };
+
+                this.dialogFormVisible_initGraph  = false;
+
+
+                this.info.nodes.push(init_node);
+
+
+                this.renderGraph(this.info);
+                this.selectClear();
             },
 
+
             addNodes(){
+
                 this.dialogFormVisible = false;
                 this.doubleClick(this.info, this.info.nodes, this.node_value);
-                this.selectClear();
-                this.optionVisible = false;
-                this.optionVisible_link = false;
+
+                // this.optionVisible = false;
+                // this.optionVisible_link = false;
                 this.btnChangeEnable = true;
+                this.selectClear();
+
 
             },
 
@@ -767,11 +900,15 @@
 
                 this.info.nodes[this.node_id].properties.name = this.new_node_name;
                 this.dialogFormVisible_change_node_name = false;
-                this.selectClear();
-                this.optionVisible = false;
-                this.optionVisible_link = false;
+
+                // this.optionVisible = false;
+                // this.optionVisible_link = false;
                 this.btnChangeEnable = true;
+
+
                 this.renderGraph(this.info);
+                this.selectClear();
+
             },
 
 
@@ -780,15 +917,21 @@
 
                 this.info.links[this.link_id].label = this.new_link_name;
                 this.dialogFormVisible_change_link_name = false;
-                this.selectClear();
+
                 this.btnChangeEnable = true;
-                this.optionVisible = false;
-                this.optionVisible_link = false;
+                // this.optionVisible = false;
+                // this.optionVisible_link = false;
+
+
+
+
                 this.renderGraph(this.info)
+                this.selectClear();
             },
 
             addLinks()
             {
+                console.log('add link',this.optionVisible,this.optionVisible_link);
 
                 this.dialogFormVisible_link = false;
 
@@ -803,8 +946,10 @@
                         message: 'Add Links!'
                     });
                 this.btnChangeEnable = true;
-                this.optionVisible = false;
-                this.optionVisible_link = false;
+                // this.optionVisible = false;
+                // this.optionVisible_link = false;
+
+
                 this.selectClear()
 
             },
@@ -815,6 +960,9 @@
 
 
                 console.log('render data',info);
+
+                this.disable_initGraph = this.info.nodes.length !== 0;
+
                 let {links, nodes} = info;
 
                 //关系分组
@@ -896,6 +1044,7 @@
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
                         this.dialogFormVisible = true;
+                        console.log(document.getElementsByClassName('el-input__inner'))
                         // this.doubleClick(info, node, nodes, links)
 
 
