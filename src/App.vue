@@ -269,6 +269,9 @@
 
 <script>
     import * as d3 from "d3";
+    // import Seven from 'node-7z'
+    import sevenBin from '7zip-bin'
+    import { list } from 'node-7z'
 
     import $ from 'jquery'
     import {
@@ -593,21 +596,23 @@
             },
 
             getWikipedia:function(){
-                this.$axios({
 
-                    method : 'get',
-                    url : '/getAllWikipediaArticles',
-                    data: {}
-                }).then(response=>{
-                    console.log(response)
-                })
+
+
+
+
+                // this.$axios({
+                //
+                //     method : 'get',
+                //     url : '/getAllWikipediaArticles',
+                //     data: {}
+                // }).then(response=>{
+                //     console.log(response)
+                // })
             },
 
 
             handleShow:function(){
-
-
-
 
                     this.centerDialogVisible=false;
                     this.$axios({
@@ -622,7 +627,6 @@
 
                     }).then(response=>{
                             this.showLogin=false;
-                            console.log('haha',response.data);
                             let user_nodes = response.data.nodes;
                             let user_links = response.data.links;
                             // let test = response.data;
@@ -639,15 +643,13 @@
                                 return element
                             });
 
-                            console.log(change_node_type);
-                            console.log(change_link_type);
+
                             this.info.nodes = change_node_type;
                             this.info.links = change_link_type;
                             this.current_user = response.data.user;
                             this.renderGraph(this.info)
 
                     }).catch(error=>{
-                        console.log('error',error);
                         this.showLogin = true;
                         this.username = '';
                         this.password = '';
@@ -668,23 +670,16 @@
                     nodes:[],
                         links:[]
                 };
-
                 this.renderGraph(this.info)
-
-                // this.$router.push({ path: '/' })
             },
 
             ////////////////////////////////////////////////////////////
 
-
-
             showOption()
             {
                 let inputContent = document.getElementsByClassName('el-input__inner')[0].value;
-                console.log(inputContent.length);
-                console.log(document.getElementsByClassName('el-input__inner'))
+
                 this.optionVisible = inputContent.length >=2;
-                console.log('option',this.optionVisible);
                 this.$forceUpdate()
             },
 
@@ -697,11 +692,8 @@
                 else{
                     inputContent = document.getElementsByClassName('el-input__inner')[1].value;
                 }
-                console.log(document.getElementsByClassName('el-input__inner'))
-                console.log(inputContent.length);
 
                 this.optionVisible_link = inputContent.length >=2;
-                console.log('option',this.optionVisible_link);
                 this.$forceUpdate()
             },
 
@@ -710,7 +702,6 @@
                 // 意见类型
                 this.btnChangeEnable = true;
                 if (e.target.value !== '') {
-                    console.log('No selection',e.target.value);
                     // this.$forceUpdate()   // 强制更新
                 }
                 this.$forceUpdate()
@@ -872,17 +863,12 @@
                     .on("click", (node, i,) => {
                         if (d3.event.defaultPrevented) return;
 
-                        // console.log('鼠标单击',this.clickTimeId);
-                        // console.log(d3.select(this))
+
                         clearTimeout(this.clickTimeId);
 
                         this.clickTimeId = setTimeout( ()=> {
 
-                                // console.log("鼠标单击");
 
-                                // this.selected_Node = node;
-                                // this.addLinks()
-                                // console.log('selected_Node',this.selected_Node)
                                 this.temp.push(node.index);
                                 console.log('liuliu',this.temp);
                                 if(this.temp.length === 2 && this.temp[0] !== this.temp[1]){
@@ -908,16 +894,13 @@
 
 
                         if (d3.event.defaultPrevented) return;
-                        console.log('double click',nodes);
                         clearTimeout(this.clickTimeId);
-                        console.log('双击',this.clickTimeId);
                         this.dialogFormVisible = true;
                         // this.doubleClick(info, node, nodes, links)
 
 
                     })
                     .on('contextmenu',(d,node)=>{
-                        console.log('node!!!!!',d,node);
                         Menu(this.menu)(d, d3.event, node)
 
                     });
@@ -939,12 +922,10 @@
 
                     circle_g.attr('node', function(n) {
 
-                        console.log('click change color',n.id,node.id);
-                        console.log('selected node',n.index,node.index);
+
 
                         if(n.index === node.index && _this.ifClicked===false ) {
                             d3.select('.g_circle_'+ n.index).select('circle').style('fill','red');
-                            // 有问题！！！！！！！
                             console.log('haha',d3.select('.g_circle_'+ n.index).select('circle'));
                             _this.ifClicked = true;
                             console.log('新选的 true',_this.ifClicked);
@@ -1072,8 +1053,7 @@
                     .on("mouseout", function() { edges_line.style("stroke-width", 3) })
                     // .on('click', (link) => { this.deleteLine(this.info,link); })
                     .on('contextmenu',(d,link)=>{
-                        console.log(d);
-                        console.log('link!!!',link)
+
                         Menu(this.menu_edge)(d,d3.event,link)
 
                     });
@@ -1209,13 +1189,11 @@
                     });
                     edges_line.attr('marker-end', function(d,i) {
                             if (d.x_start < d.x_end) {
-                                // console.log('source < end')
                                 return  "url(#end)";
                             }
                             return ''
                         }).attr('marker-start', function(d,i) {
                         if (d.x_start >= d.x_end) {
-                            // console.log('source > end')
                             return "url(#start)";
                         }
                         return ''
@@ -1254,8 +1232,7 @@
                     return (select, event, data)=> {
 
 
-                        console.log(select.type);
-                        console.log('select',data);
+
                         let elm = this;
 
 
@@ -1303,7 +1280,6 @@
                     'properties': {'name': input}
                 };
 
-                console.log('6. add node');
                 info.nodes.push(new_node);
                 this.renderGraph(info);
 
@@ -1312,8 +1288,7 @@
 
             singleClick(info, node,input){
                 // let temp = [];
-                console.log('single click!');
-                console.log('node id', node);
+
                 // let source = node.id;
 
 
@@ -1355,9 +1330,9 @@
                 console.log('submit data',this.info);
 
                 alert('Submit Successfully!');
-                console.log('current user', this.current_user);
-                console.log(this.info.nodes);
-                console.log(this.info.links);
+                // console.log('current user', this.current_user);
+                // console.log(this.info.nodes);
+                // console.log(this.info.links);
 
                 this.upload_nodes = this.info.nodes.map(function (element) {
                     return { "id":String(element.id),"type": element.type,"label": element.label, "properties": {
@@ -1375,7 +1350,6 @@
                 //
                 console.log('nn',JSON.stringify(this.upload_nodes));
                 console.log('nn',JSON.stringify(this.upload_links));
-                // console.log('ll',upload_links);
 
 
 
@@ -1429,18 +1403,9 @@
                 this.renderGraph(this.info)
             },
 
-            deleteNodes(node,info){
-                console.log('select delete node',node)
-            },
 
 
 
-
-            removeNodeClick(){
-
-                console.log('remove node')
-
-            },
 
 
 
