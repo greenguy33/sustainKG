@@ -9,7 +9,8 @@
             <el-header style="text-align: right;height: 40px;">
                 <div class="grid-content ">
                     <template >
-                        <el-button style="margin-right: 5px;"  @click="onTapLogin" v-show="showLogin" size="small" round>Login</el-button>
+                        <el-button style="margin-right: 5px;"  @click="onTapLogin" v-show="showLogin" size="small" round
+                                   type="primary" >Login</el-button>
                         <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round>{{username}}</el-button>
                         <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
                     </template>
@@ -51,12 +52,13 @@
 
 
         </el-row>
-
+        <el-divider direction="horizontal" content-position="center"/>
         <el-container>
 
             <el-row class="tac">
                 <el-col >
-                    <h5>SustainKG</h5>
+                    <h1 style="margin-left: 25px">SustainKG</h1>
+
                     <el-menu
 
                             default-active="2"
@@ -83,17 +85,29 @@
                             <i class="el-icon-menu"></i>
                             <span slot="title">Node Number：{{ info.nodes.length }}</span>
                         </el-menu-item>
+
                         <el-menu-item >
                             <i class="el-icon-setting"></i>
                             <span slot="title">Link Number：{{ info.links.length }}</span>
                         </el-menu-item>
+
+
+
+
+
                     </el-menu>
+
+                        <el-button style="margin-top: 80px; margin-left: 15px;"
+                                   @click="getCollectiveGraph" size="small" round
+                                   type="primary">View Collective Graph </el-button>
+
                 </el-col>
 
 
                 <router-view></router-view>
 
             </el-row>
+
 
             <el-dialog :visible.sync="dialogFormVisible_initGraph"
                        title="Create Start Node" center
@@ -611,6 +625,15 @@
         },
 
         methods: {
+            getCollectiveGraph:function(){
+
+                this.$axios({
+                    url:'/getCollectiveGraph',
+                    method:'post',
+                }).then(response=>{
+                    console.log(response)
+                })
+            },
             ////////////////////////////////////////////////////////////
             // login functions
 
