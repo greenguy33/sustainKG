@@ -23,10 +23,6 @@ __Vue-cli__
 
     sudo npm install -g vue-cli
 
-### Notice ###
-  
-If you download the project and install the dependencies, you can use it directly. However, if you can't 
-please delete the node_module directory and reset up the project using __set_up__ commands:   
 
 ### Set up ###
 
