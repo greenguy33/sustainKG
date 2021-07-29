@@ -297,6 +297,39 @@
                 </div>
             </el-dialog>
 
+            <div id="node_info" v-show="showdetail_node" >
+                <el-card
+                        :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
+                        class="node-card"
+                >
+                    <h2 :style="{ color: '#ca635f' }">Node Detail</h2>
+                    <div>
+
+                        <h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>
+                        <h4 :style="{ color: '#aaaaff' }">Name: {{ detailname }}</h4>
+                        <h4 :style="{ color: '#aaaaff' }">Type: {{ detailValue.type }}</h4>
+                        <h4 :style="{ color: '#aaaaff' }">Label: {{ detailValue.label }}</h4>
+                    </div>
+                </el-card>
+            </div>
+
+            <div id="link_info" v-show="showdetail_link" >
+                <el-card
+                        :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
+                        class="link-card"
+                >
+                    <h2 :style="{ color: '#ca635f' }">Link Detail</h2>
+                    <div>
+
+                        <h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>
+                        <h4 :style="{ color: '#aaaaff' }">Name: {{ detailname }}</h4>
+                        <h4 :style="{ color: '#aaaaff' }">Type: {{ detailValue.type }}</h4>
+                        <h4 :style="{ color: '#aaaaff' }">Label: {{ detailValue.label }}</h4>
+                    </div>
+                </el-card>
+            </div>
+
+
 
             <el-main id="graph">
                 <!--<div id="graph"></div>-->
@@ -400,7 +433,11 @@
                 dialogFormVisible_initGraph:false,
 
                 //////////////////////////////////////
+                showdetail_node:false, // show the info in the right corner
+                showdetail_link:false,
 
+                detailValue:'',
+                detailname:'',
                 node_value: '',
                 link_value:'',
                 init_node_value:'',
@@ -624,7 +661,7 @@
                                 }
                         }).then(response => {
 
-                            this.showLogin = false;
+                            this.showLogin = false; // control the login status
                             let user_nodes = response.data.nodes;
                             let user_links = response.data.links;
                             let change_node_type = user_nodes.map(function (element) {
@@ -960,8 +997,14 @@
 
 
                 console.log('render data',info);
-
-                this.disable_initGraph = this.info.nodes.length !== 0;
+                if(this.showLogin === false && this.info.nodes.length === 0 )
+                {
+                    this.disable_initGraph = false;
+                }
+                else{
+                    this.disable_initGraph = true;
+                }
+                // this.disable_initGraph = this.info.nodes.length !== 0;
 
                 let {links, nodes} = info;
 
@@ -1033,11 +1076,18 @@
                             , 250);
                     })
 
-                    // .on('mouseover', (node) => {
-                    //     if (d3.event.defaultPrevented) return;
-                    //     // showNodeInfo(node, this);
-                    //     // showCircleBorderOuterArc(node, i);
-                    // })
+                    .on('mouseover', (node) => {
+                        if (d3.event.defaultPrevented) return;
+                        this.showdetail_node = true;
+                        console.log(node);
+                        this.detailValue = node
+                        this.detailname = node.properties.name
+                        // showNodeInfo(node, this);
+                        // showCircleBorderOuterArc(node, i);
+                    })
+                    .on('mouseout',(node)=>{
+                        this.showdetail_node = false;
+                    })
                     .on("dblclick", (node, )=>{
 
 
@@ -1426,7 +1476,8 @@
                 let new_node = {
                     'id': nodes.length,
                     "type": "node",
-                    'properties': {'name': input}
+                    'properties': {'name': input},
+                    'label':'Concept'
                 };
 
                 info.nodes.push(new_node);
@@ -1475,41 +1526,50 @@
             },
 
 
-            submitData(){
-                console.log('submit data',this.info);
-
-                alert('Submit Successfully!');
-                // console.log('current user', this.current_user);
-                // console.log(this.info.nodes);
-                // console.log(this.info.links);
-
+            submitData() {
+                console.log('submit data', this.info);
                 this.upload_nodes = this.info.nodes.map(function (element) {
-                    return { "id":String(element.id),"type": element.type,"label": element.label, "properties": {
+                    return {
+                        "id": String(element.id), "type": element.type, "label": element.label, "properties": {
                             "name": element.properties.name
-                        }}
+                        }
+                    }
 
                 });
-                //
                 this.upload_links = this.info.links.map(function (element) {
 
-                    return {"type":element.type, "id":String(element.id), "label": element.label,
-                        "source":String(element.source.id), "target":String(element.target.id),
-                        "properties":element.properties}
+                    return {
+                        "type": element.type, "id": String(element.id), "label": element.label,
+                        "source": String(element.source.id), "target": String(element.target.id),
+                        "properties": element.properties
+                    }
                 });
                 //
-                console.log('nn',JSON.stringify(this.upload_nodes));
-                console.log('nn',JSON.stringify(this.upload_links));
+                console.log('nn', JSON.stringify(this.upload_nodes));
+                console.log('nn', JSON.stringify(this.upload_links));
+                let flag = true;
+                for (let i = 0; i < this.info.nodes.length; i++) {
+                    if (this.info.nodes[i].weight === 0) {
+                        flag = false;
+                    }
+                }
 
-
+                if (flag === false) {
+                    this.$message({
+                        'type': 'warning',
+                        'message': 'The node should have a least one link, please check it.'
+                    })
+                }
+                else{
 
                 this.$axios({
-                    headers:{
+                    headers: {
                         'Content-Type': 'application/json;'
                     },
-                    url:'/postUserGraph',
-                    method:'post',
-                    data:{
-                        user : this.current_user,
+                    url: '/postUserGraph',
+                    method: 'post',
+                    data: {
+                        user: this.current_user,
                         nodes: this.upload_nodes,
                         // nodes:[
                         //     {
@@ -1542,10 +1602,15 @@
                     }
 
 
-                }).then(response=>{
-                    console.log('success',response)
+                }).then(response => {
+                    console.log('success', response)
+                    this.$message({
+                        'type':'success',
+                        'message':'Submit Successfully!'
+                    })
                     this.renderGraph(this.info)
                 })
+            }
             },
 
             reload(){
@@ -1603,6 +1668,36 @@
     .d3-context-menu ul li:hover {
         background-color: #4677f8;
         color: #fefefe;
+    }
+
+    #node_info {
+        position: absolute;
+        bottom: 40px;
+        right: 30px;
+        width: 270px;
+    }
+    #link_info {
+        position: absolute;
+        bottom: 40px;
+        right: 30px;
+        width: 270px;
+    }
+    .node-card {
+        border: 1px solid #9faecf;
+        background-color: #00aeff6b;
+        color: #fff;
+        text-align: left;
+
+    }
+    .link-card {
+        border: 1px solid #9faecf;
+        background-color: #00aeff6b;
+        color: #fff;
+        text-align: left;
+
+    }
+    .el-card__header {
+        border-bottom: 1px solid #50596d;
     }
 
 
