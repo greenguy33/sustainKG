@@ -363,7 +363,7 @@
 
 <script>
     import * as d3 from "d3";
-    // import Seven from 'node-7z'
+    import Seven from 'node-7z'
     import sevenBin from '7zip-bin'
     import { list } from 'node-7z'
 
@@ -629,9 +629,25 @@
 
                 this.$axios({
                     url:'/getCollectiveGraph',
-                    method:'post',
+                    method:'get',
                 }).then(response=>{
                     console.log(response)
+                    let user_nodes = response.data.nodes;
+                    let user_links = response.data.links;
+                    let change_node_type = user_nodes.map(function (element) {
+                        element.id = Number(element.id);
+                        return element
+                    });
+                    let change_link_type = user_links.map(function (element) {
+                        element.id = Number(element.id);
+                        element.source = Number(element.source);
+                        element.target = Number(element.target);
+                        return element
+                    });
+
+                    this.info.nodes = change_node_type;
+                    this.info.links = change_link_type;
+                    this.renderGraph(this.info)
                 })
             },
             ////////////////////////////////////////////////////////////
@@ -730,7 +746,7 @@
 
             handleShow:function(){
 
-                    this.centerDialogVisible=false;
+
                     this.$axios({
                         url:'/getUserGraph',
                         method:'post',
@@ -742,28 +758,36 @@
                         }
 
                     }).then(response=>{
-                            this.showLogin=false;
-                            let user_nodes = response.data.nodes;
-                            let user_links = response.data.links;
-                            // let test = response.data;
+                            if (response.status === 204){
+                                alert('Wrong username or password !')
+                                this.centerDialogVisible=true;
+                            }
+                            else {
+                                this.centerDialogVisible=false;
+                                console.log(response);
+                                this.showLogin = false;
+                                let user_nodes = response.data.nodes;
+                                let user_links = response.data.links;
+                                // let test = response.data;
 
-                            let change_node_type = user_nodes.map(function (element) {
-                                element.id = Number(element.id);
-                                return element
-                            });
+                                let change_node_type = user_nodes.map(function (element) {
+                                    element.id = Number(element.id);
+                                    return element
+                                });
 
-                            let change_link_type = user_links.map(function (element) {
-                                element.id = Number(element.id);
-                                element.source = Number(element.source);
-                                element.target = Number(element.target);
-                                return element
-                            });
+                                let change_link_type = user_links.map(function (element) {
+                                    element.id = Number(element.id);
+                                    element.source = Number(element.source);
+                                    element.target = Number(element.target);
+                                    return element
+                                });
 
 
-                            this.info.nodes = change_node_type;
-                            this.info.links = change_link_type;
-                            this.current_user = response.data.user;
-                            this.renderGraph(this.info)
+                                this.info.nodes = change_node_type;
+                                this.info.links = change_link_type;
+                                this.current_user = response.data.user;
+                                this.renderGraph(this.info)
+                            }
 
                     }).catch(error=>{
                         this.showLogin = true;
@@ -1267,12 +1291,12 @@
                     // .attr("marker-end",  function (d, i) { return getMarkerArrow(i); })//根据箭头标记的id号标记箭头
                     // .attr("marker-end",  )//根据箭头标记的id号标记箭头
                     .style("stroke", 'black')
-                    .style("stroke-width", 3)//线条粗细
+                    .style("stroke-width", 2)//线条粗细
                     .style("fill-opacity",0)
                     .style("cursor","pointer")
                     .attr("id", function (d, i) { return 'edgepath' + i; })
-                    .on("mouseover", function(d){ return getStrokeWidth(d); })
-                    .on("mouseout", function() { edges_line.style("stroke-width", 3) })
+                    // .on("mouseover", function(d){ return getStrokeWidth(d); })
+                    // .on("mouseout", function() { edges_line.style("stroke-width", 3) })
                     // .on('click', (link) => { this.deleteLine(this.info,link); })
                     .on('contextmenu',(d,link)=>{
 
