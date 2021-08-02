@@ -33,7 +33,50 @@ After install the dependencies mentioned above, go to the file root directory an
 then start the server by using
 
     npm run serve 
+    
+### Docker ###
 
+
+1.Get Nginx image: (If you did it before, ignore this step):
+
+    sudo docker pull nginx
+    
+You can check the Nginx image:
+
+    sudo docker images
+    
+2.Package the vue project:
+    
+    npm run build
+    
+You will get a folder dist, and a html file is in it. 
+
+
+3.We will build the Docker:
+
+1. Dockerfile
+
+Check the content of Dockerfile:
+    
+    cat Dockerfile
+   
+Build the docker (note the period):
+
+    sudo docker build -t sustainkg-front .
+    
+Run the docker:
+
+    nohup sudo docker run --net sustainKGnetwork --name=sustainkg-front -d -p 8081:80 sustainkg-front &> nohup_sustainkgfront.out &
+
+Check the docker container:
+
+    sudo docker ps
+    
+Open the website:
+
+    http://graphdb.ics.uci.edu:8081/
+    
+#### Enjoy your journey ! ####
 
 ### Issue ###
 
