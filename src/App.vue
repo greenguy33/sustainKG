@@ -5,8 +5,8 @@
 
 
     <div id="app">
-        <el-row>
-            <el-header style="text-align: right;height: 40px;">
+
+            <el-header style="text-align: right;height:15px;">
                 <div class="grid-content ">
                     <template >
                         <el-button style="margin-right: 5px;"  @click="onTapLogin" v-show="showLogin" size="small" round
@@ -17,48 +17,13 @@
                 </div>
             </el-header>
 
-            <el-dialog
-                    title="Login"
-                    :visible.sync="centerDialogVisible"
-                    width="30%"
-                    center>
-                <span>Username<el-input v-model="username" placeholder="Please Input Username"></el-input></span>
-                <br><br>
-                <span>Password<el-input type="password" v-model="password" placeholder="Please Input Password"></el-input></span>
-                <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
-                <span slot="footer" class="dialog-footer">
-            <el-button @click.native="centerDialogVisible=false">Cancel</el-button>
-            <el-button type="primary" @click.native="handleShow" >Yes</el-button>
-          </span>
-            </el-dialog>
+        <!--<el-divider direction="horizontal" content-position="center"/>-->
 
-
-            <el-dialog
-                    title="Create New Account"
-                    :visible.sync="dialog_createUser"
-                    width="30%"
-                    center>
-                <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
-                <br><br>
-                <span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>
-                <span slot="footer" class="dialog-footer">
-            <el-button @click.native="dialog_createUser=false">Cancel</el-button>
-            <el-button type="primary" @click="createUser" >Yes</el-button>
-          </span>
-            </el-dialog>
-
-
-
-
-
-        </el-row>
-        <el-divider direction="horizontal" content-position="center"/>
         <el-container>
 
-            <el-row class="tac">
-                <el-col >
+            <!--<el-row class="tac">-->
+                <el-aside width="175px">
                     <h1 style="margin-left: 25px">SustainKG</h1>
-
                     <el-menu
 
                             default-active="2"
@@ -72,8 +37,8 @@
                             </template>
                             <el-menu-item-group>
                                 <!--<template slot="title">分组一</template>-->
-                                <el-menu-item index="1-1" @click="submitData()">Submit Data</el-menu-item>
-                                <el-menu-item index="1-2" @click="getWikipedia()">get Articles</el-menu-item>
+                                <el-menu-item index="1-1" :disabled="disable_submit" @click="submitData()">Submit Data</el-menu-item>
+                                <el-menu-item index="1-2"  @click="getWikipedia()">get Articles</el-menu-item>
                                 <el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>
                                 <el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>
 
@@ -92,224 +57,266 @@
                         </el-menu-item>
 
 
-
-
-
                     </el-menu>
 
                         <el-button style="margin-top: 80px; margin-left: 15px;"
-                                   @click="getCollectiveGraph" size="small" round
-                                   type="primary">View Collective Graph </el-button>
+                                   :disabled='disable_viewGraph'  @click="getCollectiveGraph" size="small" round
+                                   type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
 
-                </el-col>
-
-
-                <router-view></router-view>
-
-            </el-row>
+                </el-aside>
 
 
-            <el-dialog :visible.sync="dialogFormVisible_initGraph"
-                       title="Create Start Node" center
 
+
+            <!--</el-row>-->
+
+
+
+            <el-main >
+                <el-row id="graph"></el-row>
+                <!--<div id="graph"></div>-->
+            </el-main>
+
+
+        </el-container>
+
+
+                <!--下面是对话框集合 与界面无关-->
+        <el-dialog
+                title="Login"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center>
+            <span>Username<el-input v-model="username" placeholder="Please Input Username"></el-input></span>
+            <br><br>
+            <span>Password<el-input type="password" v-model="password" placeholder="Please Input Password"></el-input></span>
+            <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click.native="centerDialogVisible=false">Cancel</el-button>
+            <el-button type="primary" @click.native="handleShow" >Yes</el-button>
+          </span>
+        </el-dialog>
+
+
+        <el-dialog
+                title="Create New Account"
+                :visible.sync="dialog_createUser"
+                width="30%"
+                center>
+            <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
+            <br><br>
+            <span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click.native="dialog_createUser=false">Cancel</el-button>
+            <el-button type="primary" @click="createUser" >Yes</el-button>
+          </span>
+        </el-dialog>
+
+
+        <el-dialog :visible.sync="dialogFormVisible_initGraph"
+                   title="Create Start Node" center
+
+        >
+
+            Node Name
+            <el-select ref="init"
+
+                       @keyup.native = "showOption_init_nodes"
+                       label-position="right"
+                       label-width="86px"
+                       style="width: 300px; margin-left:50px;"
+
+                       v-model="init_node_value"
+                       placeholder="Please select"
+                       clearable
+                       filterable
+                       @blur="showOption_init_nodes"
+                       @clear="selectClear"
+                       @change="selectChange"
             >
+                <div  v-show="optionVisible_init_nodes">
+                    <el-option
 
-                Node Name
-                <el-select ref="init"
-
-                        @keyup.native = "showOption_init_nodes"
-                        label-position="right"
-                        label-width="86px"
-                        style="width: 300px; margin-left:50px;"
-
-                        v-model="init_node_value"
-                        placeholder="Please select"
-                        clearable
-                        filterable
-                        @blur="showOption_init_nodes"
-                        @clear="selectClear"
-                        @change="selectChange"
-                >
-                    <div  v-show="optionVisible_init_nodes">
-                        <el-option
-
-                                v-for="(item,index) in node_list"
-                                :key="index"
-                                :label="item.label"
-                                :value="item.value" ></el-option>
-                    </div>
-
-                </el-select>
-
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancel">
-                        No
-                    </el-button>
-                    <el-button type="primary" :disabled="btnChangeEnable" @click="InitGraph">
-                        Yes
-                    </el-button>
+                            v-for="(item,index) in node_list"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value" ></el-option>
                 </div>
-            </el-dialog>
+
+            </el-select>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    No
+                </el-button>
+                <el-button type="primary" :disabled="btnChangeEnable" @click="InitGraph">
+                    Yes
+                </el-button>
+            </div>
+        </el-dialog>
 
 
 
 
-            <el-dialog :visible.sync="dialogFormVisible"
-                       title="Create Node" center
+        <el-dialog :visible.sync="dialogFormVisible"
+                   title="Create Node" center
+        >
+
+            Node Name
+            <el-select
+                    ref="addNode"
+                    @keyup.native = "showOption_add_nodes"
+                    label-position="right"
+                    label-width="86px"
+                    style="width: 300px; margin-left:50px;"
+
+                    v-model="node_value"
+                    placeholder="Please select"
+                    clearable
+                    filterable
+                    @blur="showOption_add_nodes"
+                    @clear="selectClear"
+                    @change="selectChange"
             >
-
-                Node Name
-                <el-select
-                        ref="addNode"
-                        @keyup.native = "showOption_add_nodes"
-                        label-position="right"
-                        label-width="86px"
-                        style="width: 300px; margin-left:50px;"
-
-                        v-model="node_value"
-                        placeholder="Please select"
-                        clearable
-                        filterable
-                        @blur="showOption_add_nodes"
-                        @clear="selectClear"
-                        @change="selectChange"
-                >
-                    <div  v-show="optionVisible_add_nodes">
+                <div  v-show="optionVisible_add_nodes">
                     <el-option
                             class="bar"
-                        v-for="(item,index) in node_list"
-                        :key="index"
-                        :label="item.label"
-                        :value="item.value" ></el-option>
-                    </div>
-                </el-select>
-
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancel">
-                        No
-                    </el-button>
-                    <el-button type="primary" :disabled="btnChangeEnable" @click="addNodes">
-                        Yes
-                    </el-button>
+                            v-for="(item,index) in node_list"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value" ></el-option>
                 </div>
-            </el-dialog>
+            </el-select>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    No
+                </el-button>
+                <el-button type="primary" :disabled="btnChangeEnable" @click="addNodes">
+                    Yes
+                </el-button>
+            </div>
+        </el-dialog>
 
 
-            <el-dialog :visible.sync="dialogFormVisible_change_node_name"
-                       title="Change Node Name" center
+        <el-dialog :visible.sync="dialogFormVisible_change_node_name"
+                   title="Change Node Name" center
+        >
+
+            Node Name
+            <el-select
+                    ref="changeNodeName"
+                    @keyup.native = "showOption_change_nodes"
+                    label-position="right"
+                    label-width="86px"
+                    style="width: 300px; margin-left:30px;"
+
+                    v-model="new_node_name"
+                    placeholder="Please select"
+                    clearable
+                    filterable
+                    @blur="showOption_change_nodes"
+                    @clear="selectClear"
+                    @change="selectChange"
             >
-
-                    Node Name
-                <el-select
-                        ref="changeNodeName"
-                        @keyup.native = "showOption_change_nodes"
-                        label-position="right"
-                        label-width="86px"
-                        style="width: 300px; margin-left:30px;"
-
-                        v-model="new_node_name"
-                        placeholder="Please select"
-                        clearable
-                        filterable
-                        @blur="showOption_change_nodes"
-                        @clear="selectClear"
-                        @change="selectChange"
-                >
-                    <div  v-show="optionVisible_change_nodes">
+                <div  v-show="optionVisible_change_nodes">
                     <el-option
-                        v-for="(item,index) in node_list"
-                        :key="index"
-                        :label="item.label"
-                        :value="item.value" ></el-option></div>
-                </el-select>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancel">
-                        No
-                    </el-button>
-                    <el-button type="primary" :disabled="btnChangeEnable" @click="change_node_name">
-                        Yes
-                    </el-button>
-                </div>
-            </el-dialog>
+                            v-for="(item,index) in node_list"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value" ></el-option></div>
+            </el-select>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    No
+                </el-button>
+                <el-button type="primary" :disabled="btnChangeEnable" @click="change_node_name">
+                    Yes
+                </el-button>
+            </div>
+        </el-dialog>
 
 
 
-            <el-dialog :visible.sync="dialogFormVisible_link"
-                       :show-close="false"
-                       title="Create Link" center>
+        <el-dialog :visible.sync="dialogFormVisible_link"
+                   :show-close="false"
+                   title="Create Link" center>
 
-                Link Name
+            Link Name
 
-                <el-select
-                        ref="addLink"
-                        @keyup.native = "showOption_add_link"
-                        label-position="right"
-                        label-width="86px"
-                        style="width: 300px; margin-left:50px;"
+            <el-select
+                    ref="addLink"
+                    @keyup.native = "showOption_add_link"
+                    label-position="right"
+                    label-width="86px"
+                    style="width: 300px; margin-left:50px;"
 
-                        v-model="link_value"
-                        placeholder="Please select"
-                        clearable
-                        filterable
-                        @blur="showOption_add_link"
-                        @clear="selectClear"
-                        @change="selectChange"
-                >
-                    <div  v-show="optionVisible_add_link">
+                    v-model="link_value"
+                    placeholder="Please select"
+                    clearable
+                    filterable
+                    @blur="showOption_add_link"
+                    @clear="selectClear"
+                    @change="selectChange"
+            >
+                <div  v-show="optionVisible_add_link">
                     <el-option
-                        v-for="(item,index) in link_list"
-                        :key="index"
-                        :label="item.label"
-                        :value="item.value" ></el-option></div>
+                            v-for="(item,index) in link_list"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value" ></el-option></div>
 
-                </el-select>
+            </el-select>
 
 
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancel">
-                        No
-                    </el-button>
-                    <el-button type="primary" :disabled="btnChangeEnable"  @click="addLinks">
-                        Yes
-                    </el-button>
-                </div>
-            </el-dialog>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    No
+                </el-button>
+                <el-button type="primary" :disabled="btnChangeEnable"  @click="addLinks">
+                    Yes
+                </el-button>
+            </div>
+        </el-dialog>
 
-            <el-dialog :visible.sync="dialogFormVisible_change_link_name"
-                       title="Change Link Name" center>
+        <el-dialog :visible.sync="dialogFormVisible_change_link_name"
+                   title="Change Link Name" center>
 
-                Link Name
-                <el-select
-                        ref="changeLinkName"
-                        @keyup.native = "showOption_change_link"
-                        label-position="right"
-                        label-width="86px"
-                        style="width: 300px; margin-left:30px;"
+            Link Name
+            <el-select
+                    ref="changeLinkName"
+                    @keyup.native = "showOption_change_link"
+                    label-position="right"
+                    label-width="86px"
+                    style="width: 300px; margin-left:30px;"
 
-                        v-model="new_link_name"
-                        placeholder="Please select"
-                        clearable
-                        filterable
-                        @blur="showOption_change_link"
-                        @clear="selectClear"
-                        @change="selectChange"
-                >
-                    <div  v-show="optionVisible_change_link">
+                    v-model="new_link_name"
+                    placeholder="Please select"
+                    clearable
+                    filterable
+                    @blur="showOption_change_link"
+                    @clear="selectClear"
+                    @change="selectChange"
+            >
+                <div  v-show="optionVisible_change_link">
                     <el-option
-                        v-for="(item,index) in link_list"
-                        :key="index"
-                        :label="item.label"
-                        :value="item.value" ></el-option></div>
-                </el-select>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancel">
-                        No
-                    </el-button>
-                    <el-button type="primary" :disabled="btnChangeEnable" @click="change_link_name">
-                        Yes
-                    </el-button>
-                </div>
-            </el-dialog>
+                            v-for="(item,index) in link_list"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value" ></el-option></div>
+            </el-select>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    No
+                </el-button>
+                <el-button type="primary" :disabled="btnChangeEnable" @click="change_link_name">
+                    Yes
+                </el-button>
+            </div>
+        </el-dialog>
+
+
+
 
             <div id="node_info" v-show="showdetail_node" >
                 <el-card
@@ -320,12 +327,14 @@
                     <div>
 
                         <h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>
+                        <h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>
                         <h4 :style="{ color: '#aaaaff' }">Name: {{ detailname }}</h4>
                         <h4 :style="{ color: '#aaaaff' }">Type: {{ detailValue.type }}</h4>
                         <h4 :style="{ color: '#aaaaff' }">Label: {{ detailValue.label }}</h4>
                     </div>
                 </el-card>
             </div>
+
 
             <div id="link_info" v-show="showdetail_link" >
                 <el-card
@@ -345,14 +354,6 @@
 
 
 
-            <el-main id="graph">
-                <!--<div id="graph"></div>-->
-            </el-main>
-
-
-
-
-        </el-container>
 
 
 
@@ -423,7 +424,7 @@
             return {
 
                 //////////////////////////////////////
-
+                readOnly : false,
                 // log function parameters
                 current_user:'',
                 username:'',
@@ -443,7 +444,12 @@
 
                 upload_nodes:'',
                 upload_links:'',
+
                 disable_initGraph:true,
+                disable_submit:true,
+                disable_viewGraph: true,
+                viewGraph_btn_status:true,
+                // disable_getArticles:true,
                 dialogFormVisible_initGraph:false,
 
                 //////////////////////////////////////
@@ -533,6 +539,9 @@
                                     });
                                 console.log('test !!!',select_node,node);
                                 this.info.nodes.splice(node,1);
+
+
+
                                 for(let i =this.info.links.length-1; i>=0; i-- )
                                 {
                                     console.log('link index',i,node);
@@ -544,7 +553,13 @@
 
                                 }
 
-                                console.log('after delete', this.info)
+                                console.log('after delete', this.info);
+                                for(let i = 0; i < this.info.nodes.length;i++)
+                                {
+                                    console.log(i);
+                                    console.log(this.info.nodes[i].id,this.info.nodes[i].index);
+                                    this.info.nodes[i].id = i;
+                                }
                                 this.renderGraph(this.info);
 
                             }).catch(() => {
@@ -626,29 +641,42 @@
 
         methods: {
             getCollectiveGraph:function(){
+                this.disable_initGraph = true;
+                this.disable_submit = true;
+                this.viewGraph_btn_status = !this.viewGraph_btn_status;
 
-                this.$axios({
-                    url:'/getCollectiveGraph',
-                    method:'get',
-                }).then(response=>{
-                    console.log(response)
-                    let user_nodes = response.data.nodes;
-                    let user_links = response.data.links;
-                    let change_node_type = user_nodes.map(function (element) {
-                        element.id = Number(element.id);
-                        return element
-                    });
-                    let change_link_type = user_links.map(function (element) {
-                        element.id = Number(element.id);
-                        element.source = Number(element.source);
-                        element.target = Number(element.target);
-                        return element
-                    });
+                if (this.viewGraph_btn_status === false) {
+                    this.readOnly = true;
+                    this.$axios({
+                        url: '/getCollectiveGraph',
+                        method: 'get',
+                    }).then(response => {
+                        console.log(response)
+                        let user_nodes = response.data.nodes;
+                        let user_links = response.data.links;
+                        let change_node_type = user_nodes.map(function (element) {
+                            element.id = Number(element.id);
+                            return element
+                        });
+                        let change_link_type = user_links.map(function (element) {
+                            element.id = Number(element.id);
+                            element.source = Number(element.source);
+                            element.target = Number(element.target);
+                            return element
+                        });
 
-                    this.info.nodes = change_node_type;
-                    this.info.links = change_link_type;
-                    this.renderGraph(this.info)
-                })
+                        this.info.nodes = change_node_type;
+                        this.info.links = change_link_type;
+                        this.renderGraph(this.info)
+                        // this.renderGraph()
+
+                    })
+                }
+                else{
+
+                    this.readOnly = false;
+                    this.handleShow();
+                }
             },
             ////////////////////////////////////////////////////////////
             // login functions
@@ -804,6 +832,10 @@
 
             logout:function () {
                 this.showLogin = true;
+                this.disable_initGraph = true;
+                this.disable_submit = true;
+                this.disable_viewGraph  =true;
+                this.viewGraph_btn_status = true;
                 this.username = '';
                 this.password = '';
                 this.info= {
@@ -832,6 +864,7 @@
 
             showOption_init_nodes()
             {
+                console.log(this.$refs.init.$children);
                 let inputContent = this.$refs.init.$children[0].value;
 
                 this.optionVisible_init_nodes = inputContent.length >=2;
@@ -881,7 +914,7 @@
                 this.link_value = '';
                 this.new_node_name = '';
                 this.new_link_name = '';
-
+                this.init_node_value = '',
                 this.optionVisible_init_nodes=false;
                 this.optionVisible_add_nodes=false;
                 this.optionVisible_change_nodes=false;
@@ -947,7 +980,7 @@
             {
                 console.log(this.info);
                 console.log(document.getElementById('init'));
-
+                this.btnChangeEnable = true;
                 console.log('add a start node');
                 let init_node= {
                     "id": 0,
@@ -969,13 +1002,21 @@
 
             addNodes(){
 
-                this.dialogFormVisible = false;
-                this.doubleClick(this.info, this.info.nodes, this.node_value);
 
-                // this.optionVisible = false;
-                // this.optionVisible_link = false;
-                this.btnChangeEnable = true;
-                this.selectClear();
+
+                    let flag = this.doubleClick(this.info, this.info.nodes, this.node_value);
+                    this.btnChangeEnable = true;
+                    console.log('flag', flag)
+                    if (flag === true) {
+                        this.dialogFormVisible = false;
+                        this.selectClear();
+                    }
+                    else {
+                        this.dialogFormVisible = true;
+                        this.selectClear();
+
+                    }
+
 
 
             },
@@ -1003,13 +1044,8 @@
                 this.dialogFormVisible_change_link_name = false;
 
                 this.btnChangeEnable = true;
-                // this.optionVisible = false;
-                // this.optionVisible_link = false;
 
-
-
-
-                this.renderGraph(this.info)
+                this.renderGraph(this.info);
                 this.selectClear();
             },
 
@@ -1043,7 +1079,13 @@
                 // let temp = [];
 
 
-                console.log('render data',info);
+                console.log('render data', info);
+                if(this.showLogin === false)
+                {
+                this.disable_submit = false;
+                this.disable_viewGraph = false;
+                }
+
                 if(this.showLogin === false && this.info.nodes.length === 0 )
                 {
                     this.disable_initGraph = false;
@@ -1082,7 +1124,7 @@
                 let svg = d3.select("#graph").append("svg")
                     .attr("pointer-event", "all")
                     .attr("preserveAspectRatio", "xMidYMid meet")//自适应容器大小
-                    .attr("viewBox", "-460 -220 1200 1200")
+                    .attr("viewBox", "-460 -220 2000 2000")
                     // .on("dblclick", doubleClick)
                     .call(zoom);
 
@@ -1105,20 +1147,28 @@
                         clearTimeout(this.clickTimeId);
 
                         this.clickTimeId = setTimeout( ()=> {
-
-
-                                this.temp.push(node.index);
-                                console.log('liuliu',this.temp);
-                                if(this.temp.length === 2 && this.temp[0] !== this.temp[1]){
-                                    this.dialogFormVisible_link = true;
-
+                                if(this.readOnly === true){
+                                    this.$message(
+                                        {
+                                            type: 'Warning',
+                                            message: 'Read Only Mode'
+                                        });
                                 }
-                                else if(this.temp.length === 2 && this.temp[0] === this.temp[1])
-                                {
-                                    this.temp.length = 0
+                                else {
+
+
+                                    this.temp.push(node.index);
+                                    console.log('liuliu', this.temp);
+                                    if (this.temp.length === 2 && this.temp[0] !== this.temp[1]) {
+                                        this.dialogFormVisible_link = true;
+
+                                    }
+                                    else if (this.temp.length === 2 && this.temp[0] === this.temp[1]) {
+                                        this.temp.length = 0
+                                    }
+                                    // this.singleClick(info, node, temp, this.state2);
+                                    clickStyle(node, i, this);
                                 }
-                                // this.singleClick(info, node, temp, this.state2);
-                                clickStyle(node, i, this);
                             }
                             , 250);
                     })
@@ -1126,8 +1176,8 @@
                     .on('mouseover', (node) => {
                         if (d3.event.defaultPrevented) return;
                         this.showdetail_node = true;
-                        console.log(node);
-                        this.detailValue = node
+                        // console.log(node);
+                        this.detailValue = node;
                         this.detailname = node.properties.name
                         // showNodeInfo(node, this);
                         // showCircleBorderOuterArc(node, i);
@@ -1140,14 +1190,29 @@
 
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
-                        this.dialogFormVisible = true;
-                        console.log(document.getElementsByClassName('el-input__inner'))
-                        // this.doubleClick(info, node, nodes, links)
-
-
+                        if(this.readOnly === true){
+                            this.$message(
+                                {
+                                    type: 'Warning',
+                                    message: 'Read Only Mode'
+                                });
+                        }
+                        else {
+                            this.dialogFormVisible = true;
+                        }
                     })
                     .on('contextmenu',(d,node)=>{
-                        Menu(this.menu)(d, d3.event, node)
+                        if (d3.event.defaultPrevented) return;
+                        if(this.readOnly === true){
+                            this.$message(
+                                {
+                                    type: 'Warning',
+                                    message: 'Read Only Mode'
+                                });
+                        }
+                        else {
+                            Menu(this.menu)(d, d3.event, node)
+                        }
 
                     });
 
@@ -1202,7 +1267,9 @@
                 let circle = circle_g.append("circle")
                     .style("stroke-width", "2px")
                     .attr("r", 30)//设置圆圈半径
-                    .style("fill", function (node) { return getCircleColor(node); });
+                    .style("fill", function (node) { return getCircleColor(node); })
+
+                ;
 
                 let text = circle_g.append("text")
                     .attr("dy", ".35em")
@@ -1214,23 +1281,13 @@
                 circle.append("svg:title").text(function(node) {
                     switch (node.type) {
                         case 'node': return node.properties.name;
-                        // case 'Device': return node.factoryCode;
-                        // case 'Application': return node.applicationName;
-                        // case 'Position': return node.positionCode;
-                        // case 'Manufacturer': return node.manufacturerName;
-                        // case 'IotInfrastructure': return node.iotInfrastructureName;
-                        // case 'DeviceAdmin': return node.name;
+
                     }
                 });
                 text.append("svg:title").text(function(node) {
                     switch (node.type) {
                         case 'node': return node.properties.name;
-                        // case 'Device': return node.factoryCode;
-                        // case 'Application': return node.applicationName;
-                        // case 'Position': return node.positionCode;
-                        // case 'Manufacturer': return node.manufacturerName;
-                        // case 'IotInfrastructure': return node.iotInfrastructureName;
-                        // case 'DeviceAdmin': return node.name;
+
                     }
                 });
                 //设置连接线
@@ -1270,26 +1327,6 @@
                     .data(force.links())
                     .enter()
                     .append("path")
-
-                    // .attr('marker-end', function(d,i) {
-                    //     console.log('lala',d.label,d.x_start)
-                    //     if (d.x_start < d.x_end) {
-                    //         console.log('source < end')
-                    //         return  "url(#end)";
-                    //     }
-                    //     return ''
-                    // })
-                    // .attr('marker-start', function(d,i) {
-                    //     if (d.x_start >= d.x_end) {
-                    //         console.log('source > end')
-                    //         return "url(#start)";
-                    //     }
-                    //     return ''
-                    //
-                    // })
-                    // .attr("marker-start", "url(#start)")
-                    // .attr("marker-end",  function (d, i) { return getMarkerArrow(i); })//根据箭头标记的id号标记箭头
-                    // .attr("marker-end",  )//根据箭头标记的id号标记箭头
                     .style("stroke", 'black')
                     .style("stroke-width", 2)//线条粗细
                     .style("fill-opacity",0)
@@ -1299,8 +1336,16 @@
                     // .on("mouseout", function() { edges_line.style("stroke-width", 3) })
                     // .on('click', (link) => { this.deleteLine(this.info,link); })
                     .on('contextmenu',(d,link)=>{
-
-                        Menu(this.menu_edge)(d,d3.event,link)
+                        if (d3.event.defaultPrevented) return;
+                        if(this.readOnly === true){
+                            this.$message(
+                                {
+                                    type: 'Warning',
+                                    message: 'Read Only Mode'
+                                });
+                        }else {
+                            Menu(this.menu_edge)(d, d3.event, link)
+                        }
 
                     });
 
@@ -1338,9 +1383,6 @@
                     .text(function (d) { return d.label; });
 
 
-
-                // force.on("tick", tick)//指时间间隔，隔一段时间刷新一次画面
-                //     .start();//开始转换
                 function zoomed() {//svg下的g标签移动大小
                     svg.selectAll("g").attr("transform", "translate("  +d3.event.translate + ")scale(" +d3.event.scale + ")");
                 }
@@ -1390,7 +1432,8 @@
                         'IotInfrastructure': '#6ca5dd',
                         'DeviceAdmin': '#50DD87',
                     };//圆圈背景色
-                    return color[node.label] || '#C477E9';
+                    return "#FF9D00";
+                    // return color[node.label] || '#C477E9';
                 }
 
                 function appendCircleText(d, _this) {
@@ -1426,7 +1469,6 @@
 
                     circle.attr("transform", transform1);//圆圈
                     text.attr("transform", transform2);//顶点文字
-                    //link奇数有问题
                     edges_line
                         .attr('d', function (d) {
 
@@ -1447,15 +1489,43 @@
                     })
                     ;
 
-
                 }
 
                 //设置圆圈和文字的坐标
                 function transform1(d) {
+                    if (d.x <=-430)
+                    {
+                        d.x = -430
+                    }
+                    else if (d.x >=1150){
+                        d.x = 1150
+                    }
+
+                    if(d.y <= -168){
+                        d.y = -168
+                    }
+                    else if (d.y >=700){
+                        d.y = 700
+                    }
+
                     return "translate(" + d.x + "," + d.y + ")";
                 }
 
                 function transform2(d) {
+                    if (d.x <=-430)
+                    {
+                        d.x = -430
+                    }
+                    else if (d.x >=1150){
+                        d.x = 1150
+                    }
+
+                    if(d.y <= -168){
+                        d.y = -168
+                    }
+                    else if (d.y >=700){
+                        d.y = 700
+                    }
                     return "translate(" + (d.x) + "," + d.y + ")";
                 }
 
@@ -1519,16 +1589,33 @@
 //
             doubleClick(info,nodes, input){
 
+                let containSame = false;
 
-                let new_node = {
-                    'id': nodes.length,
-                    "type": "node",
-                    'properties': {'name': input},
-                    'label':'Concept'
-                };
+                for (let i = 0; i < this.info.nodes.length; i++) {
 
-                info.nodes.push(new_node);
-                this.renderGraph(info);
+                    if (this.info.nodes[i].properties.name === input) {
+                        containSame =  true;
+                    }
+                }
+
+                if (containSame === false) {
+
+                    let new_node = {
+                        'id': nodes.length,
+                        "type": "node",
+                        'properties': {'name': input},
+                        'label': 'Concept'
+                    };
+
+                    info.nodes.push(new_node);
+                    this.renderGraph(info);
+                    return true
+                }
+
+                else{
+                    alert('Same node already exits!')
+                    return false
+                }
 
 
             },
@@ -1546,6 +1633,7 @@
                     let new_link = {
                         "source": this.temp[0],
                         "target": this.temp[1],
+                        "id": this.info.links.length,
                         "type": 'link',
                         "properties": {},
                         "label": input
@@ -1575,6 +1663,7 @@
 
             submitData() {
                 console.log('submit data', this.info);
+
                 this.upload_nodes = this.info.nodes.map(function (element) {
                     return {
                         "id": String(element.id), "type": element.type, "label": element.label, "properties": {
@@ -1587,7 +1676,7 @@
 
                     return {
                         "type": element.type, "id": String(element.id), "label": element.label,
-                        "source": String(element.source.id), "target": String(element.target.id),
+                        "source": String(element.source.index), "target": String(element.target.index),
                         "properties": element.properties
                     }
                 });
@@ -1610,6 +1699,7 @@
                 else{
 
                 this.$axios({
+
                     headers: {
                         'Content-Type': 'application/json;'
                     },
@@ -1650,6 +1740,8 @@
 
 
                 }).then(response => {
+                    console.log('pp', JSON.stringify(this.upload_nodes));
+                    console.log('pp', JSON.stringify(this.upload_links));
                     console.log('success', response)
                     this.$message({
                         'type':'success',
