@@ -1,21 +1,28 @@
+
+
 <template>
 
-
-
-
-
-    <div id="app">
+    <div id="app" v-title data-title="SustainKG">
 
             <el-header style="text-align: right;height:15px;">
-                <div class="grid-content ">
+
+
+
+
+
+                <div class="grid-content " >
                     <template >
+                        <el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>
                         <el-button style="margin-right: 5px;"  @click="onTapLogin" v-show="showLogin" size="small" round
                                    type="primary" >Login</el-button>
                         <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round>{{username}}</el-button>
                         <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
                     </template>
                 </div>
+
             </el-header>
+
+
 
         <!--<el-divider direction="horizontal" content-position="center"/>-->
 
@@ -38,7 +45,7 @@
                             <el-menu-item-group>
                                 <!--<template slot="title">分组一</template>-->
                                 <el-menu-item index="1-1" :disabled="disable_submit" @click="submitData()">Submit Data</el-menu-item>
-                                <el-menu-item index="1-2"  @click="getWikipedia()">get Articles</el-menu-item>
+                                <!--<el-menu-item index="1-2"  @click="getWikipedia()">get Articles</el-menu-item>-->
                                 <el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>
                                 <el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>
 
@@ -63,10 +70,11 @@
                                    :disabled='disable_viewGraph'  @click="getCollectiveGraph" size="small" round
                                    type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
 
+                    <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
+                                 <!--@click="search" size="small" round-->
+                               <!--type="primary">wiki </el-button>-->
+
                 </el-aside>
-
-
-
 
             <!--</el-row>-->
 
@@ -78,7 +86,15 @@
             </el-main>
 
 
+
+
+
+
         </el-container>
+
+
+
+
 
 
                 <!--下面是对话框集合 与界面无关-->
@@ -89,14 +105,13 @@
                 center>
             <span>Username<el-input v-model="username" placeholder="Please Input Username"></el-input></span>
             <br><br>
-            <span>Password<el-input type="password" v-model="password" placeholder="Please Input Password"></el-input></span>
+            <span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='handleShow'></el-input></span>
             <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
             <span slot="footer" class="dialog-footer">
             <el-button @click.native="centerDialogVisible=false">Cancel</el-button>
             <el-button type="primary" @click.native="handleShow" >Yes</el-button>
           </span>
         </el-dialog>
-
 
         <el-dialog
                 title="Create New Account"
@@ -160,33 +175,90 @@
 
         <el-dialog :visible.sync="dialogFormVisible"
                    title="Create Node" center
+                   style='width: 1000px;margin-left:200px;'
         >
 
-            Node Name
-            <el-select
-                    ref="addNode"
-                    @keyup.native = "showOption_add_nodes"
-                    label-position="right"
-                    label-width="86px"
-                    style="width: 300px; margin-left:50px;"
 
-                    v-model="node_value"
-                    placeholder="Please select"
-                    clearable
-                    filterable
-                    @blur="showOption_add_nodes"
-                    @clear="selectClear"
-                    @change="selectChange"
-            >
-                <div  v-show="optionVisible_add_nodes">
-                    <el-option
-                            class="bar"
-                            v-for="(item,index) in node_list"
-                            :key="index"
-                            :label="item.label"
-                            :value="item.value" ></el-option>
-                </div>
-            </el-select>
+
+            <el-form :inline="true"  class="demo-form-inline" >
+                <el-form-item label="Node Name" >
+                    <el-input v-model="input"
+
+                              style='width: 200px'
+
+                              @keyup.native.enter="search('select'); "
+
+                              placeholder="Node Name"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary"
+
+                               @click="search('select'); ">Search</el-button>
+                </el-form-item>
+
+                <el-form-item label="Result">
+                    <el-select  style='width: 200px; margin-left:30px;'
+                                v-model="node_value" placeholder="Result"
+                                @change="selectChange"
+                                @blur="blur"
+                                @focus="focus"
+                                ref="select"
+                                clearable
+
+
+
+                    >
+                        <el-option
+
+                                ref="option"
+                                class="bar"
+                                v-for="(item,index) in node_list"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value" ></el-option>
+                    </el-select>
+                </el-form-item>
+
+            </el-form>
+
+            <!--<el-select-->
+                    <!--ref="addNode"-->
+                    <!--@keyup.native = "showOption_add_nodes"-->
+                    <!--label-position="right"-->
+                    <!--label-width="86px"-->
+                    <!--style="width: 200px; margin-left:50px;"-->
+
+                    <!--v-model="node_value"-->
+                    <!--placeholder="Please select"-->
+                    <!--clearable-->
+                    <!--filterable-->
+                    <!--@blur="showOption_add_nodes"-->
+                    <!--@clear="selectClear"-->
+                    <!--@change="selectChange"-->
+                    <!--@keyup.enter.native="search"-->
+                    <!--@focus="selectFocus"-->
+                    <!--@click.native="haha"-->
+
+            <!--&gt;-->
+
+
+                <!--<div  v-show="optionVisible_add_nodes">-->
+                    <!--<el-option-->
+                            <!--class="bar"-->
+                            <!--v-for="(item,index) in node_list"-->
+                            <!--:key="index"-->
+                            <!--:label="item.label"-->
+                            <!--:value="item.value" ></el-option>-->
+                <!--</div>-->
+            <!--</el-select>-->
+
+
+            <!--<el-button type="text" size='medium' style="margin-left:30px" @click.native="search"-->
+                       <!--&gt;search</el-button>-->
+
+
+
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -201,31 +273,72 @@
 
         <el-dialog :visible.sync="dialogFormVisible_change_node_name"
                    title="Change Node Name" center
+                   style='width: 1000px;margin-left:200px;'
         >
 
-            Node Name
-            <el-select
-                    ref="changeNodeName"
-                    @keyup.native = "showOption_change_nodes"
-                    label-position="right"
-                    label-width="86px"
-                    style="width: 300px; margin-left:30px;"
+            <!--Node Name-->
+            <!--<el-select-->
+                    <!--ref="changeNodeName"-->
+                    <!--@keyup.native = "showOption_change_nodes"-->
+                    <!--label-position="right"-->
+                    <!--label-width="86px"-->
+                    <!--style="width: 300px; margin-left:30px;"-->
 
-                    v-model="new_node_name"
-                    placeholder="Please select"
-                    clearable
-                    filterable
-                    @blur="showOption_change_nodes"
-                    @clear="selectClear"
-                    @change="selectChange"
-            >
-                <div  v-show="optionVisible_change_nodes">
-                    <el-option
-                            v-for="(item,index) in node_list"
-                            :key="index"
-                            :label="item.label"
-                            :value="item.value" ></el-option></div>
-            </el-select>
+                    <!--v-model="new_node_name"-->
+                    <!--placeholder="Please select"-->
+                    <!--clearable-->
+                    <!--filterable-->
+                    <!--@blur="showOption_change_nodes"-->
+                    <!--@clear="selectClear"-->
+                    <!--@change="selectChange"-->
+            <!--&gt;-->
+                <!--<div  v-show="optionVisible_change_nodes">-->
+                    <!--<el-option-->
+                            <!--v-for="(item,index) in node_list"-->
+                            <!--:key="index"-->
+                            <!--:label="item.label"-->
+                            <!--:value="item.value" ></el-option></div>-->
+            <!--</el-select>-->
+
+            <el-form :inline="true"  class="demo-form-inline">
+                <el-form-item label="Node Name">
+                    <el-input v-model="input"
+
+                              style='width: 200px'
+
+                              @keyup.native.enter="search('select_changeNode'); "
+
+                              placeholder="Node Name"></el-input>
+
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary"
+
+                               @click="search('select_changeNode'); ">Search</el-button>
+                </el-form-item>
+
+                <el-form-item label="Result">
+                    <el-select  style='width: 200px; margin-left:30px;'
+                                v-model="new_node_name" placeholder="Result"
+                                @change="selectChange"
+                                @blur="blur"
+                                ref="select_changeNode"
+                                clearable
+                    >
+                        <el-option
+                                class="bar"
+                                v-for="(item,index) in node_list"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value" ></el-option>
+                    </el-select>
+                </el-form-item>
+
+            </el-form>
+
+
+
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     No
@@ -234,6 +347,7 @@
                     Yes
                 </el-button>
             </div>
+
         </el-dialog>
 
 
@@ -273,7 +387,7 @@
                 <el-button @click="cancel">
                     No
                 </el-button>
-                <el-button type="primary" :disabled="btnChangeEnable"  @click="addLinks">
+                <el-button type="primary" :disabled="btnChangeEnable"  @click="drag_addLinks">
                     Yes
                 </el-button>
             </div>
@@ -318,16 +432,17 @@
 
 
 
-            <div id="node_info" v-show="showdetail_node" >
+            <div id="node_info" v-show="showdetail_node"  >
                 <el-card
                         :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                         class="node-card"
+                        style="height: 250px"
                 >
                     <h2 :style="{ color: '#ca635f' }">Node Detail</h2>
                     <div>
 
                         <h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>
-                        <h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>
+                        <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
                         <h4 :style="{ color: '#aaaaff' }">Name: {{ detailname }}</h4>
                         <h4 :style="{ color: '#aaaaff' }">Type: {{ detailValue.type }}</h4>
                         <h4 :style="{ color: '#aaaaff' }">Label: {{ detailValue.label }}</h4>
@@ -364,10 +479,9 @@
 
 <script>
     import * as d3 from "d3";
-    import Seven from 'node-7z'
-    import sevenBin from '7zip-bin'
+    import  wiki from 'wikijs';
     import { list } from 'node-7z'
-
+    import Vue from 'vue'
     import $ from 'jquery'
     import {
         getNodeSelfPath,
@@ -376,24 +490,33 @@
 
 
 
-
     export default {
 
-
+        name: 'App',
         data(){
 
 
 
             let info = {
                 "links": [
-                    {
-                        "source" : 0,
-                        "target" : 1,
-                        "type" : "link",
-                        'label': 'Link TEST',
-                        "properties":{}
+                    // {
+                    //     "source" : 0,
+                    //     "target" : 1,
+                    //     "type" : "link",
+                    //     'label': 'Link TEST',
+                    //     "properties":{}
+                    //
+                    // },
 
-                    },
+                    // {
+                    //     "source" : 0,
+                    //     "target" : 2,
+                    //     "type" : "link",
+                    //     'label': 'Link TEST',
+                    //     "properties":{}
+                    //
+                    // },
+
 
                 ],
                 "nodes": [
@@ -422,7 +545,9 @@
 
 
             return {
-
+                input:'',
+                searchDialog:false,
+                disableSelect: true,
                 //////////////////////////////////////
                 readOnly : false,
                 // log function parameters
@@ -441,7 +566,7 @@
                 optionVisible_add_link:false,
                 optionVisible_change_link:false,
 
-
+                inputNodeContent:'',
                 upload_nodes:'',
                 upload_links:'',
 
@@ -462,26 +587,27 @@
                 link_value:'',
                 init_node_value:'',
                 btnChangeEnable: true,
-                node_list: [
-                    {
-                        value: 'node1',
-                        label: 'node1'
-                    },
-
-                    {
-                        value: 'node2',
-                        label: 'node2'
-                    },
-
-                    {
-                        value: 'test3',
-                        label: 'test3'
-                    },
-                    {
-                        value: 'bbb',
-                        label: 'bbb'
-                    }
-                ],
+                node_list: [],
+                // node_list: [
+                //     {
+                //         value: 'node1',
+                //         label: 'node1'
+                //     },
+                //
+                //     {
+                //         value: 'node2',
+                //         label: 'node2'
+                //     },
+                //
+                //     {
+                //         value: 'test3',
+                //         label: 'test3'
+                //     },
+                //     {
+                //         value: 'bbb',
+                //         label: 'bbb'
+                //     }
+                // ],
 
                 link_list: [
                     {
@@ -498,15 +624,15 @@
                     }
                 ],
 
-                info: {
-                    nodes:[],
-                    links:[]
-                },
+                // info: {
+                //     nodes:[],
+                //     links:[]
+                // },
 
-                // info: info,
+                info: info,
 
                 ifClicked:false,
-
+                searchNode: false,
                 selected_Node: '',
 
                 dialogFormVisible:false,
@@ -629,47 +755,235 @@
                 ],
 
 
-
+                dragStartIndex:'',
+                dragEndIndex:'',
+                mouseLinkLineStartLoc:[],
+                original_dx:0,
+                original_dy:0,
+                dragNode:null,
+                start:null,
+                end:null,
             }
         },
 
         mounted() {
 
             this.renderGraph(this.info);
+            this.centerDialogVisible = true;
 
         },
 
         methods: {
+
+
+
+            search:function(nextRef){
+
+                if(this.input !== '') {
+                    this.$refs[nextRef].$el.click();
+                    this.node_value = [];
+                    this.disableSelect = false;
+                    this.$axios({
+                        url:'https://en.wikipedia.org/w/api.php?action=opensearch&search='+ this.input +'&origin=*&callback=',
+                        // url: 'https://en.wikipedia.org/w/api.php?action=query&format=json&&list=search&srsearch=' + this.input + '&origin=*&callback=',
+                        method: 'get',
+                    }).then(response => {
+                        // console.log(eval(response.data)[1]);
+                        let search_term = []
+                        for(let i =0;i<eval(response.data)[1].length;i++){
+                            if(eval(response.data)[1][i].search('(disambiguation)') !== -1 ||eval(response.data)[1][i].search('List_of_') !== -1)
+                                continue;
+                            search_term.push(eval(response.data)[1][i])
+                        }
+
+                        this.node_list = search_term.map(function (element) {
+                            return {'value': element, 'label': element,}
+                        });
+                        this.btnChangeEnable = false;
+                        this.node_value = this.node_list[0].value
+                    });
+                }
+                else{
+                    alert('Input can not be empty');
+                }
+                this.$forceUpdate()
+            },
+
+            blur(){
+                console.log('lose')
+            },
+            focus(){
+                console.log('get');
+                console.log( this.$refs);
+                this.$refs['select'].focus()
+
+            },
             getCollectiveGraph:function(){
+
+                let node_limits = 25;
+                let link_set = [];
+                let nodeId_set = [];
                 this.disable_initGraph = true;
                 this.disable_submit = true;
                 this.viewGraph_btn_status = !this.viewGraph_btn_status;
 
                 if (this.viewGraph_btn_status === false) {
+
                     this.readOnly = true;
                     this.$axios({
                         url: '/getCollectiveGraph',
                         method: 'get',
                     }).then(response => {
-                        console.log(response)
-                        let user_nodes = response.data.nodes;
-                        let user_links = response.data.links;
-                        let change_node_type = user_nodes.map(function (element) {
+
+                        console.log('response',response)
+                        let data_map = [];
+                        for(let i =0; i<response.data.nodes.length;i++)
+                        {
+                            data_map[(i)] = []
+                        }
+
+                        console.log('data_map 1',data_map);
+
+                        for(let i =0; i<response.data.nodes.length;i++)
+                        {
+                            for(let j=0; j<response.data.links.length;j++){
+                                    let src = response.data.links[j].source;
+                                    let tar = response.data.links[j].target;
+
+
+                                    if(src > 25 || tar > 25)
+                                        break;
+
+                                    if(i===Number(src) || i===Number(tar))
+                                    {
+
+                                        data_map[i].push(response.data.links[j])
+                                    }
+                            }
+                        }
+
+                        console.log('data_map 2',data_map);
+                        let links_list = [];
+                        let nodes_list = [];
+                        for(let i = 0; i< 25; i++){
+
+                            nodes_list.push(response.data.nodes[i]);
+                            for(let j =0; j < data_map[i].length;j++){
+                                if(j === 2)
+                                    break;
+
+                                links_list.push(data_map[i][j]);
+
+
+
+                            }
+                        }
+                        console.log('nodes_list 1', nodes_list);
+                        console.log('links_list 1', links_list);
+
+                        let new_nodes_list = nodes_list.map(function(element){
                             element.id = Number(element.id);
                             return element
                         });
-                        let change_link_type = user_links.map(function (element) {
+
+                        let new_links_list = links_list.map(function(element){
                             element.id = Number(element.id);
                             element.source = Number(element.source);
                             element.target = Number(element.target);
                             return element
                         });
 
-                        this.info.nodes = change_node_type;
-                        this.info.links = change_link_type;
-                        this.renderGraph(this.info)
-                        // this.renderGraph()
+                        let unique_links_src_tar = []; // drop the link with same source and target
+                        let unique_links_list = [];
+                        for(let i =0; i<new_links_list.length;i++){
+                            // let src = new_links_list[i].source;
+                            // let tar = new_links_list[i].target;
+                            // let label = new_links_list[i].label;
+                            if(unique_links_src_tar.indexOf([new_links_list[i].source,new_links_list[i].target,
+                                new_links_list[i].label].toString()) === -1){
 
+                                unique_links_list.push(new_links_list[i])
+                            }
+
+                            unique_links_src_tar.push([new_links_list[i].source,new_links_list[i].target,
+                                new_links_list[i].label].toString());
+
+
+                        }
+                        console.log('unique_links_src_tar',unique_links_src_tar);
+                        console.log('nodes_list 2', new_nodes_list);
+                        console.log('links_list 2', unique_links_list);
+
+                        this.info.nodes = new_nodes_list;
+                        this.info.links = unique_links_list;
+
+                        console.log(this.info);
+                        this.renderGraph(this.info);
+
+
+                        // let user_nodes = response.data.nodes;
+                        // let user_links = response.data.links;
+                        // let change_node_type = user_nodes.map(function (element) {
+                        //     element.id = Number(element.id);
+                        //     return element
+                        // });
+                        // let change_link_type = user_links.map(function (element) {
+                        //     element.id = Number(element.id);
+                        //     element.source = Number(element.source);
+                        //     element.target = Number(element.target);
+                        //     return element
+                        // });
+                        //
+                        // this.info.nodes = change_node_type;
+                        // this.info.links = change_link_type;
+                        //
+                        // // this.renderGraph()
+                        // if(this.info.nodes.length > node_limits)
+                        // {
+                        //     this.info.nodes = this.info.nodes.slice(0,node_limits)
+                        // }
+                        // nodeId_set = this.info.nodes.map(function(element){
+                        //     return element.id
+                        // });
+                        // // console.log(this.info.nodes);
+                        // // console.log(nodeId_set);
+                        // for(let j =0; j<this.info.links.length; j++)
+                        //     {
+                        //         if((nodeId_set.indexOf(this.info.links[j].source)!==-1) &&(nodeId_set.indexOf(this.info.links[j].target)!==-1)){
+                        //             link_set.push(this.info.links[j])
+                        //         }
+                        //     }
+                        //     // console.log(link_set);
+                        // link_set = link_set.slice(0,200);
+                        // let unique_arr = [];
+                        // let unique_link_id_arr = [];
+                        // for(let i =0;i<link_set.length;i++){
+                        //
+                        //     if(unique_arr.indexOf([link_set[i].source, link_set[i].target, link_set[i].label].toString())===-1)
+                        //     {
+                        //         unique_link_id_arr.push(link_set[i].id);
+                        //         unique_arr.push([link_set[i].source, link_set[i].target, link_set[i].label].toString())
+                        //     }
+                        //
+                        // }
+                        //
+                        //
+                        //
+                        // let new_link_set  = [];
+                        // for(let i =0; i<unique_link_id_arr.length;i++)
+                        // {
+                        //
+                        //         new_link_set.push(this.info.links[unique_link_id_arr[i]])
+                        //
+                        // }
+                        //
+                        //
+                        //
+                        // // console.log(new_link_set);
+                        // this.info.links = new_link_set;
+                        // // console.log('info',this.info);
+                        //
+                        // this.renderGraph(this.info)
                     })
                 }
                 else{
@@ -708,7 +1022,7 @@
 
                             {
                                 type: 'warning',
-                                message: 'The username is existed !'
+                                message: 'The username already exists!'
                             });
                         this.showLogin = true;
                         this.dialog_createUser  = true;
@@ -716,6 +1030,7 @@
                         this.password = '';
                     }
                     else {
+
 
                         this.$axios({
                             url: '/getUserGraph',
@@ -753,22 +1068,6 @@
                     }
                 })
 
-            },
-
-            getWikipedia:function(){
-
-
-
-
-
-                // this.$axios({
-                //
-                //     method : 'get',
-                //     url : '/getAllWikipediaArticles',
-                //     data: {}
-                // }).then(response=>{
-                //     console.log(response)
-                // })
             },
 
 
@@ -814,6 +1113,12 @@
                                 this.info.nodes = change_node_type;
                                 this.info.links = change_link_type;
                                 this.current_user = response.data.user;
+                                this.$message(
+
+                                    {
+                                        type: 'success',
+                                        message: 'Welcome Back, Our Friend!'
+                                    });
                                 this.renderGraph(this.info)
                             }
 
@@ -846,20 +1151,26 @@
             },
 
             ////////////////////////////////////////////////////////////
-            // optionVisible_init_nodes:false,
-            // optionVisible_add_nodes:false,
-            // optionVisible_change_nodes:false,
-            // optionVisible_add_link:false,
-            // optionVisible_change_link:false,
+
+
 
             showOption_add_nodes()
             {
 
-
-                let inputContent = this.$refs.addNode.$children[0].value;
-                this.optionVisible_add_nodes = inputContent.length >=2;
-
+                this.inputNodeContent = this.$refs.addNode.$children[0].value;
+                console.log(this.$refs.addNode.$children[1])
+                 console.log('duud',this.$refs.option)
+                this.node_value = this.inputNodeContent;
+                if(this.node_value ===''){
+                    this.optionVisible_add_nodes = false
+                }
+                // this.optionVisible_add_nodes = this.inputNodeContent.length >=2;
                 this.$forceUpdate()
+            },
+
+            selectFocus(){
+                console.log('lalala')
+                // this.optionVisible_add_nodes = false
             },
 
             showOption_init_nodes()
@@ -902,12 +1213,19 @@
             selectBlur(e) {
                 // 意见类型
                 this.btnChangeEnable = true;
+                console.log(e.target.value)
                 if (e.target.value !== '') {
+                    this.node_value = e.target.value;
                     // this.$forceUpdate()   // 强制更新
                 }
-                this.$forceUpdate()
-                this.selectClear()
+                //
+                    this.$forceUpdate();
+                //     this.selectClear()
+
             },
+
+
+
 
             selectClear() {
                 this.node_value = '';
@@ -920,20 +1238,15 @@
                 this.optionVisible_change_nodes=false;
                 this.optionVisible_add_link=false;
                 this.optionVisible_change_link=false;
-
-
-
-                // let elements = document.getElementsByClassName('el-input__inner');
-                // elements[0].parentNode.removeChild(elements[0]);
-                // while(elements.length > 0){
-                //     elements[0].parentNode.removeChild(elements[0]);
-                // }
+                this.disableSelect = true;
+                this.input = '';
+                this.node_list  =[];
 
                 this.$forceUpdate()
             },
 
             selectChange(val) {
-
+                console.log(val)
                 if(val !== '')
                 {
                     this.btnChangeEnable = false
@@ -969,7 +1282,7 @@
                 this.newUsername = '';
                 this.btnChangeEnable = true;
                 this.dialogFormVisible_initGraph = false;
-
+                // this.ifClicked = false;
                 this.selectClear();
 
             },
@@ -1074,16 +1387,93 @@
 
             },
 
+            add_new_links(start, end, info){
+
+                let new_link = {
+                    "source": start.id,
+                    "target": end.id,
+                    "id": info.links.length,
+                    "type": 'link',
+                    "properties": {},
+                    "label": this.link_value
+
+                };
+
+                info.links.push(new_link);
+                console.log('new link added', info.links);
+                this.ifClicked = false;
+                // this.renderGraph(this.info);
+
+
+                // this.temp.length = 0;
+                // this.end = null;
+                // this.start = null;
+            },
+
+            drag_addLinks()
+            {
+
+                this.dialogFormVisible_link = false;
+                console.log('add drag links',this.start.index, this.end.index);
+                let new_link = {
+                    "source": this.start.index,
+                    "target": this.end.index,
+                    "id": this.info.links.length,
+                    "type": 'link',
+                    "properties": {},
+                    "label": this.link_value
+
+                };
+                let info = {
+                    "links": [
+                    ],
+                    "nodes": [
+                        {
+                            "id": 0,
+                            "type" : "node",
+                            "label" : "Device",
+                            "properties":{"name":"hello"}
+                        },
+                        {
+                            "id": 1,
+                            "type" : "node",
+                            "label": "Device",
+                            "properties":{"name":"will"}
+                        },
+                        {
+                            "id": 2,
+                            "type" : "node",
+                            "label": "Device",
+                            "properties":{"name":"lala"}
+                        },
+
+                    ]
+                };
+                // info.links.push(new_link);
+                this.info.links.push(new_link)
+                console.log('new link added', this.info, typeof(this.info));
+                console.log('new link added', info, typeof(info));
+                // this.temp = [1,2];
+                // this.singleClick(this.info, this.selected_Node, this.link_value);
+                this.renderGraph(this.info);
+                this.selectClear();
+                this.ifClicked = false;
+
+
+            },
+
 
             renderGraph(info) {
-                // let temp = [];
 
-
+                if (this.viewGraph_btn_status === false && this.showLogin === false) {
+                    this.disable_submit = true;
+                }
                 console.log('render data', info);
-                if(this.showLogin === false)
+                if(this.showLogin === false && this.viewGraph_btn_status === true)
                 {
                 this.disable_submit = false;
                 this.disable_viewGraph = false;
+
                 }
 
                 if(this.showLogin === false && this.info.nodes.length === 0 )
@@ -1096,6 +1486,10 @@
                 // this.disable_initGraph = this.info.nodes.length !== 0;
 
                 let {links, nodes} = info;
+                // let links = info.links;
+                // let nodes = info.nodes;
+
+                // console.log('links and nodes', links, nodes);
 
                 //关系分组
                 setLinkGroup(links);
@@ -1113,22 +1507,54 @@
                             tick()
                         },
                     )//指时间间隔，隔一段时间刷新一次画面
+
                     .start();//开始转换
 
 
 
                 let zoom = d3.behavior.zoom()
                     .scaleExtent([.4, 2])
-                    .on("zoom", zoomed);
+                    .on("zoom", zoomed)
+                    ;
+
+
+                let svg_drag = d3.behavior.drag()
+                    .on('dragstart',null)
+                    .on('drag',null)
+                    .on('dragend',()=>{console.log('end')})
+
+
 
                 let svg = d3.select("#graph").append("svg")
+
                     .attr("pointer-event", "all")
                     .attr("preserveAspectRatio", "xMidYMid meet")//自适应容器大小
-                    .attr("viewBox", "-460 -220 2000 2000")
-                    // .on("dblclick", doubleClick)
-                    .call(zoom);
+                    .attr("viewBox", "-500 -200 2000 2000")
+                    .call(zoom)
+
+                    .call(svg_drag)
+                    .on('touchmove',null)
 
 
+                    .on("dblclick", (node, )=>{
+                    if (d3.event.defaultPrevented) return;
+                    clearTimeout(this.clickTimeId);
+                    if(this.readOnly === true){
+                        this.$message(
+                            {
+                                type: 'Warning',
+                                message: 'Read Only Mode'
+                            });
+                    }
+                    else {
+
+                        this.dialogFormVisible = true;
+                    }
+
+
+                });
+
+                // d3.selectAll('rect').on('mousedown.drag',null);
 
 
                 // old_nodes = nodes;
@@ -1139,11 +1565,13 @@
                     .attr("class",function(node,i){
                         return "g_circle_" + i; })//标记circle的父节点
                     .style("cursor","pointer")
-                    .call(drag()) //将当前选中的元素传到drag函数中，使顶点可以被拖动
+                    .call(drag(this)) //将当前选中的元素传到drag函数中，使顶点可以被拖动
+
                     .on("click", (node, i,) => {
                         if (d3.event.defaultPrevented) return;
 
-
+                        this.dragNode = node;
+                        console.log('dragNode',node);
                         clearTimeout(this.clickTimeId);
 
                         this.clickTimeId = setTimeout( ()=> {
@@ -1157,15 +1585,15 @@
                                 else {
 
 
-                                    this.temp.push(node.index);
-                                    console.log('liuliu', this.temp);
-                                    if (this.temp.length === 2 && this.temp[0] !== this.temp[1]) {
-                                        this.dialogFormVisible_link = true;
-
-                                    }
-                                    else if (this.temp.length === 2 && this.temp[0] === this.temp[1]) {
-                                        this.temp.length = 0
-                                    }
+                                    // this.temp.push(node.index);
+                                    // console.log('liuliu', this.temp);
+                                    // if (this.temp.length === 2 && this.temp[0] !== this.temp[1]) {
+                                    //     this.dialogFormVisible_link = true;
+                                    //
+                                    // }
+                                    // else if (this.temp.length === 2 && this.temp[0] === this.temp[1]) {
+                                    //     this.temp.length = 0
+                                    // }
                                     // this.singleClick(info, node, temp, this.state2);
                                     clickStyle(node, i, this);
                                 }
@@ -1266,10 +1694,11 @@
                 //圆圈
                 let circle = circle_g.append("circle")
                     .style("stroke-width", "2px")
-                    .attr("r", 30)//设置圆圈半径
+                    .attr("r", 40)//设置圆圈半径
                     .style("fill", function (node) { return getCircleColor(node); })
 
                 ;
+                console.log('circle',circle)
 
                 let text = circle_g.append("text")
                     .attr("dy", ".35em")
@@ -1322,6 +1751,9 @@
                     .attr("stroke-width",5)//箭头宽度
                     .attr("d", "M0,0L10,-5L10,5")//箭头的路径
                     .attr('fill', 'rgba(0,0,0, 2)');//箭头颜色
+
+
+
 
                 const edges_line = svg.append("g").selectAll(".edgepath")
                     .data(force.links())
@@ -1384,7 +1816,7 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
-                    svg.selectAll("g").attr("transform", "translate("  +d3.event.translate + ")scale(" +d3.event.scale + ")");
+                    svg.selectAll("g").attr("transform", "scale(" +d3.event.scale + ")");
                 }
 
                 function getMarkerArrow(i) {
@@ -1414,11 +1846,124 @@
                     });
                 }
 
-                function drag(){//拖拽函数
+                function drag(_this){//拖拽函数
+                    const mouse_line = svg.append("path")
+                        .attr('id','mouse_link')
+                        .style("stroke", 'black')
+                        .style("stroke-width", 2)//线条粗细
+                        .style("fill-opacity",0)
+                        .attr('marker-end', 'url(#end)');
+
                     return force.drag().on("dragstart",function(d){
+                        console.log('start node',d);
+
+                        if(_this.ifClicked===true ) {
+
+                            _this.dragStartIndex = d;
+                            _this.mouseLinkLineStartLoc = [d.x, d.y];
+
+                            force.stop();
+                            _this.original_dx =  d.px
+                            _this.original_dy = d.py;
+                            console.log('start position',_this.original_dx, _this.original_dy)
+
+                        }
+
                         d3.event.sourceEvent.stopPropagation(); //取消默认事件
                         d.fixed = true;//拖拽开始后设定被拖拽对象为固定
-                    });
+                    })
+
+                        .on('drag', (d) =>{
+
+
+                                if (_this.ifClicked === true && _this.dragNode === d) {
+
+                                    force.stop();
+
+                                    mouse_line.style('opacity', '1');
+                                    mouse_line.attr('d', function () {
+
+                                        if (d3.select(d3.event.sourceEvent.srcElement).datum() === undefined) {
+                                            return ('M' + d.x + ' '
+                                                + d.y + "L" + +d3.mouse(d3.event.sourceEvent.srcElement)[0]
+                                                + ' ' + d3.mouse(d3.event.sourceEvent.srcElement)[1]);//绘制直线
+                                        }
+                                        else {
+                                            return ('M' + _this.mouseLinkLineStartLoc[0] + ' ' + _this.mouseLinkLineStartLoc[1] +
+                                                "L" + +d3.select(d3.event.sourceEvent.srcElement).datum().x
+                                                + ' ' + d3.select(d3.event.sourceEvent.srcElement).datum().y)
+                                        }
+
+                                    });
+
+
+                                }
+
+
+                        })
+
+
+                        .on('dragend',(d)=>{
+                            console.log('mouse',((d3.event.sourceEvent.target)))
+                            if(_this.ifClicked===true) {
+                                console.log('drag end', _this.original_dx, _this.original_dy)
+                                d.px = _this.original_dx;
+                                d.py = _this.original_dy;
+                                // console.log(d3.mouse(d3.event.sourceEvent.target));
+                                // console.log(d3.event)
+                                // console.log(d3.event.sourceEvent.target);
+                                let data = d3.select(d3.event.sourceEvent.srcElement).datum()
+                                console.log('data',d3.event.sourceEvent.srcElement)
+                                console.log('datum',data);
+
+
+                                _this.end  = data;
+                                _this.start = d;
+
+
+
+                                if(data!==undefined && _this.end.type!=='link') {
+                                    console.log('clicked',_this.ifClicked);
+                                    if(_this.start.index === _this.end.index)
+                                    {
+                                        // d3.select('.g_circle_'+ d.index).select('circle')
+                                        //     .style('fill', function (node) { return getCircleColor(node);});
+                                        mouse_line.style('opacity', '0');
+                                        // _this.ifClicked = false;
+                                    }
+                                    else {
+                                        console.log('start', _this.start.properties.name, _this.start.type);
+                                        console.log('end', _this.end.properties.name, _this.end.type);
+                                        _this.dialogFormVisible_link = true;
+                                        mouse_line.style('opacity', '0');
+
+                                        d3.select('.g_circle_' + d.index).select('circle')
+                                            .style('fill', function (node) {
+                                                return getCircleColor(node);
+                                            });
+
+                                        _this.ifClicked = false;
+                                    }
+
+
+                                }
+                                else{
+                                    d3.select('.g_circle_'+ d.index).select('circle')
+                                        .style('fill', function (node) { return getCircleColor(node);});
+
+                                    _this.ifClicked = false;
+                                    mouse_line.style('opacity', '0');
+                                }
+
+
+                                force.resume();
+                            }
+
+
+                                // console.log('d',d)
+                                // _this.original_dx = null;
+                                // _this.original_dy = null;
+                        });
                 }
 
                 function getCircleColor(node) {
@@ -1456,7 +2001,7 @@
                         circleText = circleText.substring(0,14) + "...";
                         d3.select(_this).text(function(){return '';});
                     }
-                    d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 10)
+                    d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15)
                         .text(function(){ return circleText; });
                 }
 
@@ -1475,6 +2020,7 @@
                         return getNodesLine(d,edges_line,defs);//曲线路径
 
                     });
+
                     edges_line.attr('marker-end', function(d,i) {
                             if (d.x_start < d.x_end) {
                                 return  "url(#end)";
@@ -1493,6 +2039,13 @@
 
                 //设置圆圈和文字的坐标
                 function transform1(d) {
+
+                    // console.log(d)
+                    if(isNaN(d.x) && isNaN(d.y))
+                    {
+                        d.x = 360;
+                        d.y = 266;
+                    }
                     if (d.x <=-430)
                     {
                         d.x = -430
@@ -1512,6 +2065,11 @@
                 }
 
                 function transform2(d) {
+                    if(isNaN(d.x) && isNaN(d.y))
+                    {
+                        d.x = 360;
+                        d.y = 266;
+                    }
                     if (d.x <=-430)
                     {
                         d.x = -430
@@ -1549,7 +2107,6 @@
 
 
 
-                        let elm = this;
 
 
                         d3.selectAll('.d3-context-menu').html('');
@@ -1613,7 +2170,7 @@
                 }
 
                 else{
-                    alert('Same node already exits!')
+                    alert('There is already a node with that name!')
                     return false
                 }
 
@@ -1633,6 +2190,7 @@
                     let new_link = {
                         "source": this.temp[0],
                         "target": this.temp[1],
+
                         "id": this.info.links.length,
                         "type": 'link',
                         "properties": {},
@@ -1641,7 +2199,7 @@
                     };
 
                     info.links.push(new_link);
-                    console.log('new link added', info.links);
+                    console.log('new link added', info);
                     this.temp.length = 0;
                     this.renderGraph(info)
 
@@ -1681,6 +2239,7 @@
                     }
                 });
                 //
+                console.log(this.current_user);
                 console.log('nn', JSON.stringify(this.upload_nodes));
                 console.log('nn', JSON.stringify(this.upload_links));
                 let flag = true;
@@ -1746,8 +2305,14 @@
                     this.$message({
                         'type':'success',
                         'message':'Submit Successfully!'
-                    })
+                    });
                     this.renderGraph(this.info)
+                }).catch(error=>{
+                    this.$message({
+                        'type':'warning',
+                        'message':'The database server is breakdown, please contact the maintainer!'
+                    });
+
                 })
             }
             },

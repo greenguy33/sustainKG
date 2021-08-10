@@ -508,6 +508,7 @@
 
                 console.log('render data',info);
                 let {links, nodes} = info;
+                console.log('links and nodes',links, nodes)
 
                 //关系分组
                 setLinkGroup(links);

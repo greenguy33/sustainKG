@@ -18,11 +18,18 @@ axios.defaults.baseURL =  "/api";
 const router = new VueRouter({
     mode: 'history',
     routes: routers
+});
+
+Vue.directive('title', {
+    inserted: function (el, binding) {
+        document.title = el.dataset.title
+    }
 })
 
 
 new Vue({
   router,
   render: h => h(App),
+
 
 }).$mount('#app')
