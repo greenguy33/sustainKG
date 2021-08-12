@@ -128,47 +128,47 @@
         </el-dialog>
 
 
-        <el-dialog :visible.sync="dialogFormVisible_initGraph"
-                   title="Create Start Node" center
+        <!--<el-dialog :visible.sync="dialogFormVisible_initGraph"-->
+                   <!--title="Create Start Node" center-->
 
-        >
+        <!--&gt;-->
 
-            Node Name
-            <el-select ref="init"
+            <!--Node Name-->
+            <!--<el-select ref="init"-->
 
-                       @keyup.native = "showOption_init_nodes"
-                       label-position="right"
-                       label-width="86px"
-                       style="width: 300px; margin-left:50px;"
+                       <!--@keyup.native = "showOption_init_nodes"-->
+                       <!--label-position="right"-->
+                       <!--label-width="86px"-->
+                       <!--style="width: 300px; margin-left:50px;"-->
 
-                       v-model="init_node_value"
-                       placeholder="Please select"
-                       clearable
-                       filterable
-                       @blur="showOption_init_nodes"
-                       @clear="selectClear"
-                       @change="selectChange"
-            >
-                <div  v-show="optionVisible_init_nodes">
-                    <el-option
+                       <!--v-model="init_node_value"-->
+                       <!--placeholder="Please select"-->
+                       <!--clearable-->
+                       <!--filterable-->
+                       <!--@blur="showOption_init_nodes"-->
+                       <!--@clear="selectClear"-->
+                       <!--@change="selectChange"-->
+            <!--&gt;-->
+                <!--<div  v-show="optionVisible_init_nodes">-->
+                    <!--<el-option-->
 
-                            v-for="(item,index) in node_list"
-                            :key="index"
-                            :label="item.label"
-                            :value="item.value" ></el-option>
-                </div>
+                            <!--v-for="(item,index) in node_list"-->
+                            <!--:key="index"-->
+                            <!--:label="item.label"-->
+                            <!--:value="item.value" ></el-option>-->
+                <!--</div>-->
 
-            </el-select>
+            <!--</el-select>-->
 
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="cancel">
-                    No
-                </el-button>
-                <el-button type="primary" :disabled="btnChangeEnable" @click="InitGraph">
-                    Yes
-                </el-button>
-            </div>
-        </el-dialog>
+            <!--<div slot="footer" class="dialog-footer">-->
+                <!--<el-button @click="cancel">-->
+                    <!--No-->
+                <!--</el-button>-->
+                <!--<el-button type="primary" :disabled="btnChangeEnable" @click="InitGraph">-->
+                    <!--Yes-->
+                <!--</el-button>-->
+            <!--</div>-->
+        <!--</el-dialog>-->
 
 
 
@@ -205,6 +205,8 @@
                                 @focus="focus"
                                 ref="select"
                                 clearable
+                                @keyup.native.enter="addNodes"
+                                no-data-text="No Node Name found"
 
 
 
@@ -325,6 +327,7 @@
                                 @blur="blur"
                                 ref="select_changeNode"
                                 clearable
+                                no-data-text="No Node Name found"
                     >
                         <el-option
                                 class="bar"
@@ -368,17 +371,23 @@
                     v-model="link_value"
                     placeholder="Please select"
                     clearable
+
                     filterable
                     @blur="showOption_add_link"
                     @clear="selectClear"
                     @change="selectChange"
+                    @keyup.native.enter="drag_addLinks"
+
+                    no-match-text="No Link Name found"
+
             >
                 <div  v-show="optionVisible_add_link">
                     <el-option
                             v-for="(item,index) in link_list"
                             :key="index"
                             :label="item.label"
-                            :value="item.value" ></el-option></div>
+                            :value="item.value" ></el-option>
+               </div>
 
             </el-select>
 
@@ -411,6 +420,7 @@
                     @blur="showOption_change_link"
                     @clear="selectClear"
                     @change="selectChange"
+                    no-match-text="No Link Name found"
             >
                 <div  v-show="optionVisible_change_link">
                     <el-option
@@ -481,6 +491,7 @@
     import * as d3 from "d3";
     import  wiki from 'wikijs';
     import { list } from 'node-7z'
+    import linkfile from 'raw-loader!./assets/link.txt'
     import Vue from 'vue'
     import $ from 'jquery'
     import {
@@ -499,14 +510,14 @@
 
             let info = {
                 "links": [
-                    // {
-                    //     "source" : 0,
-                    //     "target" : 1,
-                    //     "type" : "link",
-                    //     'label': 'Link TEST',
-                    //     "properties":{}
-                    //
-                    // },
+                    {
+                        "source" : 0,
+                        "target" : 1,
+                        "type" : "link",
+                        'label': 'Link TEST',
+                        "properties":{}
+
+                    },
 
                     // {
                     //     "source" : 0,
@@ -524,7 +535,7 @@
                         "id": 0,
                         "type" : "node",
                         "label" : "Device",
-                        "properties":{"name":"hello"}
+                        "properties":{"name":"hello apple Inc "}
                     },
                     {
                         "id": 1,
@@ -560,9 +571,9 @@
                 centerDialogVisible:false,
                 dialog_createUser:false,
 
-                optionVisible_init_nodes:false,
-                optionVisible_add_nodes:false,
-                optionVisible_change_nodes:false,
+                // optionVisible_init_nodes:false,
+                // optionVisible_add_nodes:false,
+                // optionVisible_change_nodes:false,
                 optionVisible_add_link:false,
                 optionVisible_change_link:false,
 
@@ -649,7 +660,7 @@
 
                 menu: [
                     {
-                        title: 'Delete Nodes',
+                        title: 'Delete Node',
                         action: (node,select_node) => {
 
                             this.$confirm("Delete this node?", "Tips", {
@@ -714,7 +725,7 @@
 
                 menu_edge:[
                     {
-                        title: 'Delete Links',
+                        title: 'Delete Link',
                         action: (link,selected_link) => {
                             console.log('ll',link,selected_link);
                             this.$confirm("Delete this link?", "Tips", {
@@ -769,12 +780,18 @@
         mounted() {
 
             this.renderGraph(this.info);
+            this.readTxt();
             this.centerDialogVisible = true;
 
         },
 
+
         methods: {
 
+            readTxt(){
+                console.log(linkfile)
+
+            },
 
 
             search:function(nextRef){
@@ -791,7 +808,8 @@
                         // console.log(eval(response.data)[1]);
                         let search_term = []
                         for(let i =0;i<eval(response.data)[1].length;i++){
-                            if(eval(response.data)[1][i].search('(disambiguation)') !== -1 ||eval(response.data)[1][i].search('List_of_') !== -1)
+                            if(eval(response.data)[1][i].search('(disambiguation)') !== -1
+                                ||eval(response.data)[1][i].search('List of') !== -1 ||eval(response.data)[1][i].search('list of') !== -1)
                                 continue;
                             search_term.push(eval(response.data)[1][i])
                         }
@@ -1117,7 +1135,7 @@
 
                                     {
                                         type: 'success',
-                                        message: 'Welcome Back, Our Friend!'
+                                        message: 'Welcome Back, ' + this.current_user
                                     });
                                 this.renderGraph(this.info)
                             }
@@ -1154,42 +1172,42 @@
 
 
 
-            showOption_add_nodes()
-            {
-
-                this.inputNodeContent = this.$refs.addNode.$children[0].value;
-                console.log(this.$refs.addNode.$children[1])
-                 console.log('duud',this.$refs.option)
-                this.node_value = this.inputNodeContent;
-                if(this.node_value ===''){
-                    this.optionVisible_add_nodes = false
-                }
-                // this.optionVisible_add_nodes = this.inputNodeContent.length >=2;
-                this.$forceUpdate()
-            },
+            // showOption_add_nodes()
+            // {
+            //
+            //     this.inputNodeContent = this.$refs.addNode.$children[0].value;
+            //     console.log(this.$refs.addNode.$children[1])
+            //      console.log('duud',this.$refs.option)
+            //     this.node_value = this.inputNodeContent;
+            //     if(this.node_value ===''){
+            //         this.optionVisible_add_nodes = false
+            //     }
+            //     // this.optionVisible_add_nodes = this.inputNodeContent.length >=2;
+            //     this.$forceUpdate()
+            // },
 
             selectFocus(){
                 console.log('lalala')
                 // this.optionVisible_add_nodes = false
             },
 
-            showOption_init_nodes()
-            {
-                console.log(this.$refs.init.$children);
-                let inputContent = this.$refs.init.$children[0].value;
+            // showOption_init_nodes()
+            // {
+            //     console.log(this.$refs.init.$children);
+            //     let inputContent = this.$refs.init.$children[0].value;
+            //
+            //     this.optionVisible_init_nodes = inputContent.length >=2;
+            //
+            //     this.$forceUpdate()
+            // },
 
-                this.optionVisible_init_nodes = inputContent.length >=2;
-
-                this.$forceUpdate()
-            },
-
-            showOption_change_nodes()
-            {
-                let inputContent = this.$refs.changeNodeName.$children[0].value;
-                this.optionVisible_change_nodes = inputContent.length >=2;
-
-                this.$forceUpdate()
-            },
+            // showOption_change_nodes()
+            // {
+            //     let inputContent = this.$refs.changeNodeName.$children[0].value;
+            //     this.optionVisible_change_nodes = inputContent.length >=2;
+            //
+            //     this.$forceUpdate()
+            // },
 
 
             showOption_add_link()
@@ -1233,9 +1251,10 @@
                 this.new_node_name = '';
                 this.new_link_name = '';
                 this.init_node_value = '',
-                this.optionVisible_init_nodes=false;
-                this.optionVisible_add_nodes=false;
-                this.optionVisible_change_nodes=false;
+                // this.optionVisible_init_nodes=false;
+                // this.optionVisible_add_nodes=false;
+                // this.optionVisible_change_nodes=false;
+
                 this.optionVisible_add_link=false;
                 this.optionVisible_change_link=false;
                 this.disableSelect = true;
@@ -1387,28 +1406,7 @@
 
             },
 
-            add_new_links(start, end, info){
 
-                let new_link = {
-                    "source": start.id,
-                    "target": end.id,
-                    "id": info.links.length,
-                    "type": 'link',
-                    "properties": {},
-                    "label": this.link_value
-
-                };
-
-                info.links.push(new_link);
-                console.log('new link added', info.links);
-                this.ifClicked = false;
-                // this.renderGraph(this.info);
-
-
-                // this.temp.length = 0;
-                // this.end = null;
-                // this.start = null;
-            },
 
             drag_addLinks()
             {
@@ -1424,37 +1422,9 @@
                     "label": this.link_value
 
                 };
-                let info = {
-                    "links": [
-                    ],
-                    "nodes": [
-                        {
-                            "id": 0,
-                            "type" : "node",
-                            "label" : "Device",
-                            "properties":{"name":"hello"}
-                        },
-                        {
-                            "id": 1,
-                            "type" : "node",
-                            "label": "Device",
-                            "properties":{"name":"will"}
-                        },
-                        {
-                            "id": 2,
-                            "type" : "node",
-                            "label": "Device",
-                            "properties":{"name":"lala"}
-                        },
 
-                    ]
-                };
-                // info.links.push(new_link);
-                this.info.links.push(new_link)
+                this.info.links.push(new_link);
                 console.log('new link added', this.info, typeof(this.info));
-                console.log('new link added', info, typeof(info));
-                // this.temp = [1,2];
-                // this.singleClick(this.info, this.selected_Node, this.link_value);
                 this.renderGraph(this.info);
                 this.selectClear();
                 this.ifClicked = false;
@@ -1556,8 +1526,6 @@
 
                 // d3.selectAll('rect').on('mousedown.drag',null);
 
-
-                // old_nodes = nodes;
                 let circle_g = svg.selectAll("circle")
                     .data(force.nodes())//表示使用force.nodes数据
                     .enter()
@@ -1606,12 +1574,23 @@
                         this.showdetail_node = true;
                         // console.log(node);
                         this.detailValue = node;
-                        this.detailname = node.properties.name
+                        this.detailname = node.properties.name;
+                        d3.select('.g_circle_'+ node.index).select('circle')
+                            .attr('r',50)
+
+                        d3.select('.g_circle_'+ node.index).select('tspan')
+                            .attr('font-size',25)
+
                         // showNodeInfo(node, this);
                         // showCircleBorderOuterArc(node, i);
                     })
                     .on('mouseout',(node)=>{
                         this.showdetail_node = false;
+                        d3.select('.g_circle_'+ node.index).select('circle')
+                            .attr('r',40);
+
+                        d3.select('.g_circle_'+ node.index).select('tspan')
+                            .attr('font-size',15)
                     })
                     .on("dblclick", (node, )=>{
 
@@ -1661,8 +1640,6 @@
 
                     circle_g.attr('node', function(n) {
 
-
-
                         if(n.index === node.index && _this.ifClicked===false ) {
                             d3.select('.g_circle_'+ n.index).select('circle').style('fill','red');
                             console.log('haha',d3.select('.g_circle_'+ n.index).select('circle'));
@@ -1703,7 +1680,7 @@
                 let text = circle_g.append("text")
                     .attr("dy", ".35em")
                     .attr("text-anchor", "middle")//在圆圈中加上数据
-                    .style('fill', "#FFFFFF")
+                    .style('fill', "black")
                     .attr('x',function(d){ appendCircleText(d, this); });
 
                 //圆圈的提示文字
@@ -1764,8 +1741,8 @@
                     .style("fill-opacity",0)
                     .style("cursor","pointer")
                     .attr("id", function (d, i) { return 'edgepath' + i; })
-                    // .on("mouseover", function(d){ return getStrokeWidth(d); })
-                    // .on("mouseout", function() { edges_line.style("stroke-width", 3) })
+                    .on("mouseover", function(d){ return getStrokeWidth(d); })
+                    .on("mouseout", function() { edges_line.style("stroke-width", 3) })
                     // .on('click', (link) => { this.deleteLine(this.info,link); })
                     .on('contextmenu',(d,link)=>{
                         if (d3.event.defaultPrevented) return;
@@ -1793,10 +1770,21 @@
 
                     .attr({'class': 'edgelabel',
                         'id': function (d, i) { return 'edgepath' + i; },
-                        'dx': 190, 'dy': 20,
+                        'dx': 250,
+                        'dy': 20,
                         'fill':'black',
+
                         // 'transform': edge_text_Position()
-                    });
+                    })
+                    // .attr("x",250)
+                    // .attr('y',25)
+                    // .attr('text-anchor',"middle")
+
+
+                console.log(force)
+                console.log(force.linkDistance())
+
+
 
 
 
@@ -1871,9 +1859,23 @@
 
                         d3.event.sourceEvent.stopPropagation(); //取消默认事件
                         d.fixed = true;//拖拽开始后设定被拖拽对象为固定
+
                     })
 
                         .on('drag', (d) =>{
+
+                            edges_text
+                                .attr("dx",  function(d) {
+
+                                    return Math.abs((d.x_start+d.x_end))/ 2
+                                    // if(d.x_start < d.x_end) // start 在左
+                                    //     return Math.abs(d.x_end ) + 5;
+                                    // if(d.x_start >= d.x_end) //start在右
+                                    //     return Math.abs(d.x_start ) - 5;
+                                })
+                                .attr("dy",  function(d) {
+                                    return 30;
+                                })
 
 
                                 if (_this.ifClicked === true && _this.dragNode === d) {
@@ -1997,10 +1999,11 @@
                         circleText = d.name;
                     }
                     //如果小于四个字符，不换行
-                    if(circleText && circleText.length > 14){
-                        circleText = circleText.substring(0,14) + "...";
-                        d3.select(_this).text(function(){return '';});
-                    }
+                    // if(circleText && circleText.length > 14){
+                    //     circleText = circleText.substring(0,14) +  circleText.substring(15,circleText.length);
+                    //
+                    //     d3.select(_this).text(function(){return '';});
+                    // }
                     d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15)
                         .text(function(){ return circleText; });
                 }
@@ -2021,6 +2024,21 @@
 
                     });
 
+                    // edges_text
+                    //     .attr("dx",  function(d) {
+                    //
+                    //         return Math.abs((d.x_start+d.x_end))/ 2
+                    //         // if(d.x_start < d.x_end) // start 在左
+                    //         //     return Math.abs(d.x_end ) + 5;
+                    //         // if(d.x_start >= d.x_end) //start在右
+                    //         //     return Math.abs(d.x_start ) - 5;
+                    // })
+                    //     .attr("dy",  function(d) {
+                    //     return 30;
+                    // })
+                    // ;
+
+
                     edges_line.attr('marker-end', function(d,i) {
                             if (d.x_start < d.x_end) {
                                 return  "url(#end)";
@@ -2032,8 +2050,9 @@
                         }
                         return ''
 
-                    })
-                    ;
+                    });
+
+
 
                 }
 
@@ -2243,16 +2262,18 @@
                 console.log('nn', JSON.stringify(this.upload_nodes));
                 console.log('nn', JSON.stringify(this.upload_links));
                 let flag = true;
+                let noWeight_node = []
                 for (let i = 0; i < this.info.nodes.length; i++) {
                     if (this.info.nodes[i].weight === 0) {
                         flag = false;
+                        noWeight_node.push(this.info.nodes[i].properties.name)
                     }
                 }
 
                 if (flag === false) {
                     this.$message({
                         'type': 'warning',
-                        'message': 'The node should have a least one link, please check it.'
+                        'message': 'The node [ ' + noWeight_node.toString()+' ] needs a least one link, please check it.'
                     })
                 }
                 else{
@@ -2304,7 +2325,7 @@
                     console.log('success', response)
                     this.$message({
                         'type':'success',
-                        'message':'Submit Successfully!'
+                        'message':'Submitted Successfully!'
                     });
                     this.renderGraph(this.info)
                 }).catch(error=>{
