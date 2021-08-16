@@ -66,7 +66,7 @@ Build the docker (note the period):
     
 Run the docker:
 
-    nohup sudo docker run --net sustainKGnetwork --name=sustainkg-front -d -p 8081:80 sustainkg-front &> nohup_sustainkgfront.out &
+    nohup sudo docker run --net sustainKGnetwork -d -p 8081:80 sustainkg-front &> nohup_sustainkgfront.out &
 
 Check the docker container:
 
