@@ -2,9 +2,9 @@
 
 <template>
 
-    <div id="app" v-title data-title="SustainKG">
+    <div id="app" v-title data-title="SustainKG" >
 
-            <el-header style="text-align: right;height:15px;">
+            <el-header style="text-align: right;height:40px;">
 
 
 
@@ -13,8 +13,9 @@
                 <div class="grid-content " >
                     <template >
                         <el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>
-                        <el-button style="margin-right: 5px;"  @click="onTapLogin" v-show="showLogin" size="small" round
+                        <el-button style="margin-right: 10px;"  @click="onTapLogin" v-show="showLogin" size="small" round
                                    type="primary" >Login</el-button>
+
                         <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round>{{username}}</el-button>
                         <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
                     </template>
@@ -29,7 +30,7 @@
         <el-container>
 
             <!--<el-row class="tac">-->
-                <el-aside width="175px">
+                <el-aside width="200px">
                     <h1 style="margin-left: 25px">SustainKG</h1>
                     <el-menu
 
@@ -45,9 +46,10 @@
                             <el-menu-item-group>
                                 <!--<template slot="title">分组一</template>-->
                                 <el-menu-item index="1-1" :disabled="disable_submit" @click="submitData()">Submit Data</el-menu-item>
+                                <el-menu-item index="1-2" :disabled="disable_searchConcept"  @click.native="dialogFormVisible_viewCollective=true" >Search Another Concept</el-menu-item>
                                 <!--<el-menu-item index="1-2"  @click="getWikipedia()">get Articles</el-menu-item>-->
-                                <el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>
-                                <el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>
+                                <!--<el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>-->
+                                <!--<el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>-->
 
                             </el-menu-item-group>
 
@@ -67,12 +69,12 @@
                     </el-menu>
 
                         <el-button style="margin-top: 80px; margin-left: 15px;"
-                                   :disabled='disable_viewGraph'  @click="getCollectiveGraph" size="small" round
+                                   :disabled='disable_viewGraph'  @click="getAllConcepts" size="small" round
                                    type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
 
-                    <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
-                                 <!--@click="search" size="small" round-->
-                               <!--type="primary">wiki </el-button>-->
+
+
+
 
                 </el-aside>
 
@@ -128,55 +130,10 @@
         </el-dialog>
 
 
-        <!--<el-dialog :visible.sync="dialogFormVisible_initGraph"-->
-                   <!--title="Create Start Node" center-->
-
-        <!--&gt;-->
-
-            <!--Node Name-->
-            <!--<el-select ref="init"-->
-
-                       <!--@keyup.native = "showOption_init_nodes"-->
-                       <!--label-position="right"-->
-                       <!--label-width="86px"-->
-                       <!--style="width: 300px; margin-left:50px;"-->
-
-                       <!--v-model="init_node_value"-->
-                       <!--placeholder="Please select"-->
-                       <!--clearable-->
-                       <!--filterable-->
-                       <!--@blur="showOption_init_nodes"-->
-                       <!--@clear="selectClear"-->
-                       <!--@change="selectChange"-->
-            <!--&gt;-->
-                <!--<div  v-show="optionVisible_init_nodes">-->
-                    <!--<el-option-->
-
-                            <!--v-for="(item,index) in node_list"-->
-                            <!--:key="index"-->
-                            <!--:label="item.label"-->
-                            <!--:value="item.value" ></el-option>-->
-                <!--</div>-->
-
-            <!--</el-select>-->
-
-            <!--<div slot="footer" class="dialog-footer">-->
-                <!--<el-button @click="cancel">-->
-                    <!--No-->
-                <!--</el-button>-->
-                <!--<el-button type="primary" :disabled="btnChangeEnable" @click="InitGraph">-->
-                    <!--Yes-->
-                <!--</el-button>-->
-            <!--</div>-->
-        <!--</el-dialog>-->
-
-
-
 
         <el-dialog :visible.sync="dialogFormVisible"
                    title="Create Node" center
-                   style='width: 1000px;margin-left:200px;'
-        >
+                   style='width: 1000px;margin-left:200px;'>
 
 
 
@@ -224,44 +181,6 @@
 
             </el-form>
 
-            <!--<el-select-->
-                    <!--ref="addNode"-->
-                    <!--@keyup.native = "showOption_add_nodes"-->
-                    <!--label-position="right"-->
-                    <!--label-width="86px"-->
-                    <!--style="width: 200px; margin-left:50px;"-->
-
-                    <!--v-model="node_value"-->
-                    <!--placeholder="Please select"-->
-                    <!--clearable-->
-                    <!--filterable-->
-                    <!--@blur="showOption_add_nodes"-->
-                    <!--@clear="selectClear"-->
-                    <!--@change="selectChange"-->
-                    <!--@keyup.enter.native="search"-->
-                    <!--@focus="selectFocus"-->
-                    <!--@click.native="haha"-->
-
-            <!--&gt;-->
-
-
-                <!--<div  v-show="optionVisible_add_nodes">-->
-                    <!--<el-option-->
-                            <!--class="bar"-->
-                            <!--v-for="(item,index) in node_list"-->
-                            <!--:key="index"-->
-                            <!--:label="item.label"-->
-                            <!--:value="item.value" ></el-option>-->
-                <!--</div>-->
-            <!--</el-select>-->
-
-
-            <!--<el-button type="text" size='medium' style="margin-left:30px" @click.native="search"-->
-                       <!--&gt;search</el-button>-->
-
-
-
-
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     No
@@ -277,30 +196,6 @@
                    title="Change Node Name" center
                    style='width: 1000px;margin-left:200px;'
         >
-
-            <!--Node Name-->
-            <!--<el-select-->
-                    <!--ref="changeNodeName"-->
-                    <!--@keyup.native = "showOption_change_nodes"-->
-                    <!--label-position="right"-->
-                    <!--label-width="86px"-->
-                    <!--style="width: 300px; margin-left:30px;"-->
-
-                    <!--v-model="new_node_name"-->
-                    <!--placeholder="Please select"-->
-                    <!--clearable-->
-                    <!--filterable-->
-                    <!--@blur="showOption_change_nodes"-->
-                    <!--@clear="selectClear"-->
-                    <!--@change="selectChange"-->
-            <!--&gt;-->
-                <!--<div  v-show="optionVisible_change_nodes">-->
-                    <!--<el-option-->
-                            <!--v-for="(item,index) in node_list"-->
-                            <!--:key="index"-->
-                            <!--:label="item.label"-->
-                            <!--:value="item.value" ></el-option></div>-->
-            <!--</el-select>-->
 
             <el-form :inline="true"  class="demo-form-inline">
                 <el-form-item label="Node Name">
@@ -372,7 +267,7 @@
                     placeholder="Please select"
                     clearable
 
-                    filterable
+
                     @blur="showOption_add_link"
                     @clear="selectClear"
                     @change="selectChange"
@@ -381,13 +276,13 @@
                     no-match-text="No Link Name found"
 
             >
-                <div  v-show="optionVisible_add_link">
+
                     <el-option
                             v-for="(item,index) in link_list"
                             :key="index"
                             :label="item.label"
                             :value="item.value" ></el-option>
-               </div>
+
 
             </el-select>
 
@@ -416,18 +311,17 @@
                     v-model="new_link_name"
                     placeholder="Please select"
                     clearable
-                    filterable
                     @blur="showOption_change_link"
                     @clear="selectClear"
                     @change="selectChange"
                     no-match-text="No Link Name found"
             >
-                <div  v-show="optionVisible_change_link">
+
                     <el-option
                             v-for="(item,index) in link_list"
                             :key="index"
                             :label="item.label"
-                            :value="item.value" ></el-option></div>
+                            :value="item.value" ></el-option>
             </el-select>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -438,6 +332,57 @@
                 </el-button>
             </div>
         </el-dialog>
+
+
+
+
+
+        <el-dialog :visible.sync="dialogFormVisible_viewCollective"
+                   :show-close="false"
+                   title="View Collective Graph" center>
+
+            Node Name
+
+            <el-select
+                    ref="viewCollective"
+                    @keyup.native = "showOption_view_graph"
+                    label-position="right"
+                    label-width="86px"
+                    style="width: 300px; margin-left:50px;"
+
+                    v-model="collective_node_value"
+                    placeholder="Please select"
+                    clearable
+
+                    filterable
+                    @blur="showOption_view_graph"
+                    @clear="selectClear"
+                    @change="selectChange"
+
+                    no-match-text="No Node Name found"
+
+            >
+                <!--<div  v-show="optionVisible_viewGraph">-->
+                    <el-option
+                            v-for="(item,index) in collective_node_list"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value" ></el-option>
+                <!--</div>-->
+
+            </el-select>
+
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    No
+                </el-button>
+                <el-button type="primary" :disabled="btnChangeEnable" @click="searchConcept" >
+                    Yes
+                </el-button>
+            </div>
+        </el-dialog>
+
 
 
 
@@ -572,7 +517,7 @@
                 dialog_createUser:false,
 
                 // optionVisible_init_nodes:false,
-                // optionVisible_add_nodes:false,
+                optionVisible_viewGraph:false,
                 // optionVisible_change_nodes:false,
                 optionVisible_add_link:false,
                 optionVisible_change_link:false,
@@ -581,12 +526,14 @@
                 upload_nodes:'',
                 upload_links:'',
 
-                disable_initGraph:true,
+                // disable_initGraph:true,
                 disable_submit:true,
                 disable_viewGraph: true,
+                disable_searchConcept: true,
+                disable_dbclick : true,
                 viewGraph_btn_status:true,
                 // disable_getArticles:true,
-                dialogFormVisible_initGraph:false,
+                // dialogFormVisible_initGraph:false,
 
                 //////////////////////////////////////
                 showdetail_node:false, // show the info in the right corner
@@ -597,8 +544,13 @@
                 node_value: '',
                 link_value:'',
                 init_node_value:'',
+
                 btnChangeEnable: true,
                 node_list: [],
+                collective_node_value:'',
+                collective_node_list : [],
+                entire_collective_data:[],
+
                 // node_list: [
                 //     {
                 //         value: 'node1',
@@ -648,6 +600,7 @@
 
                 dialogFormVisible:false,
                 dialogFormVisible_link:false,
+                dialogFormVisible_viewCollective:false,
                 dialogFormVisible_change_node_name:false,
                 dialogFormVisible_change_link_name:false,
                 temp : [],
@@ -774,6 +727,7 @@
                 dragNode:null,
                 start:null,
                 end:null,
+                target_node_index : '',
             }
         },
 
@@ -789,7 +743,15 @@
         methods: {
 
             readTxt(){
-                console.log(linkfile)
+                console.log(linkfile.split('\n'));
+                let link_name = linkfile.split('\n').map(function (element) {
+
+                    return {'value':element, 'label':element}
+                });
+                console.log(link_name);
+                this.link_list = link_name;
+
+
 
             },
 
@@ -806,7 +768,7 @@
                         method: 'get',
                     }).then(response => {
                         // console.log(eval(response.data)[1]);
-                        let search_term = []
+                        let search_term = [];
                         for(let i =0;i<eval(response.data)[1].length;i++){
                             if(eval(response.data)[1][i].search('(disambiguation)') !== -1
                                 ||eval(response.data)[1][i].search('List of') !== -1 ||eval(response.data)[1][i].search('list of') !== -1)
@@ -836,12 +798,10 @@
                 this.$refs['select'].focus()
 
             },
-            getCollectiveGraph:function(){
 
-                let node_limits = 25;
-                let link_set = [];
-                let nodeId_set = [];
-                this.disable_initGraph = true;
+            getAllConcepts:function(){
+
+
                 this.disable_submit = true;
                 this.viewGraph_btn_status = !this.viewGraph_btn_status;
 
@@ -849,159 +809,19 @@
 
                     this.readOnly = true;
                     this.$axios({
-                        url: '/getCollectiveGraph',
+                        url: '/getAllConcepts',
                         method: 'get',
                     }).then(response => {
+                        this.disable_searchConcept = false;
+                        this.dialogFormVisible_viewCollective = true;
 
-                        console.log('response',response)
-                        let data_map = [];
-                        for(let i =0; i<response.data.nodes.length;i++)
-                        {
-                            data_map[(i)] = []
-                        }
+                        this.collective_node_list = response.data.nodes.map(function (element) {
 
-                        console.log('data_map 1',data_map);
+                            return {'value':element, 'label':element}
 
-                        for(let i =0; i<response.data.nodes.length;i++)
-                        {
-                            for(let j=0; j<response.data.links.length;j++){
-                                    let src = response.data.links[j].source;
-                                    let tar = response.data.links[j].target;
-
-
-                                    if(src > 25 || tar > 25)
-                                        break;
-
-                                    if(i===Number(src) || i===Number(tar))
-                                    {
-
-                                        data_map[i].push(response.data.links[j])
-                                    }
-                            }
-                        }
-
-                        console.log('data_map 2',data_map);
-                        let links_list = [];
-                        let nodes_list = [];
-                        for(let i = 0; i< 25; i++){
-
-                            nodes_list.push(response.data.nodes[i]);
-                            for(let j =0; j < data_map[i].length;j++){
-                                if(j === 2)
-                                    break;
-
-                                links_list.push(data_map[i][j]);
-
-
-
-                            }
-                        }
-                        console.log('nodes_list 1', nodes_list);
-                        console.log('links_list 1', links_list);
-
-                        let new_nodes_list = nodes_list.map(function(element){
-                            element.id = Number(element.id);
-                            return element
                         });
 
-                        let new_links_list = links_list.map(function(element){
-                            element.id = Number(element.id);
-                            element.source = Number(element.source);
-                            element.target = Number(element.target);
-                            return element
-                        });
 
-                        let unique_links_src_tar = []; // drop the link with same source and target
-                        let unique_links_list = [];
-                        for(let i =0; i<new_links_list.length;i++){
-                            // let src = new_links_list[i].source;
-                            // let tar = new_links_list[i].target;
-                            // let label = new_links_list[i].label;
-                            if(unique_links_src_tar.indexOf([new_links_list[i].source,new_links_list[i].target,
-                                new_links_list[i].label].toString()) === -1){
-
-                                unique_links_list.push(new_links_list[i])
-                            }
-
-                            unique_links_src_tar.push([new_links_list[i].source,new_links_list[i].target,
-                                new_links_list[i].label].toString());
-
-
-                        }
-                        console.log('unique_links_src_tar',unique_links_src_tar);
-                        console.log('nodes_list 2', new_nodes_list);
-                        console.log('links_list 2', unique_links_list);
-
-                        this.info.nodes = new_nodes_list;
-                        this.info.links = unique_links_list;
-
-                        console.log(this.info);
-                        this.renderGraph(this.info);
-
-
-                        // let user_nodes = response.data.nodes;
-                        // let user_links = response.data.links;
-                        // let change_node_type = user_nodes.map(function (element) {
-                        //     element.id = Number(element.id);
-                        //     return element
-                        // });
-                        // let change_link_type = user_links.map(function (element) {
-                        //     element.id = Number(element.id);
-                        //     element.source = Number(element.source);
-                        //     element.target = Number(element.target);
-                        //     return element
-                        // });
-                        //
-                        // this.info.nodes = change_node_type;
-                        // this.info.links = change_link_type;
-                        //
-                        // // this.renderGraph()
-                        // if(this.info.nodes.length > node_limits)
-                        // {
-                        //     this.info.nodes = this.info.nodes.slice(0,node_limits)
-                        // }
-                        // nodeId_set = this.info.nodes.map(function(element){
-                        //     return element.id
-                        // });
-                        // // console.log(this.info.nodes);
-                        // // console.log(nodeId_set);
-                        // for(let j =0; j<this.info.links.length; j++)
-                        //     {
-                        //         if((nodeId_set.indexOf(this.info.links[j].source)!==-1) &&(nodeId_set.indexOf(this.info.links[j].target)!==-1)){
-                        //             link_set.push(this.info.links[j])
-                        //         }
-                        //     }
-                        //     // console.log(link_set);
-                        // link_set = link_set.slice(0,200);
-                        // let unique_arr = [];
-                        // let unique_link_id_arr = [];
-                        // for(let i =0;i<link_set.length;i++){
-                        //
-                        //     if(unique_arr.indexOf([link_set[i].source, link_set[i].target, link_set[i].label].toString())===-1)
-                        //     {
-                        //         unique_link_id_arr.push(link_set[i].id);
-                        //         unique_arr.push([link_set[i].source, link_set[i].target, link_set[i].label].toString())
-                        //     }
-                        //
-                        // }
-                        //
-                        //
-                        //
-                        // let new_link_set  = [];
-                        // for(let i =0; i<unique_link_id_arr.length;i++)
-                        // {
-                        //
-                        //         new_link_set.push(this.info.links[unique_link_id_arr[i]])
-                        //
-                        // }
-                        //
-                        //
-                        //
-                        // // console.log(new_link_set);
-                        // this.info.links = new_link_set;
-                        // // console.log('info',this.info);
-                        //
-                        // this.renderGraph(this.info)
                     })
                 }
                 else{
@@ -1010,6 +830,46 @@
                     this.handleShow();
                 }
             },
+
+            searchConcept()
+            {
+                let linklist = [];
+                let nodelist = [];
+                console.log('concept value', this.collective_node_value);
+                this.$axios({
+                    url: '/getAllNodeConnections',
+                    method: 'post',
+                    data:{
+                        node:this.collective_node_value
+                    }
+            }).then(response => {
+                    console.log(response);
+                    linklist = response.data.links.map(function (element) {
+                        element.source = Number(element.source);
+                        element.target = Number(element.target);
+                        element.id = Number(element.id);
+                        return element
+                    });
+
+                    nodelist = response.data.nodes.map(function (element) {
+                        element.id = Number(element.id);
+                        return element
+                    });
+
+                    console.log('link list', linklist);
+                    console.log('node list', nodelist);
+                    this.dialogFormVisible_viewCollective = false;
+                    this.info.nodes = nodelist;
+                    this.info.links = linklist;
+                    this.renderGraph(this.info);
+
+                })
+
+
+
+
+            },
+
             ////////////////////////////////////////////////////////////
             // login functions
 
@@ -1109,6 +969,7 @@
                             }
                             else {
                                 this.centerDialogVisible=false;
+                                this.disable_dbclick = false;
                                 console.log(response);
                                 this.showLogin = false;
                                 let user_nodes = response.data.nodes;
@@ -1155,9 +1016,11 @@
 
             logout:function () {
                 this.showLogin = true;
+                this.disable_dbclick = true;
                 this.disable_initGraph = true;
                 this.disable_submit = true;
                 this.disable_viewGraph  =true;
+                this.disable_searchConcept = true;
                 this.viewGraph_btn_status = true;
                 this.username = '';
                 this.password = '';
@@ -1172,49 +1035,29 @@
 
 
 
-            // showOption_add_nodes()
-            // {
-            //
-            //     this.inputNodeContent = this.$refs.addNode.$children[0].value;
-            //     console.log(this.$refs.addNode.$children[1])
-            //      console.log('duud',this.$refs.option)
-            //     this.node_value = this.inputNodeContent;
-            //     if(this.node_value ===''){
-            //         this.optionVisible_add_nodes = false
-            //     }
-            //     // this.optionVisible_add_nodes = this.inputNodeContent.length >=2;
-            //     this.$forceUpdate()
-            // },
+            showOption_view_graph()
+            {
+
+                let inputContent = this.$refs.viewCollective.$children[0].value;
+
+
+                this.optionVisible_viewGraph = inputContent.length >=2;
+
+                this.$forceUpdate()
+            },
 
             selectFocus(){
                 console.log('lalala')
                 // this.optionVisible_add_nodes = false
             },
 
-            // showOption_init_nodes()
-            // {
-            //     console.log(this.$refs.init.$children);
-            //     let inputContent = this.$refs.init.$children[0].value;
-            //
-            //     this.optionVisible_init_nodes = inputContent.length >=2;
-            //
-            //     this.$forceUpdate()
-            // },
-
-            // showOption_change_nodes()
-            // {
-            //     let inputContent = this.$refs.changeNodeName.$children[0].value;
-            //     this.optionVisible_change_nodes = inputContent.length >=2;
-            //
-            //     this.$forceUpdate()
-            // },
 
 
             showOption_add_link()
             {
                 let inputContent = this.$refs.addLink.$children[0].value;
 
-                this.optionVisible_add_link = inputContent.length >=2;
+                this.optionVisible_add_link = true;
                 this.$forceUpdate()
             },
 
@@ -1222,7 +1065,7 @@
             {
 
                 let inputContent = this.$refs.changeLinkName.$children[0].value;
-                this.optionVisible_change_link = inputContent.length >=2;
+                this.optionVisible_change_link = true;
 
                 this.$forceUpdate()
             },
@@ -1250,13 +1093,16 @@
                 this.link_value = '';
                 this.new_node_name = '';
                 this.new_link_name = '';
-                this.init_node_value = '',
+                this.init_node_value = '';
+                this.collective_node_value = '';
+
                 // this.optionVisible_init_nodes=false;
                 // this.optionVisible_add_nodes=false;
                 // this.optionVisible_change_nodes=false;
 
                 this.optionVisible_add_link=false;
                 this.optionVisible_change_link=false;
+                this.optionVisible_viewGraph = false;
                 this.disableSelect = true;
                 this.input = '';
                 this.node_list  =[];
@@ -1285,6 +1131,9 @@
                 else if(this.dialogFormVisible_initGraph === true){
                     this.init_node_value = val;
                 }
+                else if(this.dialogFormVisible_viewCollective === true){
+                    this.collective_node_value = val;
+                }
                 this.$forceUpdate()
             },
 
@@ -1295,7 +1144,7 @@
                 this.dialogFormVisible_link = false;
                 this.dialogFormVisible_change_node_name = false;
                 this.dialogFormVisible_change_link_name = false;
-
+                this.dialogFormVisible_viewCollective = false;
                 this.temp.length = 0;
                 this.newPassword = '';
                 this.newUsername = '';
@@ -1437,29 +1286,21 @@
 
                 if (this.viewGraph_btn_status === false && this.showLogin === false) {
                     this.disable_submit = true;
+                    this.disable_searchConcept = false;
                 }
                 console.log('render data', info);
                 if(this.showLogin === false && this.viewGraph_btn_status === true)
                 {
                 this.disable_submit = false;
                 this.disable_viewGraph = false;
+                this.disable_searchConcept = true;
+
 
                 }
 
-                if(this.showLogin === false && this.info.nodes.length === 0 )
-                {
-                    this.disable_initGraph = false;
-                }
-                else{
-                    this.disable_initGraph = true;
-                }
-                // this.disable_initGraph = this.info.nodes.length !== 0;
+
 
                 let {links, nodes} = info;
-                // let links = info.links;
-                // let nodes = info.nodes;
-
-                // console.log('links and nodes', links, nodes);
 
                 //关系分组
                 setLinkGroup(links);
@@ -1488,10 +1329,10 @@
                     ;
 
 
-                let svg_drag = d3.behavior.drag()
-                    .on('dragstart',null)
-                    .on('drag',null)
-                    .on('dragend',()=>{console.log('end')})
+                // let svg_drag = d3.behavior.drag()
+                //     .on('dragstart',null)
+                //     .on('drag',null)
+                //     .on('dragend',()=>{console.log('end')})
 
 
 
@@ -1502,20 +1343,21 @@
                     .attr("viewBox", "-500 -200 2000 2000")
                     .call(zoom)
 
-                    .call(svg_drag)
+                    // .call(svg_drag)
                     .on('touchmove',null)
 
 
                     .on("dblclick", (node, )=>{
                     if (d3.event.defaultPrevented) return;
                     clearTimeout(this.clickTimeId);
-                    if(this.readOnly === true){
+                    if(this.readOnly === true || this.disable_dbclick === true){
                         this.$message(
                             {
                                 type: 'Warning',
                                 message: 'Read Only Mode'
                             });
                     }
+
                     else {
 
                         this.dialogFormVisible = true;
@@ -1591,6 +1433,9 @@
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
                             .attr('font-size',15)
+
+
+
                     })
                     .on("dblclick", (node, )=>{
 
@@ -1710,9 +1555,9 @@
                     .attr("refY", 0)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
-                    .attr("stroke-width",5)//箭头宽度
+                    .attr("stroke-width",7)//箭头宽度
                     .attr("d", "M0,-5L10,0L0,5")//箭头的路径
-                    .attr('fill', 'rgba(0,0,0, 0.4)');//箭头颜色
+                    .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
 
                 defs.append("marker")
                     .attr("id", "start")
@@ -1725,9 +1570,9 @@
                     .attr("refY", 0)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
-                    .attr("stroke-width",5)//箭头宽度
+                    .attr("stroke-width",7)//箭头宽度
                     .attr("d", "M0,0L10,-5L10,5")//箭头的路径
-                    .attr('fill', 'rgba(0,0,0, 2)');//箭头颜色
+                    .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
 
 
 
@@ -1781,8 +1626,6 @@
                     // .attr('text-anchor',"middle")
 
 
-                console.log(force)
-                console.log(force.linkDistance())
 
 
 
@@ -1804,7 +1647,9 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
-                    svg.selectAll("g").attr("transform", "scale(" +d3.event.scale + ")");
+                    // svg.selectAll("g").attr("transform", "scale(" +d3.event.scale + ")");
+                    svg.attr("transform", "scale(" +d3.event.scale + ")");
+
                 }
 
                 function getMarkerArrow(i) {
@@ -1834,6 +1679,17 @@
                     });
                 }
 
+                function getTextPosition(d){
+                    const sx = d.source.x;
+                    const sy = d.source.y;
+                    const tx = d.target.x;
+                    const ty = d.target.y;
+
+                    const distance = Math.sqrt(Math.pow(tx - sx, 2) + Math.pow(ty - sy, 2));
+
+                    return distance / 2
+                }
+
                 function drag(_this){//拖拽函数
                     const mouse_line = svg.append("path")
                         .attr('id','mouse_link')
@@ -1843,7 +1699,9 @@
                         .attr('marker-end', 'url(#end)');
 
                     return force.drag().on("dragstart",function(d){
+
                         console.log('start node',d);
+
 
                         if(_this.ifClicked===true ) {
 
@@ -1864,39 +1722,58 @@
 
                         .on('drag', (d) =>{
 
-                            edges_text
-                                .attr("dx",  function(d) {
 
-                                    return Math.abs((d.x_start+d.x_end))/ 2
-                                    // if(d.x_start < d.x_end) // start 在左
-                                    //     return Math.abs(d.x_end ) + 5;
-                                    // if(d.x_start >= d.x_end) //start在右
-                                    //     return Math.abs(d.x_start ) - 5;
+
+                            edges_text
+                                .attr("dx",  d=> {
+
+                                   return getTextPosition(d)
                                 })
                                 .attr("dy",  function(d) {
                                     return 30;
-                                })
+                                });
 
 
                                 if (_this.ifClicked === true && _this.dragNode === d) {
-
                                     force.stop();
 
                                     mouse_line.style('opacity', '1');
                                     mouse_line.attr('d', function () {
 
+
+
                                         if (d3.select(d3.event.sourceEvent.srcElement).datum() === undefined) {
+
+                                            d3.select('.g_circle_' + _this.target_node_index).select('circle')
+                                                .style('fill', function (node) {
+                                                    return getCircleColor(node);
+                                                });
+
                                             return ('M' + d.x + ' '
                                                 + d.y + "L" + +d3.mouse(d3.event.sourceEvent.srcElement)[0]
                                                 + ' ' + d3.mouse(d3.event.sourceEvent.srcElement)[1]);//绘制直线
                                         }
                                         else {
+
+                                            d3.select('.g_circle_'+ d3.select(d3.event.sourceEvent.srcElement).datum().index)
+                                                .select('circle').style('fill','red');
+
+
+
                                             return ('M' + _this.mouseLinkLineStartLoc[0] + ' ' + _this.mouseLinkLineStartLoc[1] +
                                                 "L" + +d3.select(d3.event.sourceEvent.srcElement).datum().x
                                                 + ' ' + d3.select(d3.event.sourceEvent.srcElement).datum().y)
                                         }
 
+
+
                                     });
+
+                                    if (d3.select(d3.event.sourceEvent.srcElement).datum() !== undefined
+                                        && d.index !== d3.select(d3.event.sourceEvent.srcElement).datum().index)
+                                    {
+                                        _this.target_node_index = d3.select(d3.event.sourceEvent.srcElement).datum().index;
+                                    }
 
 
                                 }
@@ -1917,6 +1794,8 @@
                                 let data = d3.select(d3.event.sourceEvent.srcElement).datum()
                                 console.log('data',d3.event.sourceEvent.srcElement)
                                 console.log('datum',data);
+
+
 
 
                                 _this.end  = data;
@@ -1962,9 +1841,6 @@
                             }
 
 
-                                // console.log('d',d)
-                                // _this.original_dx = null;
-                                // _this.original_dy = null;
                         });
                 }
 
@@ -2365,6 +2241,8 @@
         height: 100vh;
     }
 
+
+
     .d3-context-menu {
         position: absolute;
         display: none;
@@ -2424,6 +2302,7 @@
     .el-card__header {
         border-bottom: 1px solid #50596d;
     }
+
 
 
 </style>
