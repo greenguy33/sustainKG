@@ -7,9 +7,10 @@ import axios from 'axios';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import routers from './routers'
+import locale from 'element-ui/lib/locale/lang/en'
 
 Vue.use(VueRouter)
-Vue.use(ElementUI)
+Vue.use(ElementUI,{locale})
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 Vue.prototype.$axios = axios;
 axios.defaults.baseURL =  "/api";

@@ -16,7 +16,8 @@
     "d3": "^3.5.17",
     "node-7z": "^2.1.2",
     "spawn-sync": "^2.0.0",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "vue-resource": "^1.5.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",

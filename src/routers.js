@@ -1,4 +1,6 @@
-import home from './components/home'
+import home from '@/components/home'
+import login from '@/components/Login'
+import dashboard from '@/components/Dashboard'
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router);
@@ -8,12 +10,26 @@ const routers = [
     {
         path: '/home',
         name: 'home',
-        component: home
-    },
+        component: home,
 
-  // {
+
+    },
+    {
+        path: '/',
+        name: 'login',
+        component: login,
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: dashboard,
+    }
+
+
+    // {
   //     path: '/',
-  //         component: Home
+  //     component: Home,
+  //
   // },
 ]
 
