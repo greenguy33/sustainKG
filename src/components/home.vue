@@ -48,26 +48,26 @@
                             <el-menu-item class="el-icon-upload2" index="1-1" :disabled="disable_submit" @click="submitData()"> Submit Data</el-menu-item>
                             <el-menu-item class="el-icon-search" index="1-2" :disabled="disable_searchConcept"  @click="searchConcept_dialog" > Search Another Concept</el-menu-item>
 
-                            <el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>
+                            <!--<el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>-->
                             <!--<el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>-->
 
                         </el-menu-item-group>
 
 
                     </el-submenu>
-                    <el-menu-item   @click="instruction">
-                        <i class="el-icon-info"></i>
-                        <span slot="title">Help</span>
+                    <!--<el-menu-item   @click="instruction">-->
+                        <!--<i class="el-icon-info"></i>-->
+                        <!--<span slot="title">Help</span>-->
+                    <!--</el-menu-item>-->
+
+                    <el-menu-item >
+                        <i class="el-icon-star-off"></i>
+                        <span slot="title">Nodes：{{ info.nodes.length }}</span>
                     </el-menu-item>
 
                     <el-menu-item >
                         <i class="el-icon-star-off"></i>
-                        <span slot="title">Nodes ：{{ info.nodes.length }}</span>
-                    </el-menu-item>
-
-                    <el-menu-item >
-                        <i class="el-icon-star-off"></i>
-                        <span slot="title">Links ：{{ info.links.length }}</span>
+                        <span slot="title">Links：{{ info.links.length }}</span>
                     </el-menu-item>
 
 
@@ -76,6 +76,12 @@
                 <el-button style="margin-top: 80px; margin-left: 15px;"
                            :disabled='disable_viewGraph'  @click="getAllConcepts" size="small" round
                            type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
+
+                <el-button style="margin-top: 80px; margin-left: 15px;"
+                            @click="instruction" size="small" round
+                           type="primary">
+                    <i class="el-icon-info"></i>
+                    Help</el-button>
 
                 <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
                             <!--@click="submit2" size="small" round-->
@@ -141,8 +147,8 @@
             <br><br>
             <span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>
             <span slot="footer" class="dialog-footer">
-            <el-button @click.native="dialog_createUser=false">No</el-button>
-            <el-button type="primary" @click="createUser" >Yes</el-button>
+            <el-button @click.native="dialog_createUser=false">Cancel</el-button>
+            <el-button type="primary" @click="createUser" >Submit</el-button>
           </span>
         </el-dialog>
 
@@ -150,7 +156,7 @@
 
         <el-dialog :visible.sync="dialogFormVisible"
                    title="Create Node" center
-                   style='width: 1000px;margin-left:200px;'>
+                 >
 
 
 
@@ -200,21 +206,21 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
-                    No
+                    Cancel
                 </el-button>
                 <el-button type="primary" :disabled="btnChangeEnable" @click="addNodes">
-                    Yes
+                    Submit
                 </el-button>
             </div>
         </el-dialog>
 
 
         <el-dialog :visible.sync="dialogFormVisible_change_node_name"
-                   title="Change Node Name" center
-                   style='width: 1000px;margin-left:200px;'
+                   title="Change Node Name"
+                    center
         >
 
-            <el-form :inline="true"  class="demo-form-inline">
+            <el-form :inline="true"  class="demo-form-inline" center>
                 <el-form-item label="Node Name">
                     <el-input v-model="input"
 
@@ -306,10 +312,10 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
-                    No
+                    Cancel
                 </el-button>
                 <el-button type="primary" :disabled="btnChangeEnable"  @click="drag_addLinks">
-                    Yes
+                    Submit
                 </el-button>
             </div>
         </el-dialog>
@@ -404,18 +410,18 @@
 
 
 
-        <div id="node_info" v-show="showdetail_node"  >
+        <div id="node_info" v-show="showdetail_node"  style="z-index: -1">
             <el-card
                     :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                     class="node-card"
                     style="height: 250px"
             >
-                <h2 :style="{ color: '#ca635f' }">Node Detail</h2>
+                <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
                 <div>
 
-                    <h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>
+                    <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
                     <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
-                    <h4 :style="{ color: '#aaaaff' }">Name: {{ detailname }}</h4>
+                    <!--<h4 :style="{ color: '#aaaaff' }"></h4>-->
                     <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
                 </div>
             </el-card>
@@ -1805,20 +1811,24 @@
                     .on('touchmove',null)
 
 
-                    .on("dblclick", (node, )=>{
+                    .on("dblclick", (node, i)=>{
+                        console.log('svg node',node,i,d3.select(d3.event.target).datum())
+
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
+
                         if(this.readOnly === true || this.disable_dbclick === true){
-                            this.$message(
-                                {
-                                    type: 'Warning',
-                                    message: 'Read Only Mode'
-                                });
+                            // this.$message(
+                            //     {
+                            //         type: 'Warning',
+                            //         message: 'Read Only Mode'
+                            //     });
+                            console.log('read mode only')
                         }
 
                         else {
-
-                            this.dialogFormVisible = true;
+                            if(d3.select(d3.event.target).datum() === undefined)
+                                this.dialogFormVisible = true;
                         }
 
 
@@ -1844,11 +1854,12 @@
 
                         this.clickTimeId = setTimeout( ()=> {
                                 if(this.readOnly === true){
-                                    this.$message(
-                                        {
-                                            type: 'Warning',
-                                            message: 'Read Only Mode'
-                                        });
+                                    // this.$message(
+                                    //     {
+                                    //         type: 'Warning',
+                                    //         message: 'Read Only Mode'
+                                    //     });
+                                    console.log('read only mode')
                                 }
                                 else {
 
@@ -1895,37 +1906,43 @@
 
 
                     })
-                    .on("dblclick", (node )=>{
-
-
+                    .on('dblclick',()=>{
                         if (d3.event.defaultPrevented) return;
-                        clearTimeout(this.clickTimeId);
+                        console.log('dblclick')
+
+                    })
+                    // .on("dblclick", (node )=>{
+                    //
+                    //
+                    //     if (d3.event.defaultPrevented) return;
+                    //     clearTimeout(this.clickTimeId);
+                    //     if(this.readOnly === true){
+                    //
+                    //         this.expandConcept(node.properties.name);
+                    //
+                    //         // this.$message(
+                    //         //     {
+                    //         //         type: 'Warning',
+                    //         //         message: 'Read Only Mode'
+                    //         //     });
+                    //
+                    //
+                    //
+                    //
+                    //     }
+                    //     else {
+                    //         this.dialogFormVisible = true;
+                    //     }
+                    // })
+                    .on('contextmenu',(d,node)=>{
+                        if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
-
-                            this.expandConcept(node.properties.name);
-
                             // this.$message(
                             //     {
                             //         type: 'Warning',
                             //         message: 'Read Only Mode'
                             //     });
-
-
-
-
-                        }
-                        else {
-                            this.dialogFormVisible = true;
-                        }
-                    })
-                    .on('contextmenu',(d,node)=>{
-                        if (d3.event.defaultPrevented) return;
-                        if(this.readOnly === true){
-                            this.$message(
-                                {
-                                    type: 'Warning',
-                                    message: 'Read Only Mode'
-                                });
+                            console.log('read only mode')
                         }
                         else {
                             Menu(this.menu)(d, d3.event, node)
@@ -2063,11 +2080,12 @@
                     .on('contextmenu',(d,link)=>{
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
-                            this.$message(
-                                {
-                                    type: 'Warning',
-                                    message: 'Read Only Mode'
-                                });
+                            // this.$message(
+                            //     {
+                            //         type: 'Warning',
+                            //         message: 'Read Only Mode'
+                            //     });
+                            console.log('read only mode')
                         }else {
                             Menu(this.menu_edge)(d, d3.event, link)
                         }
@@ -2087,7 +2105,7 @@
                     .attr({'class': 'edgelabel',
                         'id': function (d, i) { return 'edgepath' + i; },
                         'dx': 250,
-                        'dy': -25,
+                        'dy': -5,
                         'fill':'black',
 
                         // 'transform': edge_text_Position()
@@ -2116,16 +2134,27 @@
                     // .attr("pointer-events", "none")
                     .attr("font-size", 20)
                     .text(function (d) { return d.label; })
+                    .on('mouseover',(d,i)=>{
+                        getStrokeWidth(d,i)
+                    })
+                    .on('mouseout',(d,i)=>{
+                        d3.select('text#edgepath'+i).select('textPath').attr("font-size", 20)
+                        edges_line.style("stroke-width", 3);
+                    })
                     .on('contextmenu',(d,link)=>{
                         console.log('huahua',d,link);
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
-                            this.$message(
-                                {
-                                    type: 'Warning',
-                                    message: 'Read Only Mode'
-                                });
-                        }else {
+
+                            // this.$message(
+                            //     {
+                            //         type: 'Warning',
+                            //         message: 'Read Only Mode'
+                            //     });
+                            console.log('read only mode')
+
+                        }
+                        else {
                             Menu(this.menu_edge)(d, d3.event, link)
                         }
 
@@ -2220,7 +2249,7 @@
                                     return getTextPosition(d)
                                 })
                                 .attr("dy",  function(d) {
-                                    return -30;
+                                    return -5;
                                 });
 
 

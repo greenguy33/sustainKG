@@ -13,7 +13,7 @@
 
         </el-header>
             <el-table
-                    :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                    :data="tableData"
                     stripe
                     style="width: 100%"
                     :default-sort = "{prop: 'date', order: 'descending'}"
@@ -54,7 +54,7 @@
         <div><h2></h2></div>
         <el-pagination class="fy"
                 @current-change="handleCurrentChange"
-                layout="total, prev, pager, next, jumper"
+                layout="total"
                 :total="total"
                >
         </el-pagination>
