@@ -1,5 +1,5 @@
 module.exports = {
-    publicPath: '/',
+    publicPath: './',
     devServer: {
         proxy: {
             //配置跨域
