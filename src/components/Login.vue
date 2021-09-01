@@ -69,7 +69,7 @@
                 }else {
 
                     this.$axios({
-                        url: 'http://172.18.0.3:8080/getUserGraph',
+                        url: '/getUserGraph',
                         method: 'post',
                         data: {
                             user: this.username,
