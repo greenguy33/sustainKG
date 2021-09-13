@@ -31,12 +31,20 @@ WORKDIR /src
 RUN git clone https://github.com/nginx-shib/nginx-http-shibboleth.git
 
 WORKDIR /usr/src/nginx-1.20.1
-RUN ./configure --with-compat --with-http_ssl_module --add-dynamic-module=/src/nginx-http-shibboleth && make modules
+RUN ./configure --with-debug --with-compat --with-http_ssl_module --add-dynamic-module=/src/nginx-http-shibboleth && make modules
 
 FROM nginx:1.20.1
 
 COPY dist/ /usr/share/nginx/html/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/nginx-1.20.1/objs/ngx_http_shibboleth_module.so /usr/lib/nginx/modules/
+
+
+
+
+
+
+
+
 #COPY --from=build /src/nginx-http-shibboleth/includes/shib_fastcgi_params /etc/nginx/
 #COPY --from=build /src/nginx-http-shibboleth/includes/shib_clear_headers /etx/nginx/
