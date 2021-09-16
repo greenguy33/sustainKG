@@ -124,8 +124,10 @@
 
         <!--下面是对话框集合 与界面无关-->
         <el-dialog
+                :close-on-click-modal="false"
                 title="Login"
                 :visible.sync="centerDialogVisible"
+
                 width="30%"
                 center>
             <span>Username<el-input v-model="username" placeholder="Please Input Username"></el-input></span>
@@ -139,6 +141,7 @@
         </el-dialog>
 
         <el-dialog
+                :close-on-click-modal="false"
                 title="Create New Account"
                 :visible.sync="dialog_createUser"
                 width="30%"
@@ -154,7 +157,9 @@
 
 
 
-        <el-dialog :visible.sync="dialogFormVisible"
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible"
                    title="Create Node" center
                  >
 
@@ -215,7 +220,10 @@
         </el-dialog>
 
 
-        <el-dialog :visible.sync="dialogFormVisible_change_node_name"
+        <el-dialog
+                :close-on-click-modal="false"
+
+                :visible.sync="dialogFormVisible_change_node_name"
                    title="Change Node Name"
                     center
         >
@@ -246,6 +254,7 @@
                                 ref="select_changeNode"
                                 clearable
                                 no-data-text="No Node Name found"
+                                @keyup.native.enter="change_node_name"
                     >
                         <el-option
                                 class="bar"
@@ -273,7 +282,9 @@
 
 
 
-        <el-dialog :visible.sync="dialogFormVisible_link"
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible_link"
                    :show-close="false"
                    title="Create Link" center>
 
@@ -320,7 +331,9 @@
             </div>
         </el-dialog>
 
-        <el-dialog :visible.sync="dialogFormVisible_change_link_name"
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible_change_link_name"
                    title="Change Link Name" center>
 
             Link Name
@@ -338,6 +351,7 @@
                     @clear="selectClear"
                     @change="selectChange"
                     no-match-text="No Link Name found"
+                    @keyup.native.enter="change_link_name"
             >
 
                 <el-option
@@ -362,7 +376,9 @@
 
         <el-dialog :visible.sync="dialogFormVisible_viewCollective"
                    :show-close="false"
-                   title="View Collective Graph" center>
+                   title="View Collective Graph" center
+                   :close-on-click-modal="false"
+        >
 
             Node Name
 

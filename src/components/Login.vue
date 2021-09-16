@@ -5,6 +5,7 @@
 
 
         <el-dialog
+                :close-on-click-modal="false"
                 title="Login"
                 :visible.sync="centerDialogVisible"
                 width="30%"
@@ -21,6 +22,7 @@
 
 
         <el-dialog
+                :close-on-click-modal="false"
                 title="Create New Account"
                 :visible.sync="dialog_createUser"
                 width="30%"
