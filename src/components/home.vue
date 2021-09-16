@@ -383,6 +383,7 @@
                     @change="selectChange"
 
                     no-match-text="No Node Name found"
+                    @keyup.native.enter='searchConcept'
 
             >
                 <!--<div  v-show="optionVisible_viewGraph">-->
@@ -397,7 +398,7 @@
 
 
             <div slot="footer" class="dialog-footer">
-                <el-button @click="cancel">
+                <el-button @click="collectiveGraph_cancel">
                     No
                 </el-button>
                 <el-button type="primary" :disabled="btnChangeEnable" @click="searchConcept" >
@@ -775,7 +776,13 @@
         },
 
         mounted() {
-            console.log('route name',this.$route.name)
+
+
+
+
+
+
+            console.log('route name',this.$route.name);
 
             this.handleShow();
             this.renderGraph(this.info);
@@ -959,23 +966,23 @@
                     this.node_value = [];
                     this.disableSelect = false;
 
-                    this.$axios({
-                        url:'https://en.wikipedia.org/w/api.php?action=query&generator=prefixsearch&gpssearch='+this.input+'&gpslimit=10&prop=extracts&exsentences=1&format=json&exintro&origin=*&callback=',
-                        method:'get'
-                    }).then(response=>{
-                        response.data = response.data.slice(5);
-                        response.data = response.data.slice(0,response.data.length-1);
-                        let node_info = JSON.parse(response.data).query.pages;
-                        console.log(node_info)
-
-                    });
+                    // this.$axios({
+                    //     url:'https://en.wikipedia.org/w/api.php?action=query&generator=prefixsearch&gpssearch='+this.input+'&gpslimit=10&prop=extracts&exsentences=1&format=json&exintro&origin=*&callback=',
+                    //     method:'get'
+                    // }).then(response=>{
+                    //     response.data = response.data.slice(5);
+                    //     response.data = response.data.slice(0,response.data.length-1);
+                    //     let node_info = JSON.parse(response.data).query.pages;
+                    //     console.log(node_info)
+                    //
+                    // });
 
                     this.$axios({
                         url: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=intitle:+"+this.input+"+&srprop=snippet&format=json&origin=*&callback=",
                         method:'get'
                     }).then(response =>{
                         let term = [];
-                        // console.log(response.data);
+                        console.log(response.data);
                         response.data = response.data.slice(5);
                         response.data = response.data.slice(0,response.data.length-1);
                         let node_info = JSON.parse(response.data).query.search;
@@ -1022,12 +1029,14 @@
             },
 
             getAllConcepts:function(){
-                let flag = null
+
+                let flag = null;
                 this.viewGraph_btn_status = !this.viewGraph_btn_status;
                 if(this.viewGraph_btn_status === false ) {
                     this.temp_linklist = [];
                     this.temp_nodelist = [];
                     flag = this.submitData();
+
                 }
                 if(flag === false)
                 {
@@ -1052,10 +1061,9 @@
                                 return {'value': element, 'label': element}
 
                             });
-
-
                         })
 
+                        this.renderGraph({nodes:[], links:[]});
 
                     }
                     else {
@@ -1065,13 +1073,329 @@
                     }
                 }
             },
+            collapseConcept(node){
+                console.log('node collapsed', node);
+
+                for(let i =0; i<this.info.nodes.length; i++){
+                    if(this.info.nodes[i].properties.name === node.properties.name){
+                        this.info.nodes[i].if_expanded = false;
+                    }
+                }
+
+                let related_links = [];
+                //找出与该node相连的所有links
+                for(let i=0; i< this.info.links.length; i++){
+                    if(this.info.links[i].source.properties.name === node.properties.name ||
+                        this.info.links[i].target.properties.name === node.properties.name){
+                        related_links.push(this.info.links[i])
+                    }
+                }
+
+
+
+                //找出与该node之间有多个连线的nodes集合
+                let related_nodes = [];
+                let related_nodes_name = [];
+                let multi_related_nodes = []; //选取相关node weight>1
+                let multi_related_nodes_name = [];
+                let multi_related_nodes_only = []; //选取只和目标node相关 且weight>1的nodes集合
+                let multi_related_nodes_only_name = []; //选取只和目标node相关 且weight>1的nodes集合
+
+                let collapse_nodes = []; //需要collapse的nodes集合
+                let collapse_links = []; //需要collapse的links集合
+
+                let collapse_nodes_name = []; //需要collapse的nodes集合
+                let collapse_links_id = []; //需要collapse的links集合
+
+                for(let i =0; i< related_links.length;i++){
+                    if(related_links[i].source.properties.name === node.properties.name){
+                        related_nodes.push(related_links[i].target);
+                        related_nodes_name.push(related_links[i].target.properties.name);
+
+                    }
+                    else if(related_links[i].target.properties.name === node.properties.name){
+                        related_nodes.push(related_links[i].source);
+                        related_nodes_name.push(related_links[i].source.properties.name);
+
+                    }
+
+                }
+
+
+
+                for(let i=0;i<related_nodes.length;i++){
+                    if(related_nodes[i].weight > 1 ){
+                        multi_related_nodes.push(related_nodes[i]);
+                        multi_related_nodes_name.push(related_nodes[i].properties.name);
+                    }
+
+                }
+
+
+                //筛选与只有和目标node存在多个关系的node（不连接其他node）
+                let node_count = {};
+                for(let i =0; i< multi_related_nodes_name.length; i++){
+                    let name = multi_related_nodes_name[i];
+                    node_count[name] = node_count[name] ? node_count[name] + 1 : 1;
+                }
+
+                for(let i=0; i< multi_related_nodes.length;i++){
+                    if((multi_related_nodes[i].weight - node_count[multi_related_nodes_name[i]] === 0)
+                    &&(multi_related_nodes_only_name.indexOf(multi_related_nodes_name[i])) ===-1)
+                    {
+                        multi_related_nodes_only.push(multi_related_nodes[i]);
+                        multi_related_nodes_only_name.push(multi_related_nodes[i].properties.name);
+
+                    }
+                }
+
+
+                // 找出所有需要collapse的nodes
+                for(let i =0; i<related_nodes.length;i++){
+                    if(related_nodes[i].weight === 1){
+                        collapse_nodes.push(related_nodes[i]);
+                        collapse_nodes_name.push(related_nodes[i].properties.name);
+                    }
+                }
+                for(let i=0; i<multi_related_nodes_only.length;i++){
+                    collapse_nodes.push(multi_related_nodes_only[i]);
+                    collapse_nodes_name.push(multi_related_nodes_only[i].properties.name);
+                }
+
+
+                //找出所有需要collapse的links，需要在related links里面减去那些不需要collapse 的nodes的links
+                let uncollapse_nodes = []; // 记录不需要被collapse的node集合
+                let uncollapse_nodes_name = [];
+                for(let i =0; i<related_nodes.length; i++){
+
+                    if(collapse_nodes_name.indexOf(related_nodes_name[i]) === -1){
+                        uncollapse_nodes.push(related_nodes[i]);
+                        uncollapse_nodes_name.push(related_nodes_name[i]);
+                    }
+                }
+
+
+                for(let i = 0; i<related_links.length;i++){
+                    if(collapse_nodes_name.indexOf(related_links[i].source.properties.name) > -1 ||
+                    collapse_nodes_name.indexOf(related_links[i].target.properties.name)>-1){
+                        collapse_links.push(related_links[i]);
+                        collapse_links_id.push(related_links[i].id);
+                    }
+                }
+
+
+
+
+                console.log('所有与该node相连的links集合',related_links);
+                console.log('所有与该node有关系的node集合',related_nodes);
+                console.log('这个node集合的名字',related_nodes_name);
+                console.log('2个node之间有多个link的情况',multi_related_nodes,multi_related_nodes_name,node_count);
+                console.log('只有和目标node存在多个关系的node(不连接其他node)',multi_related_nodes_only, multi_related_nodes_only_name);
+                console.log('所有不需要collapse的nodes集合',uncollapse_nodes,uncollapse_nodes_name);
+                console.log('所有需要collapse的nodes集合',collapse_nodes,collapse_nodes_name);
+                console.log('所有需要collapse的links集合',collapse_links,collapse_links_id);
+
+
+
+                for(let i = this.info.nodes.length - 1; i > 0; i--){
+                    //如果nodes集合中 该node属于要被collapse的集合里面，则collapse该node
+                    if(collapse_nodes_name.indexOf(this.info.nodes[i].properties.name) > -1){
+                        this.info.nodes.splice(i,1);
+                    }
+                }
+
+                for(let i = this.info.links.length - 1; i > 0; i--){
+                    //如果links集合中 该link属于要被collapse的集合里面，则collapse该link
+                    if(collapse_links_id.indexOf(this.info.links[i].id) > -1){
+                        this.info.links.splice(i,1);
+                    }
+                }
+
+
+                for(let i = 0; i<this.info.nodes.length; i++){
+                    this.info.nodes[i].id = i;
+                    this.info.nodes[i].index = i;
+                }
+
+                for(let i = 0; i<this.info.links.length; i++){
+                    this.info.links[i].id = i;
+                }
+
+                console.log('Nodes 最后的结果', this.info.nodes);
+                console.log('Links 最后的结果', this.info.links);
+
+
+                // let new_node = {
+                //     'id': nodes.length,
+                //     "type": "node",
+                //     'properties': {'name': input},
+                //     'label': 'Concept',
+                //     'snippet':snippet,
+                //     'if_expanded':false
+                // };
+
+                let node_to_string = this.info.nodes.map(function (element) {
+                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                    'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded};
+                });
+
+                // node_to_string = JSON.stringify(node_to_string);
+
+
+
+
+                // let new_link = {
+                //     "source": this.temp[0],
+                //     "target": this.temp[1],
+                //
+                //     "id": this.info.links.length,
+                //     "type": 'link',
+                //     "properties": {},
+                //     "label": input
+                //
+                // };
+
+                let link_to_string = this.info.links.map(function (element) {
+                    return {
+                        "source": element.source.id,
+                        "target": element.target.id,
+
+                        "id": element.id,
+                        "type": element.type,
+                        "properties": {},
+                        "label": element.label}
+
+                });
+
+                console.log('stringfy node', node_to_string);
+                console.log('stringfy links', link_to_string);
+
+                let new_info = [];
+                new_info.nodes = node_to_string;
+                new_info.links = link_to_string;
+
+                this.renderGraph(new_info);
+
+
+
+                // for(let i = this.info.nodes.length - 1; i>=0; i--){
+                //         if(single_link_node_name.indexOf(this.info.nodes[i].properties.name) > -1){
+                //             this.info.nodes.splice(i,1);
+                //         }
+                // }
+                //
+                // for(let i = this.info.links.length - 1; i>=0; i--){
+                //         if(hideLinks_id.indexOf(this.info.links[i].id) > -1){
+                //             this.info.links.splice(i,1);
+                //         }
+                // }
+
+
+                // let deepcopy_link =this.info.links;
+                //
+                //
+                // let deepcopy_node = this.info.nodes;
+                //
+                // console.log('deep cp node',deepcopy_node);
+                // console.log('deep cp link',deepcopy_link);
+                //
+                //
+                //
+                //
+                // let related_link = [];
+                // let related_node = [];
+                //
+                // for(let i=0; i< deepcopy_link.length;i++){
+                //     if(deepcopy_link[i].source.properties.name === node.properties.name ||
+                //         deepcopy_link[i].target.properties.name === node.properties.name ){
+                //         related_link.push(deepcopy_link[i])
+                //         if(deepcopy_link[i].source.properties.name !== node.properties.name){
+                //             related_node.push(deepcopy_link[i].source)
+                //         }else{
+                //             related_node.push(deepcopy_link[i].target)
+                //         }
+                //
+                //     }
+                // }
+                //
+                //
+                // let single_link_node = [];
+                // let single_link_node_name = [];
+                // let multi_link_node = [];
+                // let multi_link_node_name = [];
+                // for(let i =0; i<related_node.length;i++){
+                //     if(related_node[i].weight === 1){
+                //         single_link_node.push(related_node[i]);
+                //         single_link_node_name.push(related_node[i].properties.name);
+                //     }else{
+                //         multi_link_node.push(related_node[i]);
+                //         multi_link_node_name.push(related_node[i].properties.name);
+                //     }
+                // }
+                // console.log('multi link node name',multi_link_node_name);
+                // let hideLinks = [];
+                // let hideLinks_id = [];
+                //
+                // for(let i=0; i<related_link.length;i++){
+                //     if(related_link[i].source.properties.name === node.properties.name &&
+                //         single_link_node_name.indexOf(related_link[i].target.properties.name)>-1){
+                //         hideLinks.push(related_link[i]);
+                //         hideLinks_id.push(related_link[i].id);
+                //     }
+                //     else if(related_link[i].target.properties.name === node.properties.name &&
+                //         single_link_node_name.indexOf(related_link[i].source.properties.name)>-1){
+                //         hideLinks.push(related_link[i]);
+                //         hideLinks_id.push(related_link[i].id);
+                //     }
+                // }
+                //
+                // console.log('related links', related_link);
+                // console.log('related nodes', related_node);
+                // console.log('single link nodes', single_link_node);
+                // console.log('hide links',hideLinks);
+                // console.log('hide link id', hideLinks_id);
+                //
+                //
+                //
+                // for(let i = this.info.nodes.length - 1; i>=0; i--){
+                //         if(single_link_node_name.indexOf(this.info.nodes[i].properties.name) > -1){
+                //             this.info.nodes.splice(i,1);
+                //         }
+                // }
+                //
+                // for(let i = this.info.links.length - 1; i>=0; i--){
+                //         if(hideLinks_id.indexOf(this.info.links[i].id) > -1){
+                //             this.info.links.splice(i,1);
+                //         }
+                // }
+                //
+                //
+                // console.log('node',this.info.nodes);
+                // console.log('link',this.info.links);
+                //
+                // this.renderGraph(this.info);
+
+
+
+
+
+
+
+
+
+
+
+            },
+
+
 
             expandConcept(node_name){
                 console.log('node name',node_name);
                 console.log('current info',this.info);
+
                 let linklist = [];
                 let nodelist = [];
-                console.log('concept value', this.collective_node_value);
+                // console.log('concept value', this.collective_node_value);
                 this.$axios({
                     url: '/getAllNodeConnections',
                     method: 'post',
@@ -1091,33 +1415,16 @@
                         element.id = Number(element.id);
                         return element
                     });
-                    console.log('nodelist 2',nodelist);
-                    console.log('linklist 2',linklist);
+                    // console.log('nodelist 2',nodelist);
+                    // console.log('linklist 2',linklist);
 
-
-
-
-                    // let link_map = [];
-                    // for(let i =0; i<linklist.length;i++){
-                    //     if(Object.keys(link_map).indexOf(linklist[i].label)>-1)
-                    //     {
-                    //         link_map[linklist[i].label].push({'source':nodelist[linklist[i].source], 'target':nodelist[linklist[i].target]})
-                    //     }
-                    //     else {
-                    //         link_map[linklist[i].label] = [{
-                    //             'source': nodelist[linklist[i].source],
-                    //             'target': nodelist[linklist[i].target]
-                    //         }]
-                    //     }
-                    //
-                    // }
-                    // console.log(link_map);
 
                     let node_merge_result = this.mergeNodes(this.temp_nodelist,nodelist);
+                    console.log('temp node', this.temp_nodelist);
                     let merge_node = node_merge_result[0];
                     let node_map = node_merge_result[1];
-                    console.log('ppp',node_map);
-                    console.log('lll',linklist);
+                    // console.log('ppp',node_map);
+                    // console.log('lll',linklist);
 
 
 
@@ -1128,7 +1435,7 @@
                     }
 
 
-                    console.log('nnn',linklist);
+                    // console.log('nnn',linklist);
                     let merge_link = this.mergeLinks(this.temp_linklist,linklist);
 
 
@@ -1142,8 +1449,17 @@
                     // console.log(this.info)
 
 
+                    for(let i =0; i<this.info.nodes.length;i++){
+                        if(this.info.nodes[i].if_expanded === true){
+                            console.log('expanded node', this.info.nodes[i])
+                        }else{
+                            this.info.nodes[i]['if_expanded']= false;
+                        }
+                    }
+
 
                     this.renderGraph(this.info)
+
 
 
                 })
@@ -1176,7 +1492,7 @@
                     }
                 }
 
-                console.log('merge link',arr1);
+                // console.log('merge link',arr1);
                 return arr1
             },
 
@@ -1188,8 +1504,8 @@
                 let arr1_name = arr1.map(function (element) {
                     return element.properties.name
                 });
-                console.log(arr1_name)
-                console.log(arr1_name.indexOf('Meat'))
+                // console.log(arr1_name)
+                // console.log(arr1_name.indexOf('Meat'))
                 for(let i =0; i<arr2.length;i++){
                     old_node_id = arr2[i].id;
                     if(arr1_name.indexOf(arr2[i].properties.name) > -1){ // 去重
@@ -1203,7 +1519,7 @@
                     }
                 }
 
-                console.log('merge node',arr1);
+                // console.log('merge node',arr1);
                 return [arr1, node_map]
             },
 
@@ -1241,7 +1557,21 @@
                     // this.info.links = linklist;
                     this.info.nodes = this.temp_nodelist;
                     this.info.links = this.temp_linklist;
+
+                    let concept_value = this.collective_node_value;
+
+                    this.info.nodes = this.info.nodes.map(function (element) {
+                        if(element.properties.name === concept_value){
+                            element.if_expanded = true;
+                        }
+                        else {
+                            element['if_expanded'] = false;
+                        }
+                        return element
+                    });
+
                     this.collective_node_value = '';
+
                     this.renderGraph(this.info);
 
                 })
@@ -1539,16 +1869,23 @@
                 this.dialogFormVisible_link = false;
                 this.dialogFormVisible_change_node_name = false;
                 this.dialogFormVisible_change_link_name = false;
-                this.dialogFormVisible_viewCollective = false;
                 this.temp.length = 0;
                 this.newPassword = '';
                 this.newUsername = '';
                 this.btnChangeEnable = true;
                 this.dialogFormVisible_initGraph = false;
-                this.viewGraph_btn_status = true;
+
+
                 // this.ifClicked = false;
                 this.selectClear();
 
+            },
+
+            collectiveGraph_cancel(){
+                this.renderGraph(this.info)
+                this.dialogFormVisible_viewCollective = false;
+                this.viewGraph_btn_status = true;
+                this.readOnly = false;
             },
             showInitGraph:function(){
                 this.dialogFormVisible_initGraph = true;
@@ -1704,13 +2041,14 @@
 
                 //关系分组
                 setLinkGroup(links);
+                console.log('render graph link',links);
                 let nodes_name = ''
                 nodes.map(function (element) {
                     nodes_name = nodes_name.concat(element.properties.name,'%7C')
                      return nodes_name
 
                 });
-                console.log('nodes_name',nodes_name)
+                // console.log('nodes_name',nodes_name)
 
                 if(nodes !== []) {
                     this.$axios({
@@ -1730,7 +2068,7 @@
                             let title = String(wiki[Object.keys(wiki)[i]].title)
                             extract[title] = snippet
                         }
-                        console.log('extract',extract)
+                        // console.log('extract',extract)
                         // for(let i  = 0; i<nodes.length;i++){
                         //     nodes[i].snippet = extract[nodes[i].properties.name]
                         // }
@@ -1742,7 +2080,7 @@
                             localStorage.setItem(Object.keys(extract)[i], extract[Object.keys(extract)[i]])
 
                         }
-                        console.log('local storage',localStorage.valueOf())
+                        // console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name)
                         }
@@ -1752,7 +2090,12 @@
 
 
                     });
+
+
+
                 }
+
+
 
 
                 d3.select("#graph").html('');
@@ -1769,21 +2112,22 @@
                     )//指时间间隔，隔一段时间刷新一次画面
 
                     .start();//开始转换
+                //此处不能换位置，因为需要先读取info信息
+                if(this.info !== []) {
+                    let noWeight_node = [];
+                    for (let i = 0; i < this.info.nodes.length; i++) {
+                        if (this.info.nodes[i].weight === 0) {
 
-
-
-                let noWeight_node = [];
-                for (let i = 0; i < this.info.nodes.length; i++) {
-                    if (this.info.nodes[i].weight === 0) {
-
-                        noWeight_node.push(this.info.nodes[i].properties.name)
+                            noWeight_node.push(this.info.nodes[i].properties.name)
+                        }
                     }
-                }
-                console.log('noweight node',noWeight_node);
-                console.log(noWeight_node.length === 0);
-                console.log(this.has_weight);
+                    console.log('noweight node', noWeight_node);
+                    console.log(noWeight_node.length === 0);
+                    console.log(this.has_weight);
 
-                this.has_weight = noWeight_node.length === 0;
+                    this.has_weight = noWeight_node.length === 0;
+                }
+
 
 
 
@@ -1818,11 +2162,7 @@
                         clearTimeout(this.clickTimeId);
 
                         if(this.readOnly === true || this.disable_dbclick === true){
-                            // this.$message(
-                            //     {
-                            //         type: 'Warning',
-                            //         message: 'Read Only Mode'
-                            //     });
+
                             console.log('read mode only')
                         }
 
@@ -1906,34 +2246,35 @@
 
 
                     })
-                    .on('dblclick',()=>{
-                        if (d3.event.defaultPrevented) return;
-                        console.log('dblclick')
-
-                    })
-                    // .on("dblclick", (node )=>{
-                    //
-                    //
+                    // .on('dblclick',()=>{
                     //     if (d3.event.defaultPrevented) return;
-                    //     clearTimeout(this.clickTimeId);
-                    //     if(this.readOnly === true){
+                    //     console.log('dblclick')
                     //
-                    //         this.expandConcept(node.properties.name);
-                    //
-                    //         // this.$message(
-                    //         //     {
-                    //         //         type: 'Warning',
-                    //         //         message: 'Read Only Mode'
-                    //         //     });
-                    //
-                    //
-                    //
-                    //
-                    //     }
-                    //     else {
-                    //         this.dialogFormVisible = true;
-                    //     }
                     // })
+                    .on("dblclick", (node )=>{
+
+
+                        if (d3.event.defaultPrevented) return;
+                        clearTimeout(this.clickTimeId);
+                        if(this.readOnly === true){
+
+                            if(node.if_expanded === true){
+                                node.if_expanded = false;
+                                this.collapseConcept(node);
+
+                            }
+                            else {
+                                node.if_expanded = true;
+                                this.expandConcept(node.properties.name);
+                            }
+
+
+
+                        }
+                        else {
+                            this.dialogFormVisible = true;
+                        }
+                    })
                     .on('contextmenu',(d,node)=>{
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
@@ -2560,7 +2901,8 @@
                         "type": "node",
                         'properties': {'name': input},
                         'label': 'Concept',
-                        'snippet':snippet
+                        'snippet':snippet,
+                        'if_expanded':false
                     };
 
                     info.nodes.push(new_node);
@@ -2639,11 +2981,12 @@
                 });
                 //
                 console.log(this.current_user);
-                console.log('nn', JSON.stringify(this.upload_nodes));
-                console.log('nn', JSON.stringify(this.upload_links));
+                // console.log('nn', JSON.stringify(this.upload_nodes));
+                // console.log('nn', JSON.stringify(this.upload_links));
 
                 let flag = true;
-                let noWeight_node = []
+                let noWeight_node = [];
+                console.log('testtest',this.info);
                 for (let i = 0; i < this.info.nodes.length; i++) {
                     if (this.info.nodes[i].weight === 0) {
                         flag = false;
@@ -2709,9 +3052,10 @@
                             'type':'success',
                             'message':'Submitted Successfully!'
                         });
-                        this.renderGraph(this.info)
+                        // this.renderGraph(this.info)
                         return true
                     }).catch(error=>{
+                        console.log('error',error);
                         this.$message({
                             'type':'warning',
                             'message':'The database server is breakdown, please contact the maintainer!'
