@@ -1,5 +1,6 @@
 module.exports = {
     publicPath: './',
+    runtimeCompiler: true, //关键点在这
     devServer: {
         proxy: {
             //配置跨域
