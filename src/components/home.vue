@@ -944,7 +944,7 @@
             getGraphStatistics(){
                 console.log('haha')
                 let routeUrl =  this.$router.resolve({
-                    name: 'dashboard',
+                    name: '/secure/dashboard',
                     query:{
                         username: this.username,
                         password: this.password
