@@ -941,8 +941,7 @@
 
 
 
-
-                getGraphStatistics(){
+            getGraphStatistics(){
                 console.log('haha')
                 let routeUrl =  this.$router.resolve({
                     name: 'dashboard',
@@ -952,6 +951,7 @@
                     }
 
                 });
+                console.log(routeUrl.href);
 
                 window.open(routeUrl.href, '_blank');
             },
