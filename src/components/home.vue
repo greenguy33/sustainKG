@@ -942,18 +942,25 @@
 
                 console.log('haha');
 
-
-                let routeUrl =  this.$router.resolve({
+                this.$router.push({
                     name: 'dashboard',
-                    query:{
+                    params:{
                         username: this.username,
                         password: this.password
                     }
-
                 });
-                console.log(routeUrl.href);
 
-                window.open(routeUrl.href, '_blank');
+                // let routeUrl =  this.$router.resolve({
+                //     name: 'dashboard',
+                //     query:{
+                //         username: this.username,
+                //         password: this.password
+                //     }
+                //
+                // });
+                // console.log(routeUrl.href);
+                //
+                // window.open(routeUrl.href, '_blank');
             },
 
             instruction(){
