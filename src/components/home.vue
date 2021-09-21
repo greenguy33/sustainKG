@@ -91,9 +91,6 @@
                 v-show="dashboard_show"   @click="getGraphStatistics" size="small" round
                 type="primary">Dashboard</el-button>
 
-                <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
-                           <!--@click="getGraphStatistics" size="small" round-->
-                           <!--type="primary">Dashboard</el-button>-->
 
 
 
@@ -942,7 +939,10 @@
 
 
             getGraphStatistics(){
-                console.log('haha')
+
+                console.log('haha');
+
+
                 let routeUrl =  this.$router.resolve({
                     name: 'dashboard',
                     query:{
