@@ -20,7 +20,7 @@ const routers = [
         component: login,
     },
     {
-        path: '/secure/dashboard',
+        path: '/dashboard',
         name: 'dashboard',
         component: dashboard,
     }
