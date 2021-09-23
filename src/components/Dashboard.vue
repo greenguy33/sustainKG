@@ -76,8 +76,8 @@
         },
         data() {
             return {
-                username:this.$route.params.username,
-                password:this.$route.params.password,
+                username:this.$route.query.username,
+                password:this.$route.query.password,
 
                 total:0,//默认数据总数
                 pagesize:10,//每页的数据条数

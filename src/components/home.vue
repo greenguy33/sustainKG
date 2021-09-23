@@ -38,23 +38,29 @@
                         class="el-menu-vertical-demo"
 
                 >
-                    <el-submenu index="1">
-                        <template slot="title">
-                            <i class="el-icon-menu"></i>
-                            <span>Operation</span>
-                        </template>
-                        <el-menu-item-group>
-                            <!--<template slot="title">分组一</template>-->
-                            <el-menu-item class="el-icon-upload2" index="1-1" :disabled="disable_submit" @click="submitData()"> Submit Data</el-menu-item>
-                            <el-menu-item class="el-icon-search" index="1-2" :disabled="disable_searchConcept"  @click="searchConcept_dialog" > Search Another Concept</el-menu-item>
+                    <el-menu-item index="1"  :disabled="disable_submit" @click="submitData()">
+                        <i class="el-icon-upload2"></i>
+                        <span slot="title">Save</span>
+                        <!--<template slot="title">-->
+                            <!--<i class="el-icon-menu"></i>-->
+                            <!--<span>Operation</span>-->
+                        <!--</template>-->
+                        <!--<el-menu-item-group>-->
+                            <!--&lt;!&ndash;<template slot="title">分组一</template>&ndash;&gt;-->
+                            <!--<el-menu-item class="el-icon-upload2" index="1-1" :disabled="disable_submit" @click="submitData()"> Submit Data</el-menu-item>-->
+                            <!--<el-menu-item class="el-icon-search" index="1-2" :disabled="disable_searchConcept"  @click="searchConcept_dialog" > Search Another Concept</el-menu-item>-->
 
                             <!--<el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>-->
                             <!--<el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>-->
 
-                        </el-menu-item-group>
+                        <!--</el-menu-item-group>-->
 
 
-                    </el-submenu>
+                    </el-menu-item>
+                    <el-menu-item v-show=false index="2"   :disabled="disable_searchConcept"  @click="searchConcept_dialog" >
+                        <i class="el-icon-search"></i>
+                        <span slot="title"> Search Another Concept</span>
+                    </el-menu-item>
                     <!--<el-menu-item   @click="instruction">-->
                         <!--<i class="el-icon-info"></i>-->
                         <!--<span slot="title">Help</span>-->
@@ -62,7 +68,7 @@
 
                     <el-menu-item >
                         <i class="el-icon-star-off"></i>
-                        <span slot="title">Nodes：{{ info.nodes.length }}</span>
+                        <span slot="title">Concepts：{{ info.nodes.length }}</span>
                     </el-menu-item>
 
                     <el-menu-item >
@@ -73,7 +79,7 @@
 
                 </el-menu>
 
-                <el-button style="margin-top: 80px; margin-left: 15px;"
+                <el-button style="margin-top: 80px; margin-left: 15px;" v-show=false
                            :disabled='disable_viewGraph'  @click="getAllConcepts" size="small" round
                            type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
 
@@ -81,7 +87,7 @@
                             @click="instruction" size="small" round
                            type="primary">
                     <i class="el-icon-info"></i>
-                    Help</el-button>
+                    Instruction</el-button>
 
                 <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
                             <!--@click="submit2" size="small" round-->
@@ -157,20 +163,20 @@
         <el-dialog
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible"
-                   title="Create Node" center
+                   title="Create Concept" center
                  >
 
 
 
             <el-form :inline="true"  class="demo-form-inline" >
-                <el-form-item label="Node Name" >
+                <el-form-item label="Concept Name" >
                     <el-input v-model="input"
 
                               style='width: 200px'
 
                               @keyup.native.enter="search('select'); "
 
-                              placeholder="Node Name"></el-input>
+                              placeholder="Concept Name"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -188,7 +194,7 @@
                                 ref="select"
                                 clearable
                                 @keyup.native.enter="addNodes"
-                                no-data-text="No Node Name found"
+                                no-data-text="No Concept Name found"
 
 
 
@@ -221,7 +227,7 @@
                 :close-on-click-modal="false"
 
                 :visible.sync="dialogFormVisible_change_node_name"
-                   title="Change Node Name"
+                   title="Change Concept Name"
                     center
         >
 
@@ -233,7 +239,7 @@
 
                               @keyup.native.enter="search('select_changeNode'); "
 
-                              placeholder="Node Name"></el-input>
+                              placeholder="Concept Name"></el-input>
 
                 </el-form-item>
 
@@ -250,7 +256,7 @@
                                 @blur="blur"
                                 ref="select_changeNode"
                                 clearable
-                                no-data-text="No Node Name found"
+                                no-data-text="No Concept Name found"
                                 @keyup.native.enter="change_node_name"
                     >
                         <el-option
@@ -377,7 +383,7 @@
                    :close-on-click-modal="false"
         >
 
-            Node Name
+            Concept Name
 
             <el-select
                     ref="viewCollective"
@@ -395,7 +401,7 @@
                     @clear="selectClear"
                     @change="selectChange"
 
-                    no-match-text="No Node Name found"
+                    no-match-text="No Concept Name found"
                     @keyup.native.enter='searchConcept'
 
             >
@@ -665,10 +671,10 @@
 
                 menu: [
                     {
-                        title: 'Delete Node',
+                        title: 'Delete Concept',
                         action: (node,select_node) => {
 
-                            this.$confirm("Delete this node?", "Tips", {
+                            this.$confirm("Delete this concept?", "Tips", {
                                 confirmButtonText: "Yes",
                                 cancelButtonText: "No",
                                 type: "warning",
@@ -677,7 +683,7 @@
 
                                     {
                                         type: 'success',
-                                        message: 'The node is deleted!'
+                                        message: 'The concept is deleted!'
                                     });
                                 console.log('test !!!',select_node,node);
                                 this.info.nodes.splice(node,1);
@@ -717,7 +723,7 @@
 
                     },
                     {
-                        title: 'Change Node Name',
+                        title: 'Change Concept Name',
                         action:(node_id)=>{
                             this.dialogFormVisible_change_node_name = true;
                             this.node_id = node_id;
@@ -942,25 +948,25 @@
 
                 console.log('haha');
 
-                this.$router.push({
-                    name: 'dashboard',
-                    params:{
-                        username: this.username,
-                        password: this.password
-                    }
-                });
-
-                // let routeUrl =  this.$router.resolve({
+                // this.$router.push({
                 //     name: 'dashboard',
-                //     query:{
+                //     params:{
                 //         username: this.username,
                 //         password: this.password
                 //     }
-                //
                 // });
-                // console.log(routeUrl.href);
-                //
-                // window.open(routeUrl.href, '_blank');
+
+                let routeUrl =  this.$router.resolve({
+                    name: 'dashboard',
+                    query:{
+                        username: this.username,
+                        password: this.password
+                    }
+
+                });
+                console.log(routeUrl.href);
+
+                window.open(routeUrl.href, '_blank');
             },
 
             instruction(){
@@ -2259,7 +2265,7 @@
                         // showCircleBorderOuterArc(node, i);
                     })
                     .on('mouseout',(node)=>{
-                        this.showdetail_node = false;
+                        // this.showdetail_node = false;
                         d3.select('.g_circle_'+ node.index).select('circle')
                             .attr('r',40);
 
