@@ -31,7 +31,9 @@
 
             <!--<el-row class="tac">-->
             <el-aside width="200px">
-                <h1 style="margin-left: 25px">SustainKG</h1>
+                <h1 style="margin-left: 25px">Sustainability</h1>
+                <h1 style="margin-left: 25px">Knowledge</h1>
+                <h1 style="margin-left: 25px">Mapper</h1>
                 <el-menu
 
                         default-active="2"
@@ -73,7 +75,7 @@
 
                     <el-menu-item >
                         <i class="el-icon-star-off"></i>
-                        <span slot="title">Links：{{ info.links.length }}</span>
+                        <span slot="title">Relationships：{{ info.links.length }}</span>
                     </el-menu-item>
 
 
@@ -87,7 +89,7 @@
                             @click="instruction" size="small" round
                            type="primary">
                     <i class="el-icon-info"></i>
-                    Instruction</el-button>
+                    Instructions</el-button>
 
                 <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
                             <!--@click="submit2" size="small" round-->
@@ -291,7 +293,7 @@
                    :show-close="false"
                    title="Create Link" center>
 
-            Link Name
+            Relationships Name
 
             <el-select
                     ref="addLink"
@@ -310,7 +312,7 @@
                     @change="selectChange"
                     @keyup.native.enter="drag_addLinks"
 
-                    no-match-text="No Link Name found"
+                    no-match-text="No Relationships Name found"
 
             >
 
@@ -337,9 +339,9 @@
         <el-dialog
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible_change_link_name"
-                   title="Change Link Name" center>
+                   title="Change Relationships Name" center>
 
-            Link Name
+            Relationships Name
             <el-select
                     ref="changeLinkName"
                     @keyup.native = "showOption_change_link"
@@ -353,7 +355,7 @@
                     @blur="showOption_change_link"
                     @clear="selectClear"
                     @change="selectChange"
-                    no-match-text="No Link Name found"
+                    no-match-text="No Relationships Name found"
                     @keyup.native.enter="change_link_name"
             >
 
@@ -453,7 +455,7 @@
                     :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                     class="link-card"
             >
-                <h2 :style="{ color: '#ca635f' }">Link Detail</h2>
+                <h2 :style="{ color: '#ca635f' }">Relationships Detail</h2>
                 <div>
 
                     <h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>
@@ -470,10 +472,24 @@
 
                    title="Instruction" center>
             <div>
-                <el-image
-                        class="table-td-thumb"
-                        :src="require('@/assets/img/help.png')"
-                ></el-image>
+                <h2 >Sustainability Knowledge Mapper</h2>
+                <h1></h1>
+                <h4>Welcome to Sustainability Knowledge Mapper.
+                    On this site you can build your own knowledge graph.</h4>
+                <h4>1.	To add a concept, double-click the screen.</h4>
+                <h4>2.	To add a relationship, click a concept so it turns red, then drag from that concept to a different concept.</h4>
+                <h4>3.	To edit a concept or relationship, right-click (Windows) or control-click (Mac) on it.</h4>
+                <h4>4.	Your work will be automatically saved whenever you close the browser window.
+                    You may save it manually by clicking the “Save” link.
+                    You do not need to do anything special to submit each assignment;
+                    the teaching staff will grade whatever content is visible here by each grading deadline</h4>
+                <h4>If you have any question, please email the teaching staff.
+                    We welcome any comments to help us improve this site. :)</h4>
+
+                <!--<el-image-->
+                        <!--class="table-td-thumb"-->
+                        <!--:src="require('@/assets/img/help.png')"-->
+                <!--&gt;</el-image>-->
             </div>
 
         </el-dialog>
@@ -492,7 +508,7 @@
 
 
     import { list } from 'node-7z'
-    import linkfile from 'raw-loader!./../assets/link.txt'
+    import linkfile from 'raw-loader!./../assets/temp_link.txt'
     import Vue from 'vue'
     import $ from 'jquery'
     import {
@@ -736,10 +752,10 @@
 
                 menu_edge:[
                     {
-                        title: 'Delete Link',
+                        title: 'Delete Relationship',
                         action: (link,selected_link) => {
                             console.log('ll',link,selected_link);
-                            this.$confirm("Delete this link?", "Tips", {
+                            this.$confirm("Delete this Relationship?", "Tips", {
                                 confirmButtonText: "Yes",
                                 cancelButtonText: "No",
                                 type: "warning",
@@ -748,7 +764,7 @@
 
                                     {
                                         type: 'success',
-                                        message: 'The link is deleted!'
+                                        message: 'The Relationship is deleted!'
                                     });
                                 this.info.links.splice(link,1);
                                 this.renderGraph(this.info);
@@ -765,7 +781,7 @@
 
                     },
                     {
-                        title: 'Change link Name',
+                        title: 'Change Relationship Name',
                         action:(link_id)=>
                         {
                             this.dialogFormVisible_change_link_name = true;
@@ -2034,13 +2050,34 @@
                     "label": this.link_value
 
                 };
+                let link_name_set = [];
+                console.log('temp node',this.temp[0]);
+                for(let i=0; i<this.info.links.length;i++){
+                    if(this.info.links[i].source.properties.name === this.start.properties.name
+                        && this.info.links[i].target.properties.name === this.end.properties.name){
 
-                this.info.links.push(new_link);
-                console.log('new link added', this.info, typeof(this.info));
-                // this.initial_links_count ++;
+                        link_name_set.push(this.info.links[i].label);
+                    }
+                }
+
+                console.log('link name set', link_name_set);
+                if(link_name_set.indexOf(new_link.label) > -1){
+                    console.log('This label is already used ');
+                    this.$message({
+                        'type': 'warning',
+                        'message': 'There is already a relationship with that name!'
+                    })
+                }
+                else {
+                    this.info.links.push(new_link);
+                    console.log('new link added', this.info, typeof(this.info));
+                    // this.initial_links_count ++;
+
+
+                }
                 this.renderGraph(this.info);
-                this.selectClear();
                 this.ifClicked = false;
+                this.selectClear();
 
 
             },
@@ -2475,7 +2512,7 @@
                     .attr({'class': 'edgelabel',
                         'id': function (d, i) { return 'edgepath' + i; },
                         'dx': 250,
-                        'dy': -5,
+                        'dy': -1,
                         'fill':'black',
 
                         // 'transform': edge_text_Position()
@@ -2940,7 +2977,11 @@
                 }
 
                 else{
-                    alert('There is already a node with that name!')
+                    this.$message({
+                        'type': 'warning',
+                        'message': 'There is already a concept with that name!'
+                    })
+                    // alert('There is already a concept with that name!')
                     return false
                 }
 
@@ -2952,7 +2993,7 @@
 
                 // let source = node.id;
 
-
+                let link_name_set = [];
                 if(this.temp.length ===2 && this.temp[0] !== this.temp[1] )
                 {
 
@@ -2968,10 +3009,13 @@
 
                     };
 
-                    info.links.push(new_link);
-                    console.log('new link added', info);
-                    this.temp.length = 0;
-                    this.renderGraph(info)
+
+
+                        info.links.push(new_link);
+                        console.log('new link added', info);
+                        this.temp.length = 0;
+                        this.renderGraph(info)
+
 
                 }
                 else if(this.temp.length ===2 && this.temp[0] === this.temp[1] )
