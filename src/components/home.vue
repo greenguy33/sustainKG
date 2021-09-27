@@ -812,7 +812,12 @@
 
         mounted() {
 
-
+            this.$axios({
+                url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
+                method:'get'
+            }).then(response =>{
+                console.log(response);
+            });
 
 
 
