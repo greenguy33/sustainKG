@@ -1830,7 +1830,8 @@
                     nodes:[],
                     links:[]
                 };
-                this.$router.push({name:'login'})
+                // this.$router.push({name:'login'})
+                // this.centerDialogVisible=true;
                 this.renderGraph(this.info)
             },
 
