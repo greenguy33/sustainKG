@@ -1730,21 +1730,21 @@
             handleShow:function(){
 
                 console.log('cccc');
-
+                console.log('handleshow username', this.username);
                 console.log(this.$route.params);
-                let data = [];
-                if(this.ifTeamWork === false){
-
-                    data = {user: this.username}
-                }else{
-                    data = { user : this.username
-                             }
-                }
+                // let data = [];
+                // if(this.ifTeamWork === false){
+                //
+                //     data = {user: this.username}
+                // }else{
+                //     data = { user : this.username
+                //              }
+                // }
 
                 this.$axios({
                     url:'/getUserGraph',
                     method:'post',
-                    data:data
+                    data:{user:this.username},
                     // data:{
                     //     // user : "some_user",
                     //     // password: "my_password"
