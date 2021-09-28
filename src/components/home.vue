@@ -822,14 +822,22 @@
 
         mounted() {
 
-
+            this.$axios({
+                url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
+                method:'get'
+            }).then(response =>{
+                console.log(response);
+                this.username = response.data.attributes[0].values[0];
+                console.log(this.username);
+                this.handleShow();
+            });
 
 
 
 
             console.log('route name',this.$route.name);
 
-            this.handleShow();
+            // this.handleShow();
             this.renderGraph(this.info);
             this.readTxt();
             this.centerDialogVisible = false;
@@ -1724,14 +1732,7 @@
 
 
 
-                this.$axios({
-                    url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
-                    method:'get'
-                }).then(response =>{
-                    console.log(response);
-                    this.username = response.data.attributes[0].values[0];
-                    console.log(this.username);
-                });
+
 
                 console.log('cccc');
                 console.log('handleshow username', this.username);
