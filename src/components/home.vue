@@ -816,7 +816,7 @@
                 snippet: [],
                 select_snippet: '',
                 uci_id:'',
-                ifTeamWork:true,
+                // ifTeamWork:true,
             }
         },
 
@@ -827,8 +827,8 @@
                 method:'get'
             }).then(response =>{
                 console.log(response);
-                this.uci_id = response.data.attributes[0].values[0];
-                console.log(this.uci_id);
+                this.username = response.data.attributes[0].values[0];
+                console.log(this.username);
             });
 
 
@@ -1735,7 +1735,7 @@
                 let data = [];
                 if(this.ifTeamWork === false){
 
-                    data = {user: this.uci_id}
+                    data = {user: this.username}
                 }else{
                     data = { user : this.username
                              }
