@@ -822,14 +822,7 @@
 
         mounted() {
 
-            this.$axios({
-                url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
-                method:'get'
-            }).then(response =>{
-                console.log(response);
-                this.username = response.data.attributes[0].values[0];
-                console.log(this.username);
-            });
+
 
 
 
@@ -845,20 +838,20 @@
 
 
 
-            window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
-            window.addEventListener('unload', e => this.unloadHandler(e))
+            // window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
+            // window.addEventListener('unload', e => this.unloadHandler(e))
 
 
 
         },
 
-        destroyed() {
-
-                window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
-                window.addEventListener('unload', e => this.unloadHandler(e))
-
-
-        },
+        // destroyed() {
+        //
+        //         window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
+        //         window.addEventListener('unload', e => this.unloadHandler(e))
+        //
+        //
+        // },
 
         methods: {
 
@@ -1728,6 +1721,17 @@
 
 
             handleShow:function(){
+
+
+
+                this.$axios({
+                    url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
+                    method:'get'
+                }).then(response =>{
+                    console.log(response);
+                    this.username = response.data.attributes[0].values[0];
+                    console.log(this.username);
+                });
 
                 console.log('cccc');
                 console.log('handleshow username', this.username);
