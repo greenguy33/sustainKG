@@ -18,6 +18,7 @@
 
                     <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round>{{username}}</el-button>
                     <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
+
                 </template>
             </div>
 
@@ -91,6 +92,13 @@
                     <i class="el-icon-info"></i>
                     Instructions</el-button>
 
+
+                <el-button style="margin-top: 80px; margin-left: 15px;"
+                           @click="TeamLogin" size="small" round
+                           type="primary">
+                    <i class="el-icon-info"></i>
+                    Team Work</el-button>
+
                 <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
                             <!--@click="submit2" size="small" round-->
                            <!--type="primary">test</el-button>-->
@@ -135,9 +143,9 @@
 
                 width="30%"
                 center>
-            <span>Username<el-input v-model="username" placeholder="Please Input Username"></el-input></span>
+            <span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='handleShow'></el-input></span>
             <br><br>
-            <span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='handleShow'></el-input></span>
+            <!--<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='handleShow'></el-input></span>-->
             <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
             <span slot="footer" class="dialog-footer">
             <el-button @click.native="centerDialogVisible=false">No</el-button>
@@ -153,7 +161,7 @@
                 center>
             <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
             <br><br>
-            <span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>
+            <!--<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>-->
             <span slot="footer" class="dialog-footer">
             <el-button @click.native="dialog_createUser=false">Cancel</el-button>
             <el-button type="primary" @click="createUser" >Submit</el-button>
@@ -582,9 +590,9 @@
                 // log function parameters
                 current_user:'',
                 username:this.$route.params.username,
-                password:this.$route.params.password,
+                // password:this.$route.params.password,
                 newUsername:'',
-                newPassword:'',
+                // newPassword:'',
                 showLogin:true,
                 centerDialogVisible:false,
                 dialog_createUser:false,
@@ -807,6 +815,8 @@
                 temp_nodelist:[],
                 snippet: [],
                 select_snippet: '',
+                uci_id:'',
+                ifTeamWork:true,
             }
         },
 
@@ -817,6 +827,8 @@
                 method:'get'
             }).then(response =>{
                 console.log(response);
+                this.uci_id = response.data.attributes[0].values[0];
+                console.log(this.uci_id);
             });
 
 
@@ -973,7 +985,7 @@
                     name: 'dashboard',
                     params:{
                         username: this.username,
-                        password: this.password
+                        // password: this.password
                     }
                 });
 
@@ -993,6 +1005,12 @@
             instruction(){
                 this.dialogFormVisible_instruction = true;
 
+            },
+            TeamLogin(){
+                this.$router.push({
+                    name: 'login',
+                    // params: {username: this.username, password: this.password}
+                })
             },
 
             readTxt(){
@@ -1637,7 +1655,7 @@
             createUser:function(){
 
                 this.dialog_createUser  = false;
-                console.log('create user function',this.newUsername, this.newPassword)
+                console.log('create user function',this.newUsername)
 
                 this.$axios({
                     url : '/createNewUser',
@@ -1645,12 +1663,12 @@
                     data :
                         {
                             "user" : this.newUsername,
-                            "password" : this.newPassword
+                            // "password" : this.newPassword
                         }
                 }).then(response=>{
                     this.username = this.newUsername;
-                    this.password = this.newPassword;
-                    this.newPassword = '';
+                    // this.password = this.newPassword;
+                    // this.newPassword = '';
                     this.newUsername = '';
                     console.log(response);
                     if(response.status === 204)
@@ -1665,7 +1683,7 @@
                         this.showLogin = true;
                         this.dialog_createUser  = true;
                         this.username = '';
-                        this.password = '';
+                        // this.password = '';
                     }
                     else {
 
@@ -1676,7 +1694,7 @@
                             data:
                                 {
                                     user: this.username,
-                                    password: this.password
+                                    // password: this.password
 
                                 }
                         }).then(response => {
@@ -1713,19 +1731,28 @@
 
                 console.log('cccc');
 
-                console.log(this.$route.params)
+                console.log(this.$route.params);
+                let data = [];
+                if(this.ifTeamWork === false){
+
+                    data = {user: this.uci_id}
+                }else{
+                    data = { user : this.username
+                             }
+                }
 
                 this.$axios({
                     url:'/getUserGraph',
                     method:'post',
-                    data:{
-                        // user : "some_user",
-                        // password: "my_password"
-                        user : this.username,
-                        password: this.password
-                        // user : String(this.$route.params.username),
-                        // password: String(this.$route.params.password)
-                    }
+                    data:data
+                    // data:{
+                    //     // user : "some_user",
+                    //     // password: "my_password"
+                    //     user : this.username,
+                    //     password: this.password
+                    //     // user : String(this.$route.params.username),
+                    //     // password: String(this.$route.params.password)
+                    // }
 
                 }).then(response=>{
                     if (response.status === 204){
@@ -1773,7 +1800,7 @@
                 }).catch(error=>{
                     this.showLogin = true;
                     this.username = '';
-                    this.password = '';
+                    // this.password = '';
                 })
 
 
@@ -1793,7 +1820,7 @@
                 this.viewGraph_btn_status = true;
                 this.dashboard_show=false;
                 this.username = '';
-                this.password = '';
+                // this.password = '';
                 this.info= {
                     nodes:[],
                     links:[]
@@ -1920,7 +1947,7 @@
                 this.dialogFormVisible_change_node_name = false;
                 this.dialogFormVisible_change_link_name = false;
                 this.temp.length = 0;
-                this.newPassword = '';
+                // this.newPassword = '';
                 this.newUsername = '';
                 this.btnChangeEnable = true;
                 this.dialogFormVisible_initGraph = false;

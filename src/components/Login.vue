@@ -10,9 +10,9 @@
                 :visible.sync="centerDialogVisible"
                 width="30%"
                 center>
-            <span>Username<el-input v-model="username" placeholder="Please Input Username"></el-input></span>
+            <span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='login'></el-input></span>
             <br><br>
-            <span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>
+            <!--<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>-->
             <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
             <span slot="footer" class="dialog-footer">
             <!--<el-button @click.native="centerDialogVisible=false">No</el-button>-->
@@ -29,7 +29,7 @@
                 center>
             <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
             <br><br>
-            <span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>
+            <!--<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>-->
             <span slot="footer" class="dialog-footer">
             <el-button @click.native="dialog_createUser=false; centerDialogVisible=true">No</el-button>
             <el-button type="primary" @click="createUser" >Yes</el-button>
@@ -50,9 +50,9 @@
                 centerDialogVisible:true,
                 dialog_createUser:false,
                 username:'',
-                password:'',
+                // password:'',
                 newUsername:'',
-                newPassword:'',
+                // newPassword:'',
 
             }
         },
@@ -62,11 +62,11 @@
 
             login() {
 
-                if (this.password === '' || this.username === '') {
+                if ( this.username === '') {
                     this.$message(
                         {
                             type: 'warning',
-                            message: 'The username or password cannot be empty'
+                            message: 'The username cannot be empty'
                         });
                 }else {
 
@@ -75,7 +75,7 @@
                         method: 'post',
                         data: {
                             user: this.username,
-                            password: this.password
+                            // password: this.password
 
                         }
 
@@ -84,7 +84,7 @@
                             this.$message(
                                 {
                                     type: 'warning',
-                                    message: 'Wrong username or password !'
+                                    message: 'Wrong username !'
                                 });
 
                             this.centerDialogVisible = true;
@@ -93,7 +93,7 @@
                         else {
                             this.$router.push({
                                 name: 'home',
-                                params: {username: this.username, password: this.password}
+                                params: {username: this.username}
                             })
                         }
                     })
@@ -104,12 +104,12 @@
             createUser: function () {
 
                 this.dialog_createUser = false;
-                console.log('create user function', this.newUsername, this.newPassword);
-                if (this.newPassword === '' || this.newUsername === '') {
+                console.log('create user function', this.newUsername);
+                if ( this.newUsername === '') {
                     this.$message(
                         {
                             type: 'warning',
-                            message: 'The username or password cannot be empty'
+                            message: 'The username cannot be empty'
                         });
                     this.dialog_createUser = true
                 }
@@ -121,12 +121,12 @@
                         data:
                             {
                                 "user": this.newUsername,
-                                "password": this.newPassword
+                                // "password": this.newPassword
                             }
                     }).then(response => {
                         this.username = this.newUsername;
-                        this.password = this.newPassword;
-                        this.newPassword = '';
+                        // this.password = this.newPassword;
+                        // this.newPassword = '';
                         this.newUsername = '';
                         console.log(response);
                         if (response.status === 204) {
@@ -139,7 +139,7 @@
                             this.showLogin = true;
                             this.dialog_createUser = true;
                             this.username = '';
-                            this.password = '';
+                            // this.password = '';
                         }
 
                         else {
@@ -150,7 +150,7 @@
                                 method: 'post',
                                 data: {
                                     user: this.username,
-                                    password: this.password
+                                    // password: this.password
 
                                 }
 
@@ -163,7 +163,7 @@
                                 // else {
                                 this.$router.push({
                                     name: 'home',
-                                    params: {username: this.username, password: this.password}
+                                    params: {username: this.username}
                                 })
                                 // }
                             })

@@ -8,14 +8,14 @@ import axios from 'axios'
 Vue.prototype.axios = axios;
 const routers = [
     {
-        path: '/home',
+        path: '/',
         name: 'home',
         component: home,
 
 
     },
     {
-        path: '/',
+        path: '/login',
         name: 'login',
         component: login,
     },
