@@ -347,7 +347,7 @@
         <el-dialog
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible_change_link_name"
-                   title="Change Relationships Name" center>
+                   title="Change Relationships Citation" center>
 
             Relationships Name
             <el-select
@@ -478,7 +478,7 @@
 
         <el-dialog :visible.sync="dialogFormVisible_instruction"
 
-                   title="Instruction" center>
+                   title="Instructions" center>
             <div>
                 <h2 >Sustainability Knowledge Mapper</h2>
                 <h1></h1>
@@ -487,11 +487,10 @@
                 <h4>1.	To add a concept, double-click the screen.</h4>
                 <h4>2.	To add a relationship, click a concept so it turns red, then drag from that concept to a different concept.</h4>
                 <h4>3.	To edit a concept or relationship, right-click (Windows) or control-click (Mac) on it.</h4>
-                <h4>4.	Your work will be automatically saved whenever you close the browser window.
-                    You may save it manually by clicking the “Save” link.
-                    You do not need to do anything special to submit each assignment;
-                    the teaching staff will grade whatever content is visible here by each grading deadline</h4>
-                <h4>If you have any question, please email the teaching staff.
+                <h4>4. You should save your work periodically by clicking the “Save” link.
+                    Every concept must be connected to at least one other concept in order to be able to save that concept;
+                    the system will not save any concepts that are not connected to at least one other concept.</h4>
+                <h4>If you have any questions, please email the teaching staff.
                     We welcome any comments to help us improve this site. :)</h4>
 
                 <!--<el-image-->
@@ -3108,7 +3107,7 @@
                 if (this.has_weight === false) {
                     this.$message({
                         'type': 'warning',
-                        'message': 'The node [ ' + noWeight_node.toString()+' ] needs a least one link, please check it.'
+                        'message': 'The concept [ ' + noWeight_node.toString()+' ] needs a least one relationship, please check it.'
                     })
                     return false;
                 }
@@ -3161,7 +3160,7 @@
                         console.log('success', response)
                         this.$message({
                             'type':'success',
-                            'message':'Submitted Successfully!'
+                            'message':'Saved Successfully!'
                         });
                         // this.renderGraph(this.info)
                         return true
