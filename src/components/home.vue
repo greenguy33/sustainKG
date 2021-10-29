@@ -826,7 +826,7 @@
                 method:'get'
             }).then(response =>{
                 console.log(response);
-                this.username = response.data.attributes[0].values[0];
+                this.username = response.data;
                 console.log('shibboleth username',this.username);
                 this.handleShow();
             });
