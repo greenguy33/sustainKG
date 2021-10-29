@@ -17,9 +17,9 @@ axios.defaults.baseURL =  "/api";
 
 
 const router = new VueRouter({
-    mode: 'hash',
+    mode: 'history',
     routes: routers,
-    // base: '/'
+    base: '/dist/'
 });
 
 Vue.directive('title', {
