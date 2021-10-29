@@ -1746,7 +1746,7 @@
                 // }
 
                 this.$axios({
-                    url:'api/getUserGraph',
+                    url:'/getUserGraph',
                     method:'post',
                     data:{user:this.username},
                     // data:{
