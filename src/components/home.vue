@@ -1746,7 +1746,7 @@
                 // }
 
                 this.$axios({
-                    url:'http://graphdb.ics.uci.edu:8080/getUserGraph',
+                    url:'https://graphdb.ics.uci.edu/getUserGraph',
                     method:'post',
                     data:{user:this.username},
                     // data:{
