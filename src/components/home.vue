@@ -1815,6 +1815,7 @@
             },
 
             logout:function () {
+
                 this.showLogin = true;
                 this.disable_dbclick = true;
                 this.disable_initGraph = true;
@@ -1832,6 +1833,7 @@
                 // this.$router.push({name:'login'})
                 // this.centerDialogVisible=true;
                 this.renderGraph(this.info)
+                window.location.href = "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout";
             },
 
             ////////////////////////////////////////////////////////////
