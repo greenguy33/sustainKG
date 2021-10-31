@@ -330,9 +330,9 @@
                         :label="item.label"
                         :value="item.value" ></el-option>
 
-
             </el-select>
 
+            <span>Reference<el-input v-model="reference" placeholder="Add Reference URL" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -581,6 +581,7 @@
             return {
                 has_weight:true,
                 input:'',
+                reference:'',
                 searchDialog:false,
                 disableSelect: true,
                 dashboard_show:false,
@@ -2080,6 +2081,21 @@
 
                 this.dialogFormVisible_link = false;
                 console.log('add drag links',this.start.index, this.end.index);
+
+                console.log('add reference', this.reference);
+                let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+                if(pattern.test(this.reference)){
+                    console.log('valid');
+                }else{
+                    console.log('invalid');
+                }
+
                 let new_link = {
                     "source": this.start.index,
                     "target": this.end.index,
