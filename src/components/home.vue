@@ -1842,14 +1842,9 @@
                 // this.centerDialogVisible=true;
                 this.renderGraph(this.info)
 
-                this.$axios({
-                    url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout",
-                    method:'get'
-                }).then(response =>{
 
-                });
-
-                window.location.href = "https://graphdb.ics.uci.edu/dist/";
+                window.location.href = "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout?return=URLENCODE(https://" +
+                    "shib.nacs.uci.edu/idp/profile/Logout?return_url=URLENCODE(https://graphdb.ics.uci.edu/dist/))";
             },
 
             ////////////////////////////////////////////////////////////
