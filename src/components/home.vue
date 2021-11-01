@@ -1963,6 +1963,7 @@
 
                 // this.ifClicked = false;
                 this.selectClear();
+                this.renderGraph(this.info);
 
             },
 
@@ -2079,7 +2080,7 @@
             drag_addLinks()
             {
 
-                this.dialogFormVisible_link = false;
+
                 console.log('add drag links',this.start.index, this.end.index);
 
                 console.log('add reference', this.reference);
@@ -2091,6 +2092,7 @@
                     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
 
                 if(pattern.test(this.reference)){
+                    this.dialogFormVisible_link = false;
                     console.log('valid');
                     let new_link = {
                         "source": this.start.index,
@@ -2120,6 +2122,7 @@
                         })
                     }
                     else {
+
                         this.info.links.push(new_link);
                         console.log('new link added', this.info, typeof(this.info));
                         // this.initial_links_count ++;
@@ -2133,6 +2136,7 @@
 
 
                 }else{
+                    this.dialogFormVisible_link = true;
                     this.$message(
 
                         {
@@ -2140,6 +2144,8 @@
                             message: 'Invalid URL!'
                         });
                     this.reference = '';
+
+
                 }
 
 
@@ -2754,6 +2760,7 @@
                                         return ('M' + _this.mouseLinkLineStartLoc[0] + ' ' + _this.mouseLinkLineStartLoc[1] +
                                             "L" + +d3.select(d3.event.sourceEvent.srcElement).datum().x
                                             + ' ' + d3.select(d3.event.sourceEvent.srcElement).datum().y)
+
                                     }
 
 
