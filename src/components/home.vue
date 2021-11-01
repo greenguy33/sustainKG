@@ -301,36 +301,36 @@
                    :show-close="false"
                    title="Create Link" center>
 
-            Relationships Name
+            Add Reference
 
-            <el-select
-                    ref="addLink"
-                    @keyup.native = "showOption_add_link"
-                    label-position="right"
-                    label-width="86px"
-                    style="width: 300px; margin-left:50px;"
+            <!--<el-select-->
+                    <!--ref="addLink"-->
+                    <!--@keyup.native = "showOption_add_link"-->
+                    <!--label-position="right"-->
+                    <!--label-width="86px"-->
+                    <!--style="width: 300px; margin-left:50px;"-->
 
-                    v-model="link_value"
-                    placeholder="Please select"
-                    clearable
+                    <!--v-model="link_value"-->
+                    <!--placeholder="Please select"-->
+                    <!--clearable-->
 
 
-                    @blur="showOption_add_link"
-                    @clear="selectClear"
-                    @change="selectChange"
-                    @keyup.native.enter="drag_addLinks"
+                    <!--@blur="showOption_add_link"-->
+                    <!--@clear="selectClear"-->
+                    <!--@change="selectChange"-->
+                    <!--@keyup.native.enter="drag_addLinks"-->
 
-                    no-match-text="No Relationships Name found"
+                    <!--no-match-text="No Relationships Name found"-->
 
-            >
+            <!--&gt;-->
 
-                <el-option
-                        v-for="(item,index) in link_list"
-                        :key="index"
-                        :label="item.label"
-                        :value="item.value" ></el-option>
+                <!--<el-option-->
+                        <!--v-for="(item,index) in link_list"-->
+                        <!--:key="index"-->
+                        <!--:label="item.label"-->
+                        <!--:value="item.value" ></el-option>-->
 
-            </el-select>
+            <!--</el-select>-->
 
             <span>Reference<el-input v-model="reference" placeholder="Add Reference URL" ></el-input></span>
 
@@ -338,7 +338,7 @@
                 <el-button @click="cancel">
                     Cancel
                 </el-button>
-                <el-button type="primary" :disabled="btnChangeEnable"  @click="drag_addLinks">
+                <el-button type="primary"   @click="drag_addLinks">
                     Submit
                 </el-button>
             </div>
@@ -2092,47 +2092,57 @@
 
                 if(pattern.test(this.reference)){
                     console.log('valid');
-                }else{
-                    console.log('invalid');
-                }
+                    let new_link = {
+                        "source": this.start.index,
+                        "target": this.end.index,
+                        "id": this.info.links.length,
+                        "type": 'link',
+                        "properties": {},
+                        "label": this.reference
 
-                let new_link = {
-                    "source": this.start.index,
-                    "target": this.end.index,
-                    "id": this.info.links.length,
-                    "type": 'link',
-                    "properties": {},
-                    "label": this.link_value
+                    };
+                    let link_name_set = [];
+                    console.log('temp node',this.temp[0]);
+                    for(let i=0; i<this.info.links.length;i++){
+                        if(this.info.links[i].source.properties.name === this.start.properties.name
+                            && this.info.links[i].target.properties.name === this.end.properties.name){
 
-                };
-                let link_name_set = [];
-                console.log('temp node',this.temp[0]);
-                for(let i=0; i<this.info.links.length;i++){
-                    if(this.info.links[i].source.properties.name === this.start.properties.name
-                        && this.info.links[i].target.properties.name === this.end.properties.name){
-
-                        link_name_set.push(this.info.links[i].label);
+                            link_name_set.push(this.info.links[i].label);
+                        }
                     }
+
+                    console.log('link name set', link_name_set);
+                    if(link_name_set.indexOf(new_link.label) > -1){
+                        console.log('This label is already used ');
+                        this.$message({
+                            'type': 'warning',
+                            'message': 'There is already a relationship with that name!'
+                        })
+                    }
+                    else {
+                        this.info.links.push(new_link);
+                        console.log('new link added', this.info, typeof(this.info));
+                        // this.initial_links_count ++;
+
+
+                    }
+                    this.renderGraph(this.info);
+                    this.ifClicked = false;
+                    this.selectClear();
+                    this.reference = '';
+
+
+                }else{
+                    this.$message(
+
+                        {
+                            type: 'warning',
+                            message: 'Invalid URL!'
+                        });
+                    this.reference = '';
                 }
 
-                console.log('link name set', link_name_set);
-                if(link_name_set.indexOf(new_link.label) > -1){
-                    console.log('This label is already used ');
-                    this.$message({
-                        'type': 'warning',
-                        'message': 'There is already a relationship with that name!'
-                    })
-                }
-                else {
-                    this.info.links.push(new_link);
-                    console.log('new link added', this.info, typeof(this.info));
-                    // this.initial_links_count ++;
 
-
-                }
-                this.renderGraph(this.info);
-                this.ifClicked = false;
-                this.selectClear();
 
 
             },
