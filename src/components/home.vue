@@ -870,51 +870,44 @@
 
         methods: {
 
-            submit2() {
-                let url = "http://graphdb.ics.uci.edu:8080/api/postUserGraph";
-
-                this.upload_nodes = this.info.nodes.map(function (element) {
-                    return {
-                        "id": String(element.id), "type": element.type, "label": element.label, "properties": {
-                            "name": element.properties.name
-                        }
-                    }
-
-                });
-                this.upload_links = this.info.links.map(function (element) {
-
-                    return {
-                        "type": element.type, "id": String(element.id), "label": element.label,
-                        "source": String(element.source.index), "target": String(element.target.index),
-                        "properties": element.properties
-                    }
-                });
-
-                console.log(this.info);
-                console.log(this.current_user);
-                console.log('nn', JSON.stringify(this.upload_nodes));
-                console.log('nn', JSON.stringify(this.upload_links));
-
-
-                const data =
-                    {
-
-                        user: this.current_user,
-                        nodes: this.upload_nodes,
-                        links: this.upload_links
-                    }
-
-
-                let a = window.navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/postUserGraph",JSON.stringify(data));
-
-
-
-
-
-
-
-
-            },
+            // submit2() {
+            //     let url = "http://graphdb.ics.uci.edu:8080/api/postUserGraph";
+            //
+            //     this.upload_nodes = this.info.nodes.map(function (element) {
+            //         return {
+            //             "id": String(element.id), "type": element.type, "label": element.label, "properties": {
+            //                 "name": element.properties.name
+            //             }
+            //         }
+            //
+            //     });
+            //     this.upload_links = this.info.links.map(function (element) {
+            //
+            //         return {
+            //             "type": element.type, "id": String(element.id), "label": element.label,
+            //             "source": String(element.source.index), "target": String(element.target.index),
+            //             "properties": element.properties
+            //         }
+            //     });
+            //
+            //     console.log(this.info);
+            //     console.log(this.current_user);
+            //     console.log('nn', JSON.stringify(this.upload_nodes));
+            //     console.log('nn', JSON.stringify(this.upload_links));
+            //
+            //
+            //     const data =
+            //         {
+            //
+            //             user: this.current_user,
+            //             nodes: this.upload_nodes,
+            //             links: this.upload_links
+            //         }
+            //
+            //
+            //     let a = window.navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/postUserGraph",JSON.stringify(data));
+            //
+            // },
 
             beforeunloadHandler(e) {
 
@@ -985,7 +978,7 @@
                         }
 
 
-                    navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/postUserGraph", JSON.stringify(data));
+                    navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/api/postUserGraph", JSON.stringify(data));
                 }
 
 
