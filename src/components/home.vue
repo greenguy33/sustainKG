@@ -977,8 +977,10 @@
                             links: this.upload_links
                         }
 
-
-                    navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/api/postUserGraph", JSON.stringify(data));
+                    const reportData = () => {
+                        navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/postUserGraph", JSON.stringify(data));
+                    };
+                    // navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/api/postUserGraph", JSON.stringify(data));
                 }
 
 
