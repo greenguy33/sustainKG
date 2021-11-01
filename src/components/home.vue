@@ -1837,17 +1837,19 @@
                 this.dashboard_show=false;
                 this.username = '';
                 // this.password = '';
-                this.info= {
-                    nodes:[],
-                    links:[]
-                };
+                // this.info= {
+                //     nodes:[],
+                //     links:[]
+                // };
                 // this.$router.push({name:'login'})
                 // this.centerDialogVisible=true;
-                this.renderGraph(this.info)
+                // this.renderGraph(this.info)
 
                 let url1 = "https://shib.nacs.uci.edu/idp/profile/Logout";
                 let url2 = "https://graphdb.ics.uci.edu/dist/";
                 // let url2 = "https://www.youtube.com/";
+
+
 
                 window.location.href = "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout?return="
                     +encodeURI(url1 + "?" + "return_url="+encodeURI(url2) )
