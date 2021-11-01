@@ -945,16 +945,16 @@
                 //     }
                 // }
 
-                let selected_nodes = [] // to find those nodes without links
-                for(let i =0; i < this.info.length; i++){
-                    if (this.info.nodes[i].weight === 0) {
-
-                                selected_nodes.push(this.info.nodes[i])
-                            }
-                }
+                // let selected_nodes = [] // to find those nodes without links
+                // for(let i =0; i < this.info.length; i++){
+                //     if (this.info.nodes[i].weight === 0) {
+                //
+                //                 selected_nodes.push(this.info.nodes[i])
+                //             }
+                // }
 
                 if (this.$route.name === 'home' && this.viewGraph_btn_status===true && this.has_weight === true) {
-                    this.upload_nodes = selected_nodes.map(function (element) {
+                    this.upload_nodes = this.info.nodes.map(function (element) {
                         return {
                             "id": String(element.id), "type": element.type, "label": element.label, "properties": {
                                 "name": element.properties.name
