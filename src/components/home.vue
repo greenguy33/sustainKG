@@ -853,8 +853,8 @@
 
 
 
-            // window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
-            // window.addEventListener('unload', e => this.unloadHandler(e))
+            window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
+            window.addEventListener('unload', e => this.unloadHandler(e))
 
 
 
@@ -945,8 +945,16 @@
                 //     }
                 // }
 
+                let selected_nodes = [] // to find those nodes without links
+                for(let i =0; i < this.info.length; i++){
+                    if (this.info.nodes[i].weight === 0) {
+
+                                selected_nodes.push(this.info.nodes[i])
+                            }
+                }
+
                 if (this.$route.name === 'home' && this.viewGraph_btn_status===true && this.has_weight === true) {
-                    this.upload_nodes = this.info.nodes.map(function (element) {
+                    this.upload_nodes = selected_nodes.map(function (element) {
                         return {
                             "id": String(element.id), "type": element.type, "label": element.label, "properties": {
                                 "name": element.properties.name
@@ -1843,8 +1851,8 @@
                 this.renderGraph(this.info)
 
                 let url1 = "https://shib.nacs.uci.edu/idp/profile/Logout";
-                // let url2 = "https://graphdb.ics.uci.edu/dist/";
-                let url2 = "https://www.youtube.com/";
+                let url2 = "https://graphdb.ics.uci.edu/dist/";
+                // let url2 = "https://www.youtube.com/";
 
                 window.location.href = "https://graphdb.uci.edu/Shibboleth.sso/Logout?return="
                     +encodeURIComponent(url1 + "?" + "return_url="+encodeURIComponent(url2) )
