@@ -299,7 +299,7 @@
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible_link"
                    :show-close="false"
-                   title="Create Link" center>
+                   title="Add Reference URL" center>
 
 
             <!--<el-select-->
@@ -1841,7 +1841,15 @@
                 // this.$router.push({name:'login'})
                 // this.centerDialogVisible=true;
                 this.renderGraph(this.info)
-                window.location.href = "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout";
+
+                this.$axios({
+                    url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout",
+                    method:'get'
+                }).then(response =>{
+
+                });
+
+                window.location.href = "https://graphdb.ics.uci.edu/dist/";
             },
 
             ////////////////////////////////////////////////////////////
