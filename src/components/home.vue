@@ -1843,8 +1843,8 @@
                 this.renderGraph(this.info)
 
 
-                window.location.href = "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout?return=URLENCODE(https://" +
-                    "shib.nacs.uci.edu/idp/profile/Logout?return_url=URLENCODE(https://graphdb.ics.uci.edu/dist/))";
+                window.location.href = "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout?return=https://" +
+                    "shib.nacs.uci.edu/idp/profile/Logout?return_url=https://graphdb.ics.uci.edu/dist/";
             },
 
             ////////////////////////////////////////////////////////////
