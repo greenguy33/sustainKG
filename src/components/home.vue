@@ -978,7 +978,7 @@
                         }
 
 
-                        navigator.sendBeacon("http://172.18.0.3:8080/postUserGraph", JSON.stringify(data));
+                        navigator.sendBeacon("http://172.18.0.3:8080/api/postUserGraph", JSON.stringify(data));
 
                     // navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/api/postUserGraph", JSON.stringify(data));
                 }
@@ -1849,7 +1849,7 @@
                 let url2 = "https://graphdb.ics.uci.edu/dist/";
                 // let url2 = "https://www.youtube.com/";
 
-                window.location.href = "https://graphdb.uci.edu/Shibboleth.sso/Logout?return="
+                window.location.href = "https://graphdb.ics.uci.edu/Shibboleth.sso/Logout?return="
                     +encodeURI(url1 + "?" + "return_url="+encodeURI(url2) )
                     ;
             },
