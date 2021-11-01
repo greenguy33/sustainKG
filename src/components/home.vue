@@ -871,7 +871,7 @@
         methods: {
 
             submit2() {
-                let url = "http://graphdb.ics.uci.edu:8080/postUserGraph";
+                let url = "http://graphdb.ics.uci.edu:8080/api/postUserGraph";
 
                 this.upload_nodes = this.info.nodes.map(function (element) {
                     return {
