@@ -1855,7 +1855,7 @@
                 // let url2 = "https://www.youtube.com/";
 
                 window.location.href = "https://graphdb.uci.edu/Shibboleth.sso/Logout?return="
-                    +encodeURIComponent(url1 + "?" + "return_url="+encodeURIComponent(url2) )
+                    +encodeURI(url1 + "?" + "return_url="+encodeURI(url2) )
                     ;
             },
 
