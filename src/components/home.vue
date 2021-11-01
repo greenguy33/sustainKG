@@ -1963,7 +1963,7 @@
 
                 // this.ifClicked = false;
                 this.selectClear();
-                this.renderGraph(this.info);
+
 
             },
 
@@ -2752,8 +2752,8 @@
                                     }
                                     else {
 
-                                        d3.select('.g_circle_'+ d3.select(d3.event.sourceEvent.srcElement).datum().index)
-                                            .select('circle').style('fill','red');
+                                        // d3.select('.g_circle_'+ d3.select(d3.event.sourceEvent.srcElement).datum().index)
+                                        //     .select('circle').style('fill','red');
 
 
 
