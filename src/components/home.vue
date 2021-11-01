@@ -978,7 +978,7 @@
                         }
 
 
-                        navigator.sendBeacon("https://graphdb.ics.uci.edu/postUserGraph", JSON.stringify(data));
+                        navigator.sendBeacon("http://172.18.0.3:8080/postUserGraph", JSON.stringify(data));
 
                     // navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/api/postUserGraph", JSON.stringify(data));
                 }
