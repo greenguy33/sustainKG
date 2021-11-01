@@ -1844,9 +1844,10 @@
 
                 let url1 = "https://shib.nacs.uci.edu/idp/profile/Logout";
                 let url2 = "https://graphdb.ics.uci.edu/dist/";
-                
-                window.location.href = "https://graphdb.uci.edu/Shibboleth.sso/Logout?return="+encodeURIComponent(url1)+"?" +
-                    "return_url="+encodeURIComponent(url2);
+
+                window.location.href = "https://graphdb.uci.edu/Shibboleth.sso/Logout?return="
+                    +encodeURIComponent(url1 + "?" + "return_url="+encodeURIComponent(url2) )
+                    ;
             },
 
             ////////////////////////////////////////////////////////////
