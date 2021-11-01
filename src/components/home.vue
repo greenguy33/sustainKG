@@ -14,7 +14,7 @@
                 <template >
                     <!--<el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>-->
                     <el-button style="margin-right: 10px;"  @click="onTapLogin" v-show="showLogin" size="small" round
-                               type="primary" >Login</el-button>
+                               :disabled="true" type="primary" >Login</el-button>
 
                     <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round>{{username}}</el-button>
                     <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
