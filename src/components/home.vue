@@ -2118,7 +2118,7 @@
                         console.log('This label is already used ');
                         this.$message({
                             'type': 'warning',
-                            'message': 'There is already a relationship with that name!'
+                            'message': 'There is already a relationship with that URL!'
                         })
                     }
                     else {
