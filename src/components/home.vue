@@ -301,7 +301,6 @@
                    :show-close="false"
                    title="Create Link" center>
 
-            Add Reference
 
             <!--<el-select-->
                     <!--ref="addLink"-->
@@ -332,7 +331,7 @@
 
             <!--</el-select>-->
 
-            <span>Reference<el-input v-model="reference" placeholder="Add Reference URL" ></el-input></span>
+            <span>Reference<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -349,35 +348,42 @@
                 :visible.sync="dialogFormVisible_change_link_name"
                    title="Change Relationships Citation" center>
 
-            Relationships Name
-            <el-select
-                    ref="changeLinkName"
-                    @keyup.native = "showOption_change_link"
-                    label-position="right"
-                    label-width="86px"
-                    style="width: 300px; margin-left:30px;"
 
-                    v-model="new_link_name"
-                    placeholder="Please select"
-                    clearable
-                    @blur="showOption_change_link"
-                    @clear="selectClear"
-                    @change="selectChange"
-                    no-match-text="No Relationships Name found"
-                    @keyup.native.enter="change_link_name"
-            >
+            <!--<el-select-->
+                    <!--ref="changeLinkName"-->
+                    <!--@keyup.native = "showOption_change_link"-->
+                    <!--label-position="right"-->
+                    <!--label-width="86px"-->
+                    <!--style="width: 300px; margin-left:30px;"-->
 
-                <el-option
-                        v-for="(item,index) in link_list"
-                        :key="index"
-                        :label="item.label"
-                        :value="item.value" ></el-option>
-            </el-select>
+                    <!--v-model="new_link_name"-->
+                    <!--placeholder="Please select"-->
+                    <!--clearable-->
+                    <!--@blur="showOption_change_link"-->
+                    <!--@clear="selectClear"-->
+                    <!--@change="selectChange"-->
+                    <!--no-match-text="No Relationships Name found"-->
+                    <!--@keyup.native.enter="change_link_name"-->
+            <!--&gt;-->
+
+                <!--<el-option-->
+                        <!--v-for="(item,index) in link_list"-->
+                        <!--:key="index"-->
+                        <!--:label="item.label"-->
+                        <!--:value="item.value" ></el-option>-->
+            <!--</el-select>-->
+
+            <span>Reference<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
+
+            </el-input></span>
+
+
             <div slot="footer" class="dialog-footer">
+
                 <el-button @click="cancel">
                     No
                 </el-button>
-                <el-button type="primary" :disabled="btnChangeEnable" @click="change_link_name">
+                <el-button type="primary"  @click="change_link_name">
                     Yes
                 </el-button>
             </div>
@@ -582,6 +588,7 @@
                 has_weight:true,
                 input:'',
                 reference:'',
+                new_reference:'',
                 searchDialog:false,
                 disableSelect: true,
                 dashboard_show:false,
@@ -2041,13 +2048,35 @@
             change_link_name()
             {
 
-                this.info.links[this.link_id].label = this.new_link_name;
-                this.dialogFormVisible_change_link_name = false;
+                let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
 
-                this.btnChangeEnable = true;
+                if(pattern.test(this.new_reference)) {
 
-                this.renderGraph(this.info);
-                this.selectClear();
+                    this.info.links[this.link_id].label = this.new_reference;
+                    this.dialogFormVisible_change_link_name = false;
+
+                    this.btnChangeEnable = true;
+                    this.new_reference = '';
+                    this.renderGraph(this.info);
+                    this.selectClear();
+                }else{
+
+                    this.dialogFormVisible_change_link_name = true;
+                    this.$message(
+
+                        {
+                            type: 'warning',
+                            message: 'Invalid URL!'
+                        });
+                    this.new_reference = '';
+
+
+                }
             },
 
             addLinks()
