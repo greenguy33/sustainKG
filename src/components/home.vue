@@ -946,8 +946,11 @@
                 //             }
                 // }
 
-                if (this.$route.name === 'home' && this.viewGraph_btn_status===true && this.has_weight === true) {
-                    this.upload_nodes = this.info.nodes.map(function (element) {
+                if (this.$route.name === 'home' && this.viewGraph_btn_status===true ) {
+
+                    this.upload_nodes = this.info.nodes.filter(element =>{element.weight > 0});
+
+                    this.upload_nodes = this.upload_nodes.map(function (element) {
                         return {
                             "id": String(element.id), "type": element.type, "label": element.label, "properties": {
                                 "name": element.properties.name
