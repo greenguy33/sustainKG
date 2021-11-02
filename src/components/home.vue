@@ -948,12 +948,14 @@
 
                 if (this.$route.name === 'home' && this.viewGraph_btn_status===true ) {
 
-                    this.upload_nodes = this.info.nodes.filter(element =>{element.weight > 0});
 
-                    this.upload_nodes = this.upload_nodes.map(function (element) {
-                        return {
-                            "id": String(element.id), "type": element.type, "label": element.label, "properties": {
-                                "name": element.properties.name
+
+                    this.upload_nodes = this.info.nodes.map(function (element) {
+                        if(element.weight > 0) {
+                            return {
+                                "id": String(element.id), "type": element.type, "label": element.label, "properties": {
+                                    "name": element.properties.name
+                                }
                             }
                         }
 
