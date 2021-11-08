@@ -2132,8 +2132,8 @@
                     this.dialogFormVisible_link = false;
                     console.log('valid');
                     let new_link = {
-                        "source": this.start.index,
-                        "target": this.end.index,
+                        "source": this.start,
+                        "target": this.end,
                         "id": this.info.links.length,
                         "type": 'link',
                         "properties": {},
@@ -2178,7 +2178,6 @@
                         return {
                             "source": element.source.id,
                             "target": element.target.id,
-
                             "id": element.id,
                             "type": element.type,
                             "properties": {},
