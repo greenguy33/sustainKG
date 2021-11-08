@@ -2311,21 +2311,22 @@
                     )//指时间间隔，隔一段时间刷新一次画面
 
                     .start();//开始转换
+
                 //此处不能换位置，因为需要先读取info信息
-                if(this.info !== []) {
-                    let noWeight_node = [];
-                    for (let i = 0; i < this.info.nodes.length; i++) {
-                        if (this.info.nodes[i].weight === 0) {
-
-                            noWeight_node.push(this.info.nodes[i].properties.name)
-                        }
-                    }
-                    console.log('noweight node', noWeight_node);
-                    console.log(noWeight_node.length === 0);
-                    console.log(this.has_weight);
-
-                    this.has_weight = noWeight_node.length === 0;
-                }
+                // if(this.info !== []) {
+                //     let noWeight_node = [];
+                //     for (let i = 0; i < this.info.nodes.length; i++) {
+                //         if (this.info.nodes[i].weight === 0) {
+                //
+                //             noWeight_node.push(this.info.nodes[i].properties.name)
+                //         }
+                //     }
+                //     console.log('noweight node', noWeight_node);
+                //     console.log(noWeight_node.length === 0);
+                //     console.log(this.has_weight);
+                //
+                //     this.has_weight = noWeight_node.length === 0;
+                // }
 
 
 
