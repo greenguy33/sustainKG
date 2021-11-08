@@ -2163,7 +2163,8 @@
 
                     let node_to_string = this.info.nodes.map(function (element) {
                         return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                            'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded};
+                            'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                            'weight':element.weight};
                     });
 
 
