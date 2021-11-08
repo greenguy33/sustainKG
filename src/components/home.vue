@@ -853,8 +853,8 @@
 
 
 
-            window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
-            window.addEventListener('unload', e => this.unloadHandler(e))
+            // window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
+            // window.addEventListener('unload', e => this.unloadHandler(e))
 
 
 
