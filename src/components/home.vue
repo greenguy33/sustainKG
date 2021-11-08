@@ -787,8 +787,36 @@
                                         type: 'success',
                                         message: 'The Relationship is deleted!'
                                     });
+                                
                                 this.info.links.splice(link,1);
-                                this.renderGraph(this.info);
+
+                                let node_to_string = this.info.nodes.map(function (element) {
+                                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                                    };
+                                });
+
+
+                                let link_to_string = this.info.links.map(function (element) {
+                                    return {
+                                        "source": element.source.id,
+                                        "target": element.target.id,
+                                        "id": element.id,
+                                        "type": element.type,
+                                        "properties": {},
+                                        "label": element.label}
+
+                                });
+
+                                console.log('stringfy node', node_to_string);
+                                console.log('stringfy links', link_to_string);
+
+                                let new_info = [];
+                                new_info.nodes = node_to_string;
+                                new_info.links = link_to_string;
+
+                                this.renderGraph(new_info);
+                                // this.renderGraph(this.info);
 
                             }).catch(() => {
                                 this.$message({
