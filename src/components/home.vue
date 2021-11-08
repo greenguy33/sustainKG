@@ -41,9 +41,9 @@
                         class="el-menu-vertical-demo"
 
                 >
-                    <el-menu-item index="1"  :disabled="disable_submit" @click="submitData()">
-                        <i class="el-icon-upload2"></i>
-                        <span slot="title">Save</span>
+                    <!--<el-menu-item index="1"  :disabled="disable_submit" @click="submitData()">-->
+                        <!--<i class="el-icon-upload2"></i>-->
+                        <!--<span slot="title">Save</span>-->
                         <!--<template slot="title">-->
                             <!--<i class="el-icon-menu"></i>-->
                             <!--<span>Operation</span>-->
@@ -59,7 +59,7 @@
                         <!--</el-menu-item-group>-->
 
 
-                    </el-menu-item>
+                    <!--</el-menu-item>-->
                     <el-menu-item v-show=false index="2"   :disabled="disable_searchConcept"  @click="searchConcept_dialog" >
                         <i class="el-icon-search"></i>
                         <span slot="title"> Search Another Concept</span>
@@ -87,17 +87,23 @@
                            type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
 
                 <el-button style="margin-top: 80px; margin-left: 15px;"
+                           @click="submitData()" size="small" round
+                           type="primary">
+                    <i class="el-icon-info"></i>
+                    Save</el-button>
+
+                <el-button style="margin-top: 80px; margin-left: 15px;"
                             @click="instruction" size="small" round
                            type="primary">
                     <i class="el-icon-info"></i>
                     Instructions</el-button>
 
 
-                <el-button style="margin-top: 80px; margin-left: 15px;"
-                           @click="TeamLogin" size="small" round
-                           type="primary">
-                    <i class="el-icon-info"></i>
-                    Team Work</el-button>
+                <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
+                           <!--@click="TeamLogin" size="small" round-->
+                           <!--type="primary">-->
+                    <!--<i class="el-icon-info"></i>-->
+                    <!--Team Work</el-button>-->
 
                 <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
                             <!--@click="submit2" size="small" round-->
@@ -796,7 +802,7 @@
 
                     },
                     {
-                        title: 'Change Relationship Name',
+                        title: 'Change citation URL',
                         action:(link_id)=>
                         {
                             this.dialogFormVisible_change_link_name = true;
@@ -2164,7 +2170,7 @@
                     let node_to_string = this.info.nodes.map(function (element) {
                         return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                             'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                            'weight':element.weight};
+                            };
                     });
 
 
@@ -2187,7 +2193,7 @@
                     new_info.nodes = node_to_string;
                     new_info.links = link_to_string;
 
-                    this.renderGraph(new_info);
+                    // this.renderGraph(new_info);
 
 
 
@@ -2313,20 +2319,20 @@
                     .start();//开始转换
 
                 //此处不能换位置，因为需要先读取info信息
-                // if(this.info !== []) {
-                //     let noWeight_node = [];
-                //     for (let i = 0; i < this.info.nodes.length; i++) {
-                //         if (this.info.nodes[i].weight === 0) {
-                //
-                //             noWeight_node.push(this.info.nodes[i].properties.name)
-                //         }
-                //     }
-                //     console.log('noweight node', noWeight_node);
-                //     console.log(noWeight_node.length === 0);
-                //     console.log(this.has_weight);
-                //
-                //     this.has_weight = noWeight_node.length === 0;
-                // }
+                if(this.info !== []) {
+                    let noWeight_node = [];
+                    for (let i = 0; i < this.info.nodes.length; i++) {
+                        if (this.info.nodes[i].weight === 0) {
+
+                            noWeight_node.push(this.info.nodes[i].properties.name)
+                        }
+                    }
+                    console.log('noweight node', noWeight_node);
+                    console.log(noWeight_node.length === 0);
+                    console.log(this.has_weight);
+
+                    this.has_weight = noWeight_node.length === 0;
+                }
 
 
 
