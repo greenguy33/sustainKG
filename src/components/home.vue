@@ -1323,21 +1323,6 @@
                     'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded};
                 });
 
-                // node_to_string = JSON.stringify(node_to_string);
-
-
-
-
-                // let new_link = {
-                //     "source": this.temp[0],
-                //     "target": this.temp[1],
-                //
-                //     "id": this.info.links.length,
-                //     "type": 'link',
-                //     "properties": {},
-                //     "label": input
-                //
-                // };
 
                 let link_to_string = this.info.links.map(function (element) {
                     return {
@@ -2175,7 +2160,37 @@
 
 
                     }
-                    this.renderGraph(this.info);
+
+                    let node_to_string = this.info.nodes.map(function (element) {
+                        return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                            'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded};
+                    });
+
+
+                    let link_to_string = this.info.links.map(function (element) {
+                        return {
+                            "source": element.source.id,
+                            "target": element.target.id,
+
+                            "id": element.id,
+                            "type": element.type,
+                            "properties": {},
+                            "label": element.label}
+
+                    });
+
+                    console.log('stringfy node', node_to_string);
+                    console.log('stringfy links', link_to_string);
+
+                    let new_info = [];
+                    new_info.nodes = node_to_string;
+                    new_info.links = link_to_string;
+
+                    this.renderGraph(new_info);
+
+
+
+                    // this.renderGraph(this.info);
                     this.ifClicked = false;
                     this.selectClear();
                     this.reference = '';
