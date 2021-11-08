@@ -2192,7 +2192,7 @@
                     new_info.nodes = node_to_string;
                     new_info.links = link_to_string;
 
-                    // this.renderGraph(new_info);
+                    this.renderGraph(new_info);
 
 
 
