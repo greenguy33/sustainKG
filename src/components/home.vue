@@ -739,12 +739,23 @@
                                 }
 
                                 console.log('after delete', this.info);
-                                // for(let i = 0; i < this.info.nodes.length;i++)
-                                // {
-                                //     console.log(i);
-                                //     console.log(this.info.nodes[i].id,this.info.nodes[i].index);
-                                //     this.info.nodes[i].id = i;
-                                // }
+                                for(let i = 0; i < this.info.nodes.length;i++)
+                                {
+                                    console.log(i);
+                                    console.log(this.info.nodes[i].id,this.info.nodes[i].index);
+                                    this.info.nodes[i].id = i;
+                                    for(let j =0; j<this.info.links.length; j++){
+                                        if(this.info.links[j].source.properties.name === this.info.nodes[i].properties.name){
+                                            this.info.links[j].source.id = this.info.nodes[i].id
+                                        }
+                                        if(this.info.links[j].target.properties.name === this.info.nodes[i].properties.name){
+                                            this.info.links[j].target.id = this.info.nodes[i].id
+                                        }
+                                    }
+                                }
+
+
+
 
                                 let node_to_string = this.info.nodes.map(function (element) {
                                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
