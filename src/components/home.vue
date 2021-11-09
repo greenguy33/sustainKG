@@ -3327,8 +3327,8 @@
                 });
                 //
                 console.log(this.current_user);
-                // console.log('nn', JSON.stringify(this.upload_nodes));
-                // console.log('nn', JSON.stringify(this.upload_links));
+                console.log('nn', JSON.stringify(this.upload_nodes));
+                console.log('nn', JSON.stringify(this.upload_links));
 
                 let flag = true;
                 let noWeight_node = [];
@@ -3359,34 +3359,8 @@
                         data: {
                             user: this.current_user,
                             nodes: this.upload_nodes,
-                            // nodes:[
-                            //     {
-                            //         "type": "node",
-                            //         "id": "0",
-                            //         "label": "Concept",
-                            //         "properties": {
-                            //             "name": "Innovation"
-                            //         }
-                            //     },
-                            //     {
-                            //         "type": "node",
-                            //         "id": "1",
-                            //         "label": "Concept",
-                            //         "properties": {
-                            //             "name": "Globalization"
-                            //         }
-                            //     }],
                             links: this.upload_links
-                            // links:  [
-                            //     {
-                            //         "type": "link",
-                            //         "id": "0",
-                            //         "label": "benefits",
-                            //         "source": "0",
-                            //         "target": "1",
-                            //         "properties": {}
-                            //     }
-                            // ]
+
                         }
 
 
@@ -3400,15 +3374,16 @@
                         });
                         // this.renderGraph(this.info)
                         return true
-                    }).catch(error=>{
-                        console.log('error',error);
-                        this.$message({
-                            'type':'warning',
-                            'message':'The database server is breakdown, please contact the maintainer!'
-                        });
-                        return false
-
-                    });
+                    })
+                    //     .catch(error=>{
+                    //     console.log('error',error);
+                    //     this.$message({
+                    //         'type':'warning',
+                    //         'message':'The database server is busy, please try again!'
+                    //     });
+                    //     return false
+                    //
+                    // });
 
                 }
 
