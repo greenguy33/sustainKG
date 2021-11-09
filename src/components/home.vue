@@ -730,8 +730,8 @@
                                 for(let i =this.info.links.length-1; i>=0; i-- )
                                 {
                                     console.log('link index',i,node);
-                                    if(this.info.links[i].source === select_node
-                                        || this.info.links[i].target === select_node)
+                                    if(this.info.links[i].source.id === select_node
+                                        || this.info.links[i].target.id === select_node)
                                     {
                                         this.info.links.splice(i,1);
                                     }
