@@ -3332,7 +3332,7 @@
 
                     return {
                         "type": element.type, "id": String(element.id), "label": element.label,
-                        "source": String(element.source.index), "target": String(element.target.index),
+                        "source": String(element.source.id), "target": String(element.target.id),
                         "properties": element.properties
                     }
                 });
