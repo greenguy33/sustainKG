@@ -1158,6 +1158,7 @@
                             this.btnChangeEnable = true;
                         }else {
                             this.node_value = this.node_list[0].value;
+                            this.new_node_name = this.node_list[0].value;
                             console.log('Current Node value', this.node_value);
                             this.select_snippet = this.node_list[0].snippet;
 
