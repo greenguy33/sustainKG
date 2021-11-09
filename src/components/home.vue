@@ -775,13 +775,7 @@
 
                                 // this.renderGraph(this.info);
 
-                            }).catch(() => {
-                                this.$message({
-                                    type: 'info',
-                                    message: 'Cancel Delete!'
-                                })
-
-                            });
+                            })
 
                         },
 
