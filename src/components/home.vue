@@ -1115,6 +1115,7 @@
                 if(this.input !== '') {
                     this.$refs[nextRef].$el.click();
                     this.node_value = [];
+                    this.new_node_name = [];
                     this.disableSelect = false;
 
                     // this.$axios({
