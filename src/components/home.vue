@@ -2078,20 +2078,24 @@
 
             addNodes(){
 
+                    if(this.node_value === ''){
+                        this.btnChangeEnable = true;
+                    }else {
+                        this.btnChangeEnable = false;
+                        let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
+                        this.btnChangeEnable = true;
+                        console.log('flag', flag)
+                        if (flag === true) {
+                            this.dialogFormVisible = false;
+                            this.selectClear();
+                        }
+                        else {
+                            this.dialogFormVisible = true;
+                            this.selectClear();
 
+                        }
+                    }
 
-                let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
-                this.btnChangeEnable = true;
-                console.log('flag', flag)
-                if (flag === true) {
-                    this.dialogFormVisible = false;
-                    this.selectClear();
-                }
-                else {
-                    this.dialogFormVisible = true;
-                    this.selectClear();
-
-                }
 
 
 
@@ -3386,15 +3390,15 @@
                         // this.renderGraph(this.info)
                         return true
                     })
-                    //     .catch(error=>{
-                    //     console.log('error',error);
-                    //     this.$message({
-                    //         'type':'warning',
-                    //         'message':'The database server is busy, please try again!'
-                    //     });
-                    //     return false
-                    //
-                    // });
+                        .catch(error=>{
+                        console.log('error',error);
+                        this.$message({
+                            'type':'warning',
+                            'message':'The database server is busy, please try again!'
+                        });
+                        return false
+
+                    });
 
                 }
 
