@@ -1154,9 +1154,15 @@
 
                             return {'value': element.title, 'label': element.title,'snippet':element.snippet}
                         });
-                        this.btnChangeEnable = false;
+
                         this.node_value = this.node_list[0].value;
+                        console.log('Current Node value', this.node_value);
                         this.select_snippet = this.node_list[0].snippet;
+                        if(this.node_value !== null) {
+                            this.btnChangeEnable = false;
+                        }else{
+                            this.btnChangeEnable = true;
+                        }
                     })
                 }
                 else{
@@ -2078,15 +2084,7 @@
 
             addNodes(){
 
-                    if(this.node_value === ''){
-                        this.$message(
 
-                            {
-                                type: 'warning',
-                                message: 'The '
-                            });
-
-                    }else {
 
                         let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
                         this.btnChangeEnable = true;
@@ -2100,7 +2098,7 @@
                             this.selectClear();
 
                         }
-                    }
+                    
 
 
 
