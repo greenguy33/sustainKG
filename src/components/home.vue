@@ -2808,10 +2808,12 @@
                     .text(function (d) {
                         let circleText = '';
                         if(d.label && d.label.length > 20){
-                             circleText = d.label.substring(0,20) + '...'+ d.label.substring(20,d.label.length);
+                             circleText = d.label.substring(0,20) + '...)' ;
 
+                        }else{
+                            circleText = d.label
                         }
-                        
+
                         return circleText;
 
 
