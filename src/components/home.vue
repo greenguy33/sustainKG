@@ -2079,9 +2079,15 @@
             addNodes(){
 
                     if(this.node_value === ''){
-                        this.btnChangeEnable = true;
+                        this.$message(
+
+                            {
+                                type: 'warning',
+                                message: 'The '
+                            });
+
                     }else {
-                        this.btnChangeEnable = false;
+
                         let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
                         this.btnChangeEnable = true;
                         console.log('flag', flag)
