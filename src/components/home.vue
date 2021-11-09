@@ -2778,7 +2778,7 @@
                         'dy': -1,
                         'fill':'black',
 
-                        // 'transform': edge_text_Position()
+
                     })
 
                 // .attr("x",250)
@@ -2796,6 +2796,17 @@
                     return 'rotate(180,40,5)'
                 }
 
+                function EdgeText(d, _this){
+                    let circleText = '';
+
+                    circleText = d.label;
+                    //如果小于四个字符，不换行
+                    if(circleText && circleText.length > 20){
+                        circleText = circleText.substring(0,20) + '...'+ circleText.substring(20,circleText.length);
+                        d3.select(_this).text(function(){return '';});
+                    }
+
+                }
 
 
                 //设置线条上的文字
@@ -2803,6 +2814,7 @@
                     .attr('xlink:href', function (d, i) { return '#edgepath' + i })
                     // .attr("pointer-events", "none")
                     .attr("font-size", 20)
+                    .attr('x',function(d){ EdgeText(d, this); })
                     .text(function (d) { return d.label; })
                     .on('mouseover',(d,i)=>{
                         getStrokeWidth(d,i)
