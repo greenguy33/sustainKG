@@ -2261,7 +2261,7 @@
                         "id": this.info.links.length,
                         "type": 'link',
                         "properties": {},
-                        "label": 'has effect' +'('+ this.reference +')'
+                        "label": 'has effect ' +'('+ this.reference +')'
 
                     };
                     let link_name_set = [];
@@ -3065,11 +3065,11 @@
                         circleText = d.name;
                     }
                     //如果小于四个字符，不换行
-                    // if(circleText && circleText.length > 14){
-                    //     circleText = circleText.substring(0,14) +  circleText.substring(15,circleText.length);
-                    //
+                    if(circleText && circleText.length > 25){
+                        circleText = circleText.substring(0,25) + '...'+ circleText.substring(25,circleText.length);
+
                     //     d3.select(_this).text(function(){return '';});
-                    // }
+                    }
                     d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15)
                         .text(function(){ return circleText; });
                 }
