@@ -2098,7 +2098,7 @@
                             this.selectClear();
 
                         }
-                    
+
 
 
 
@@ -2261,7 +2261,7 @@
                         "id": this.info.links.length,
                         "type": 'link',
                         "properties": {},
-                        "label": this.reference
+                        "label": 'has effect' +'('+ this.reference +')'
 
                     };
                     let link_name_set = [];
