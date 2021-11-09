@@ -1154,15 +1154,16 @@
 
                             return {'value': element.title, 'label': element.title,'snippet':element.snippet}
                         });
-
-                        this.node_value = this.node_list[0].value;
-                        console.log('Current Node value', this.node_value);
-                        this.select_snippet = this.node_list[0].snippet;
-                        if(this.node_value !== null) {
-                            this.btnChangeEnable = false;
-                        }else{
+                        if(this.node_list.length === 0){
                             this.btnChangeEnable = true;
+                        }else {
+                            this.node_value = this.node_list[0].value;
+                            console.log('Current Node value', this.node_value);
+                            this.select_snippet = this.node_list[0].snippet;
+
+                            this.btnChangeEnable = false;
                         }
+
                     })
                 }
                 else{
