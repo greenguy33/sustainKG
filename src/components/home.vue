@@ -2264,7 +2264,7 @@
                         "id": this.info.links.length,
                         "type": 'link',
                         "properties": {},
-                        "label": 'has effect ' +'('+ this.reference +')'
+                        "label":  this.reference
 
                     };
                     let link_name_set = [];
@@ -2810,11 +2810,11 @@
 
                     .text(function (d) {
                         let circleText = '';
-                        if(d.label && d.label.length > 20){
-                             circleText = d.label.substring(0,20) + '...)' ;
+                        if(d.label && d.label.length > 50){
+                             circleText = 'has effect (' + d.label.substring(0,50) + '...)' ;
 
                         }else{
-                            circleText = d.label
+                            circleText = 'has effect ('+ d.label + ')';
                         }
 
                         return circleText;
