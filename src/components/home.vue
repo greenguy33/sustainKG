@@ -3065,10 +3065,10 @@
                         circleText = d.name;
                     }
                     //如果小于四个字符，不换行
-                    if(circleText && circleText.length > 25){
-                        circleText = circleText.substring(0,25) + '...'+ circleText.substring(25,circleText.length);
+                    if(circleText && circleText.length > 20){
+                        circleText = circleText.substring(0,20) + '...'+ circleText.substring(20,circleText.length);
 
-                    //     d3.select(_this).text(function(){return '';});
+                        d3.select(_this).text(function(){return '';});
                     }
                     d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15)
                         .text(function(){ return circleText; });
