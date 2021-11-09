@@ -739,12 +739,12 @@
                                 }
 
                                 console.log('after delete', this.info);
-                                for(let i = 0; i < this.info.nodes.length;i++)
-                                {
-                                    console.log(i);
-                                    console.log(this.info.nodes[i].id,this.info.nodes[i].index);
-                                    this.info.nodes[i].id = i;
-                                }
+                                // for(let i = 0; i < this.info.nodes.length;i++)
+                                // {
+                                //     console.log(i);
+                                //     console.log(this.info.nodes[i].id,this.info.nodes[i].index);
+                                //     this.info.nodes[i].id = i;
+                                // }
 
                                 let node_to_string = this.info.nodes.map(function (element) {
                                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
