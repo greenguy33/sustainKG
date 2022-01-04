@@ -66,7 +66,7 @@
 
 
         mounted(){
-            if(this.username ==='sqy' || this.username ==='wmt4') {
+            if(this.username ==='qingys1' || this.username ==='wmt4') {
                 this.getData();
             }
             else{

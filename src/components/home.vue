@@ -1841,7 +1841,7 @@
                         this.centerDialogVisible=true;
                     }
                     else {
-                        if(this.username === 'wmt4' || this.username === 'sqy'){
+                        if(this.username === 'wmt4' || this.username === 'qingys1'){
                             this.dashboard_show = true;
                         }
 
