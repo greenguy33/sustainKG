@@ -528,6 +528,10 @@
 
     import { list } from 'node-7z'
     import linkfile from 'raw-loader!./../assets/temp_link.txt'
+
+    import {config} from 'raw-loader!./../assets/config.js'
+    Vue.prototype.appConfig = config;
+
     import Vue from 'vue'
     import $ from 'jquery'
     import {
@@ -910,6 +914,8 @@
 
 
             console.log('route name',this.$route.name);
+            console.log('config js',config);
+            console.log('config js',this.appConfig.API_URL);
 
             // this.handleShow();
             this.renderGraph(this.info);
