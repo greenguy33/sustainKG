@@ -914,7 +914,7 @@
 
 
             console.log('route name',this.$route.name);
-            console.log('config js',config.admin_users);
+            console.log('config js',config.config());
 
             // this.handleShow();
             this.renderGraph(this.info);
