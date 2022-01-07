@@ -529,7 +529,7 @@
     import { list } from 'node-7z'
     import linkfile from 'raw-loader!./../assets/temp_link.txt'
 
-    import config from 'raw-loader!./../assets/config.js'
+    import {config} from 'raw-loader!./../assets/config.js'
     // Vue.prototype.appConfig = config;
 
     import Vue from 'vue'
@@ -894,6 +894,7 @@
                 snippet: [],
                 select_snippet: '',
                 uci_id:'',
+                config_file : config
                 // ifTeamWork:true,
             }
         },
@@ -914,7 +915,7 @@
 
 
             console.log('route name',this.$route.name);
-            console.log('config js',config);
+            console.log('config js',this.config_file);
 
             // this.handleShow();
             this.renderGraph(this.info);
