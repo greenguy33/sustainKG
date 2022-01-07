@@ -15,8 +15,4 @@ let config = {
 
 };
 
-export default {
-    Config: function () {
-        return config;
-    }
-}
+export default config

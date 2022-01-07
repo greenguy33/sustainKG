@@ -529,7 +529,7 @@
     import { list } from 'node-7z'
     import linkfile from 'raw-loader!./../assets/temp_link.txt'
 
-    import {Config} from 'raw-loader!./../assets/config.js'
+    import config from 'raw-loader!./../assets/config.js'
     // Vue.prototype.appConfig = config;
 
     import Vue from 'vue'
@@ -914,7 +914,7 @@
 
 
             console.log('route name',this.$route.name);
-            console.log('config js',Config);
+            console.log('config js',config);
 
             // this.handleShow();
             this.renderGraph(this.info);
