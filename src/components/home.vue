@@ -1847,7 +1847,7 @@
                         this.centerDialogVisible=true;
                     }
                     else {
-                        if(this.username === 'wmt4' || this.username === 'qingys1'){
+                        if(this.config.admin_users.indexOf(this.username)!== -1){
                             this.dashboard_show = true;
                         }
 
