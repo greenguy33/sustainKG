@@ -529,7 +529,7 @@
     import { list } from 'node-7z'
     import linkfile from 'raw-loader!./../assets/temp_link.txt'
 
-    import {config} from 'raw-loader!./../assets/config.js'
+    import {config} from './../assets/config'
     // Vue.prototype.appConfig = config;
 
     import Vue from 'vue'
