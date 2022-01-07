@@ -1,6 +1,6 @@
-let config;
 
-config = {
+
+let config = {
 
     API_URL : 'http//localhost:8089',
     admin_users : ['hfreedma', 'qingys1', 'wmt'],
@@ -16,7 +16,7 @@ config = {
 };
 
 export default {
-    config: function () {
+    Config: function () {
         return config;
     }
 }
