@@ -894,7 +894,6 @@
                 snippet: [],
                 select_snippet: '',
                 uci_id:'',
-                config_data : config.Config()
                 // ifTeamWork:true,
             }
         },
@@ -915,7 +914,7 @@
 
 
             console.log('route name',this.$route.name);
-            console.log('config js',this.config_data);
+            console.log('config js',config.Config());
 
             // this.handleShow();
             this.renderGraph(this.info);
