@@ -1103,12 +1103,18 @@
             },
 
             readTxt(){
-                console.log(linkfile.split('\n'));
-                let link_name = linkfile.split('\n').map(function (element) {
 
+
+                // console.log(linkfile.split('\n'));
+                // let link_name = linkfile.split('\n').map(function (element) {
+                //
+                //     return {'value':element, 'label':element}
+                // });
+                console.log(this.config.relationships);
+
+                let link_name = this.config.relationships.map(function (element) {
                     return {'value':element, 'label':element}
                 });
-                console.log(link_name);
                 this.link_list = link_name;
 
 
