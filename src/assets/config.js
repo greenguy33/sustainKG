@@ -10,7 +10,7 @@ let config = {
     //concepts = {"Motion", "Momentum", "Impulse", "Torque", "Power"}
     //concepts = concepts.txt
     Voting : true,
-    Citations : false,
+    Citations : true,
     Collaborative : true
 
 };

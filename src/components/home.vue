@@ -308,35 +308,6 @@
                    title="Add Reference URL" center>
 
 
-            <!--<el-select-->
-                    <!--ref="addLink"-->
-                    <!--@keyup.native = "showOption_add_link"-->
-                    <!--label-position="right"-->
-                    <!--label-width="86px"-->
-                    <!--style="width: 300px; margin-left:50px;"-->
-
-                    <!--v-model="link_value"-->
-                    <!--placeholder="Please select"-->
-                    <!--clearable-->
-
-
-                    <!--@blur="showOption_add_link"-->
-                    <!--@clear="selectClear"-->
-                    <!--@change="selectChange"-->
-                    <!--@keyup.native.enter="drag_addLinks"-->
-
-                    <!--no-match-text="No Relationships Name found"-->
-
-            <!--&gt;-->
-
-                <!--<el-option-->
-                        <!--v-for="(item,index) in link_list"-->
-                        <!--:key="index"-->
-                        <!--:label="item.label"-->
-                        <!--:value="item.value" ></el-option>-->
-
-            <!--</el-select>-->
-
             <span>Reference<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
@@ -347,37 +318,49 @@
                     Submit
                 </el-button>
             </div>
+
         </el-dialog>
+
+
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible_relationship"
+                :show-close="false"
+                title="Select Relationships" center>
+
+
+            <el-select v-model="relationship" multiple placeholder="Please select the relationship">
+                <el-option
+                        v-for="item in link_list"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+
+
+
+
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    Cancel
+                </el-button>
+                <el-button type="primary"   @click="select_relationship">
+                    Submit
+                </el-button>
+            </div>
+
+        </el-dialog>
+
+
+
 
         <el-dialog
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible_change_link_name"
                    title="Change Relationships Citation" center>
 
-
-            <!--<el-select-->
-                    <!--ref="changeLinkName"-->
-                    <!--@keyup.native = "showOption_change_link"-->
-                    <!--label-position="right"-->
-                    <!--label-width="86px"-->
-                    <!--style="width: 300px; margin-left:30px;"-->
-
-                    <!--v-model="new_link_name"-->
-                    <!--placeholder="Please select"-->
-                    <!--clearable-->
-                    <!--@blur="showOption_change_link"-->
-                    <!--@clear="selectClear"-->
-                    <!--@change="selectChange"-->
-                    <!--no-match-text="No Relationships Name found"-->
-                    <!--@keyup.native.enter="change_link_name"-->
-            <!--&gt;-->
-
-                <!--<el-option-->
-                        <!--v-for="(item,index) in link_list"-->
-                        <!--:key="index"-->
-                        <!--:label="item.label"-->
-                        <!--:value="item.value" ></el-option>-->
-            <!--</el-select>-->
 
             <span>Reference<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
 
@@ -698,6 +681,7 @@
 
                 dialogFormVisible:false,
                 dialogFormVisible_link:false,
+                dialogFormVisible_relationship:false,
                 dialogFormVisible_viewCollective:false,
                 dialogFormVisible_change_node_name:false,
                 dialogFormVisible_change_link_name:false,
@@ -894,7 +878,10 @@
                 snippet: [],
                 select_snippet: '',
                 uci_id:'',
-                config
+
+                // config file
+                config,
+                relationship: '',
                 // ifTeamWork:true,
             }
         },
@@ -1949,44 +1936,10 @@
                 this.$forceUpdate()
             },
 
-            selectFocus(){
-                console.log('lalala')
-                // this.optionVisible_add_nodes = false
-            },
 
 
 
-            showOption_add_link()
-            {
-                let inputContent = this.$refs.addLink.$children[0].value;
 
-                this.optionVisible_add_link = true;
-                this.$forceUpdate()
-            },
-
-            showOption_change_link()
-            {
-
-                let inputContent = this.$refs.changeLinkName.$children[0].value;
-                this.optionVisible_change_link = true;
-
-                this.$forceUpdate()
-            },
-
-
-            // selectBlur(e) {
-            //     // 意见类型
-            //     this.btnChangeEnable = true;
-            //     console.log(e.target.value)
-            //     if (e.target.value !== '') {
-            //         this.node_value = e.target.value;
-            //         // this.$forceUpdate()   // 强制更新
-            //     }
-            //     //
-            //         this.$forceUpdate();
-            //     //     this.selectClear()
-            //
-            // },
 
 
 
@@ -2051,6 +2004,7 @@
                 this.dialogFormVisible_link = false;
                 this.dialogFormVisible_change_node_name = false;
                 this.dialogFormVisible_change_link_name = false;
+                this.dialogFormVisible_relationship  = false;
                 this.temp.length = 0;
                 // this.newPassword = '';
                 this.newUsername = '';
@@ -2251,10 +2205,18 @@
 
             },
 
+            select_relationship(){
+                console.log('selected relationship: ',this.relationship);
+                this.dialogFormVisible_relationship = false;
+
+            },
+
 
 
             drag_addLinks()
             {
+
+
 
 
                 console.log('add drag links',this.start.index, this.end.index);
@@ -3034,6 +2996,9 @@
                                     else {
                                         // console.log('start', _this.start.properties.name, _this.start.type);
                                         // console.log('end', _this.end.properties.name, _this.end.type);
+                                        if(_this.config.Citations === true){
+                                            _this.dialogFormVisible_relationship = true;
+                                        }
                                         _this.dialogFormVisible_link = true;
                                         mouse_line.style('opacity', '0');
 
