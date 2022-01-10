@@ -330,7 +330,7 @@
 
 
             <el-select v-model="relationship"
-                       style='width: 200px; margin-left:80px;'
+                       style='width: 200px; margin-left:120px;'
                        placeholder="Please select the relationship">
                 <el-option
                         v-for="item in link_list"
@@ -2786,11 +2786,12 @@
                     // .attr("pointer-events", "none")
                     .attr("font-size", 20)
 
-                    .text(function (d, _this) {
+                    .text(function (d ) {
+                        let _this = this;
                         let circleText = '';
                         console.log('text relationship', d, _this);
                         if(d.label && d.label.length > 50){
-                            if(this.relationship === '') {
+                            if(_this.relationship === '') {
                                 circleText = 'has effect (' + d.label.substring(0, 50) + '...)';
                             }
                             else{
@@ -2798,7 +2799,7 @@
                             }
 
                         }else{
-                            if(this.relationship === '') {
+                            if(_this.relationship === '') {
 
                                 circleText = 'has effect (' + d.label + ')';
                             }
