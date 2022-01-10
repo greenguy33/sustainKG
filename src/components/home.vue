@@ -857,6 +857,7 @@
                         action:(link_id)=>
                         {
                             this.dialogFormVisible_change_link_name = true;
+                            this.dialogFormVisible_relationship = true;
                             this.link_id = link_id;
 
                         }
