@@ -308,7 +308,7 @@
                    title="Add Reference URL" center>
 
 
-            <span>Reference<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
+            <span>{{relationship}}<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -329,7 +329,9 @@
                 title="Select Relationships" center>
 
 
-            <el-select v-model="relationship" multiple placeholder="Please select the relationship">
+            <el-select v-model="relationship"
+                       style='width: 200px; margin-left:30px;'
+                       placeholder="Please select the relationship">
                 <el-option
                         v-for="item in link_list"
                         :key="item.value"
@@ -1962,6 +1964,7 @@
                 this.disableSelect = true;
                 this.input = '';
                 this.node_list  =[];
+                this.relationship = '';
 
                 this.$forceUpdate()
             },
@@ -2208,6 +2211,7 @@
             select_relationship(){
                 console.log('selected relationship: ',this.relationship);
                 this.dialogFormVisible_relationship = false;
+                this.selectClear();
 
             },
 
@@ -2785,10 +2789,21 @@
                     .text(function (d) {
                         let circleText = '';
                         if(d.label && d.label.length > 50){
-                             circleText = 'has effect (' + d.label.substring(0,50) + '...)' ;
+                            if(this.relationship === '') {
+                                circleText = 'has effect (' + d.label.substring(0, 50) + '...)';
+                            }
+                            else{
+                                circleText = this.relationship + ' (' + d.label.substring(0, 50) + '...)';
+                            }
 
                         }else{
-                            circleText = 'has effect ('+ d.label + ')';
+                            if(this.relationship === '') {
+
+                                circleText = 'has effect (' + d.label + ')';
+                            }
+                            else{
+                                circleText = this.relationship + ' (' + d.label + ')';
+                            }
                         }
 
                         return circleText;
