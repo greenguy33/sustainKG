@@ -2786,7 +2786,7 @@
                     // .attr("pointer-events", "none")
                     .attr("font-size", 20)
 
-                    .text(function (d) {
+                    .text(function (d, _this) {
                         let circleText = '';
                         console.log('text relationship',d);
                         if(d.label && d.label.length > 50){
@@ -2794,7 +2794,7 @@
                                 circleText = 'has effect (' + d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                circleText = this.relationship + ' (' + d.label.substring(0, 50) + '...)';
+                                circleText = _this.relationship + ' (' + d.label.substring(0, 50) + '...)';
                             }
 
                         }else{
@@ -2803,7 +2803,7 @@
                                 circleText = 'has effect (' + d.label + ')';
                             }
                             else{
-                                circleText = this.relationship + ' (' + d.label + ')';
+                                circleText = _this.relationship + ' (' + d.label + ')';
                             }
                         }
 
