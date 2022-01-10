@@ -2779,7 +2779,7 @@
 
 
 
-
+                let that = this;
                 //设置线条上的文字
                 edges_text.append('textPath')
                     .attr('xlink:href', function (d, i) { return '#edgepath' + i })
@@ -2787,24 +2787,23 @@
                     .attr("font-size", 20)
 
                     .text(function (d ) {
-                        let _this = this;
                         let circleText = '';
-                        console.log('text relationship', d, _this);
+                        console.log('text relationship', d, that);
                         if(d.label && d.label.length > 50){
-                            if(_this.relationship === '') {
+                            if(that.relationship === '') {
                                 circleText = 'has effect (' + d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                circleText = _this.relationship + ' (' + d.label.substring(0, 50) + '...)';
+                                circleText = that.relationship + ' (' + d.label.substring(0, 50) + '...)';
                             }
 
                         }else{
-                            if(_this.relationship === '') {
+                            if(that.relationship === '') {
 
                                 circleText = 'has effect (' + d.label + ')';
                             }
                             else{
-                                circleText = _this.relationship + ' (' + d.label + ')';
+                                circleText = that.relationship + ' (' + d.label + ')';
                             }
                         }
 
