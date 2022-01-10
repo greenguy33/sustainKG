@@ -2788,7 +2788,7 @@
 
                     .text(function (d, _this) {
                         let circleText = '';
-                        console.log('text relationship',d);
+                        console.log('text relationship', d, _this);
                         if(d.label && d.label.length > 50){
                             if(this.relationship === '') {
                                 circleText = 'has effect (' + d.label.substring(0, 50) + '...)';
