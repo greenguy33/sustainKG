@@ -332,7 +332,7 @@
                    title="Change Relationships Citation" center>
 
             <el-select v-model="relationship"
-                       style='width: 200px; margin-left:120px;'
+                       style='width: 300px;'
                        placeholder="Please select the relationship">
                 <el-option
                         v-for="item in link_list"
@@ -343,7 +343,7 @@
             </el-select>
 
 
-            <span>Reference<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
+            <span>{{relationship}}}<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
 
             </el-input></span>
 
@@ -367,7 +367,7 @@
 
 
             <el-select v-model="relationship"
-                       style='width: 200px; margin-left:120px;'
+                       style='width: 300px; margin-left:150px;'
                        placeholder="Please select the relationship">
                 <el-option
                         v-for="item in link_list"
@@ -2150,6 +2150,7 @@
 
                     this.btnChangeEnable = true;
                     this.new_reference = '';
+                    this.relationship = '';
 
 
 
