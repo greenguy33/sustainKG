@@ -331,6 +331,17 @@
                 :visible.sync="dialogFormVisible_change_link_name"
                    title="Change Relationships Citation" center>
 
+            <el-select v-model="relationship"
+                       style='width: 200px; margin-left:120px;'
+                       placeholder="Please select the relationship">
+                <el-option
+                        v-for="item in link_list"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+
 
             <span>Reference<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
 
@@ -857,7 +868,6 @@
                         title: 'Change citation URL',
                         action:(link_id)=>
                         {
-                            this.dialogFormVisible_relationship = true;
 
                             this.dialogFormVisible_change_link_name = true;
 
