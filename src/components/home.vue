@@ -308,7 +308,7 @@
                    title="Add Reference URL" center>
 
 
-            <span>{{relationship}}<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
+            <span>{{relationship_name}}<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -343,7 +343,7 @@
             </el-select>
 
 
-            <span>{{relationship}}}<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
+            <span>{{relationship_name}}<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
 
             </el-input></span>
 
@@ -898,6 +898,7 @@
                 // config file
                 config,
                 relationship: '',
+                relationship_name :'',
                 // ifTeamWork:true,
             }
         },
@@ -1978,6 +1979,7 @@
                 this.disableSelect = true;
                 this.input = '';
                 this.node_list  =[];
+                this.relationship = '';
 
 
                 this.$forceUpdate()
@@ -2150,7 +2152,6 @@
 
                     this.btnChangeEnable = true;
                     this.new_reference = '';
-                    this.relationship = '';
 
 
 
@@ -2225,6 +2226,7 @@
 
             select_relationship(){
                 console.log('selected relationship: ',this.relationship);
+                this.relationship_name = this.relationship;
                 this.dialogFormVisible_relationship = false;
                 this.selectClear();
 
@@ -2805,20 +2807,20 @@
                         let circleText = '';
                         console.log('text relationship', d, that);
                         if(d.label && d.label.length > 50){
-                            if(that.relationship === '') {
+                            if(that.relationship_name === '') {
                                 circleText = 'has effect (' + d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                circleText = that.relationship + ' (' + d.label.substring(0, 50) + '...)';
+                                circleText = that.relationship_name + ' (' + d.label.substring(0, 50) + '...)';
                             }
 
                         }else{
-                            if(that.relationship === '') {
+                            if(that.relationship_name === '') {
 
                                 circleText = 'has effect (' + d.label + ')';
                             }
                             else{
-                                circleText = that.relationship + ' (' + d.label + ')';
+                                circleText = that.relationship_name + ' (' + d.label + ')';
                             }
                         }
 
