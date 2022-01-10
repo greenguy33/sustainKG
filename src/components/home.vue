@@ -322,6 +322,32 @@
         </el-dialog>
 
 
+
+
+
+
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible_change_link_name"
+                   title="Change Relationships Citation" center>
+
+
+            <span>Reference<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
+
+            </el-input></span>
+
+
+            <div slot="footer" class="dialog-footer">
+
+                <el-button @click="cancel">
+                    No
+                </el-button>
+                <el-button type="primary"  @click="change_link_name">
+                    Yes
+                </el-button>
+            </div>
+        </el-dialog>
+
         <el-dialog
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible_relationship"
@@ -353,31 +379,6 @@
                 </el-button>
             </div>
 
-        </el-dialog>
-
-
-
-
-        <el-dialog
-                :close-on-click-modal="false"
-                :visible.sync="dialogFormVisible_change_link_name"
-                   title="Change Relationships Citation" center>
-
-
-            <span>Reference<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
-
-            </el-input></span>
-
-
-            <div slot="footer" class="dialog-footer">
-
-                <el-button @click="cancel">
-                    No
-                </el-button>
-                <el-button type="primary"  @click="change_link_name">
-                    Yes
-                </el-button>
-            </div>
         </el-dialog>
 
 
@@ -857,6 +858,7 @@
                         action:(link_id)=>
                         {
                             this.dialogFormVisible_relationship = true;
+
                             this.dialogFormVisible_change_link_name = true;
 
                             this.link_id = link_id;
