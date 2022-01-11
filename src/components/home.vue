@@ -1179,8 +1179,10 @@
                 this.link_list = link_name;
                 console.log(this.link_list.length);
                 if(this.link_list.length === 1){
-                    
+
                     this.relationship = this.link_list[0].value;
+                    this.new_relationship = this.link_list[0].value;
+
                 }
 
 
@@ -2363,28 +2365,32 @@
                         this.dialogFormVisible_relationship = false;
                         console.log('valid');
                         let new_link = {};
-                        if(this.config.Citations === false){
-                            new_link = {
-                                "source": this.start,
-                                "target": this.end,
-                                "id": this.info.links.length,
-                                "type": 'link',
-                                "properties": {},
-                                "label": this.relationship
 
-                            };
-                        }
-                        else {
-                            new_link = {
-                                "source": this.start,
-                                "target": this.end,
-                                "id": this.info.links.length,
-                                "type": 'link',
-                                "properties": {'citation': this.reference},
-                                "label": this.relationship
+                        if (this.relationship !== ''){
+                            if (this.config.Citations === false) {
+                                new_link = {
+                                    "source": this.start,
+                                    "target": this.end,
+                                    "id": this.info.links.length,
+                                    "type": 'link',
+                                    "properties": {},
+                                    "label": this.relationship
 
-                            };
-                        }
+                                };
+                            }
+                            else {
+                                new_link = {
+                                    "source": this.start,
+                                    "target": this.end,
+                                    "id": this.info.links.length,
+                                    "type": 'link',
+                                    "properties": {'citation': this.reference},
+                                    "label": this.relationship
+
+                                };
+                            }
+
+
                         let link_name_set = [];
                         console.log('temp node', this.temp[0]);
                         for (let i = 0; i < this.info.links.length; i++) {
@@ -2419,7 +2425,7 @@
                             };
                         });
                         let link_to_string;
-                        if(this.config.Citations === false) {
+                        if (this.config.Citations === false) {
                             link_to_string = this.info.links.map(function (element) {
                                 return {
                                     "source": element.source.id,
@@ -2431,7 +2437,7 @@
                                 }
 
                             });
-                        }else{
+                        } else {
                             link_to_string = this.info.links.map(function (element) {
                                 return {
                                     "source": element.source.id,
@@ -2459,6 +2465,16 @@
                         this.ifClicked = false;
                         this.selectClear();
                         this.reference = '';
+                        }else{
+                            this.dialogFormVisible_link = true;
+                            this.$message(
+                                {
+                                    type: 'warning',
+                                    message: 'Labels can not be empty!'
+                                });
+                            this.reference = '';
+
+                        }
 
 
                     } else {
