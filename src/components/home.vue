@@ -2939,7 +2939,11 @@
                                 circleText =  d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                circleText = d.label + ' (' + d.properties.citations.substring(0, 50) + '...)';
+                                if(d.properties === {}){
+                                    circleText =  d.label.substring(0, 50) + '...)';
+                                }else {
+                                    circleText = d.label + ' (' + d.properties.citations.substring(0, 50) + '...)';
+                                }
                             }
 
                         }else{
@@ -2948,7 +2952,11 @@
                                 circleText = d.label ;
                             }
                             else{
-                                circleText = d.label + ' (' + d.properties.citations + ')';
+                                if(d.properties === {}){
+                                    circleText = d.label;
+                                }else {
+                                    circleText = d.label + ' (' + d.properties.citations + ')';
+                                }
                             }
                         }
 
