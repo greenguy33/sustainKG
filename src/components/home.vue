@@ -2939,7 +2939,7 @@
                                 circleText =  d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                if(d.properties === {}){
+                                if(d.properties.citations === undefined){
                                     circleText =  d.label.substring(0, 50) + '...)';
                                 }else {
                                     circleText = d.label + ' (' + d.properties.citations.substring(0, 50) + '...)';
@@ -2952,7 +2952,7 @@
                                 circleText = d.label ;
                             }
                             else{
-                                if(d.properties === {}){
+                                if(d.properties.citations === undefined){
                                     circleText = d.label;
                                 }else {
                                     circleText = d.label + ' (' + d.properties.citations + ')';
