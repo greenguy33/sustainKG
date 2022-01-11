@@ -2845,20 +2845,20 @@
                         let circleText = '';
                         console.log('text relationship', d, that);
                         if(d.label && d.label.length > 50){
-                            if(that.relationship_name === '') {
-                                circleText = 'has effect (' + d.label.substring(0, 50) + '...)';
+                            if(that.config.Citations === false) {
+                                circleText =  d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                circleText = that.relationship_name + ' (' + d.label.substring(0, 50) + '...)';
+                                circleText = d.label + ' (' + d.properties.citations.substring(0, 50) + '...)';
                             }
 
                         }else{
-                            if(that.relationship_name === '') {
+                            if(that.config.Citations === false) {
 
-                                circleText = 'has effect (' + d.label + ')';
+                                circleText = d.label ;
                             }
                             else{
-                                circleText = that.relationship_name + ' (' + d.label + ')';
+                                circleText = d.label + ' (' + d.properties.citations + ')';
                             }
                         }
 
