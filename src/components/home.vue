@@ -354,7 +354,7 @@
             </el-select>
 
 
-            <span>{{relationship_name}}<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
+            <span>{{new_relationship}}<el-input v-model="new_reference" placeholder="Change Reference URL" @keyup.native.enter="change_link_name" >
 
             </el-input></span>
 
