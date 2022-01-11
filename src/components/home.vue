@@ -385,7 +385,7 @@
                 <el-button @click="cancel">
                     Cancel
                 </el-button>
-                <el-button type="primary"   @click="select_relationship">
+                <el-button type="primary"   @click="drag_addLinks">
                     Submit
                 </el-button>
             </div>
@@ -797,7 +797,11 @@
                     {
                         title: 'Change Concept Name',
                         action:(node_id)=>{
-                            this.dialogFormVisible_change_node_name = true;
+                            if(this.config.Citations === true) {
+                                this.dialogFormVisible_change_node_name = true;
+                            }
+
+                            this.dialogFormVisible_relationship = true;
                             this.node_id = node_id;
 
                         },
@@ -2238,6 +2242,8 @@
             {
 
 
+                console.log('selected relationship: ',this.relationship);
+                this.relationship_name = this.relationship;
 
 
                 console.log('add drag links',this.start.index, this.end.index);
@@ -2250,89 +2256,121 @@
                     '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
                     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
 
-                if(pattern.test(this.reference)){
-                    this.dialogFormVisible_link = false;
-                    console.log('valid');
-                    let new_link = {
-                        "source": this.start,
-                        "target": this.end,
-                        "id": this.info.links.length,
-                        "type": 'link',
-                        "properties": {},
-                        "label":  this.reference
-
-                    };
-                    let link_name_set = [];
-                    console.log('temp node',this.temp[0]);
-                    for(let i=0; i<this.info.links.length;i++){
-                        if(this.info.links[i].source.properties.name === this.start.properties.name
-                            && this.info.links[i].target.properties.name === this.end.properties.name){
-
-                            link_name_set.push(this.info.links[i].label);
-                        }
-                    }
-
-                    console.log('link name set', link_name_set);
-                    if(link_name_set.indexOf(new_link.label) > -1){
-                        console.log('This label is already used ');
-                        this.$message({
-                            'type': 'warning',
-                            'message': 'There is already a relationship with that URL!'
-                        })
-                    }
-                    else {
-
-                        this.info.links.push(new_link);
-                        console.log('new link added', this.info, typeof(this.info));
-                        // this.initial_links_count ++;
 
 
-                    }
+                    if (pattern.test(this.reference) || (this.config.Citations === false )) {
 
-                    let node_to_string = this.info.nodes.map(function (element) {
-                        return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                            'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                        this.dialogFormVisible_link = false;
+                        this.dialogFormVisible_relationship = false;
+                        console.log('valid');
+                        let new_link = {};
+                        if(this.config.Citations === false){
+                            new_link = {
+                                "source": this.start,
+                                "target": this.end,
+                                "id": this.info.links.length,
+                                "type": 'link',
+                                "properties": {},
+                                "label": this.relationship
+
                             };
-                    });
+                        }
+                        else {
+                            new_link = {
+                                "source": this.start,
+                                "target": this.end,
+                                "id": this.info.links.length,
+                                "type": 'link',
+                                "properties": {'citations': this.reference},
+                                "label": this.relationship
+
+                            };
+                        }
+                        let link_name_set = [];
+                        console.log('temp node', this.temp[0]);
+                        for (let i = 0; i < this.info.links.length; i++) {
+                            if (this.info.links[i].source.properties.name === this.start.properties.name
+                                && this.info.links[i].target.properties.name === this.end.properties.name) {
+
+                                link_name_set.push(this.info.links[i].label);
+                            }
+                        }
+
+                        console.log('link name set', link_name_set);
+                        if (link_name_set.indexOf(new_link.label) > -1) {
+                            console.log('This label is already used ');
+                            this.$message({
+                                'type': 'warning',
+                                'message': 'There is already a relationship with that URL!'
+                            })
+                        }
+                        else {
+
+                            this.info.links.push(new_link);
+                            console.log('new link added', this.info, typeof(this.info));
+                            // this.initial_links_count ++;
 
 
-                    let link_to_string = this.info.links.map(function (element) {
-                        return {
-                            "source": element.source.id,
-                            "target": element.target.id,
-                            "id": element.id,
-                            "type": element.type,
-                            "properties": {},
-                            "label": element.label}
+                        }
 
-                    });
-
-                    console.log('stringfy node', node_to_string);
-                    console.log('stringfy links', link_to_string);
-
-                    let new_info = [];
-                    new_info.nodes = node_to_string;
-                    new_info.links = link_to_string;
-
-                    this.renderGraph(new_info);
-
-
-
-                    // this.renderGraph(this.info);
-                    this.ifClicked = false;
-                    this.selectClear();
-                    this.reference = '';
-
-
-                }else{
-                    this.dialogFormVisible_link = true;
-                    this.$message(
-
-                        {
-                            type: 'warning',
-                            message: 'Invalid URL!'
+                        let node_to_string = this.info.nodes.map(function (element) {
+                            return {
+                                'id': element.id, 'type': element.type, 'properties': {'name': element.properties.name},
+                                'label': element.label, 'snippet': element.snippet, 'if_expanded': element.if_expanded,
+                            };
                         });
-                    this.reference = '';
+                        let link_to_string;
+                        if(this.config.Citations === false) {
+                            link_to_string = this.info.links.map(function (element) {
+                                return {
+                                    "source": element.source.id,
+                                    "target": element.target.id,
+                                    "id": element.id,
+                                    "type": element.type,
+                                    "properties": {},
+                                    "label": element.label
+                                }
+
+                            });
+                        }else{
+                            link_to_string = this.info.links.map(function (element) {
+                                return {
+                                    "source": element.source.id,
+                                    "target": element.target.id,
+                                    "id": element.id,
+                                    "type": element.type,
+                                    "properties": {'citations': element.properties.citations},
+                                    "label": element.label
+                                }
+
+                            });
+                        }
+
+                        console.log('stringfy node', node_to_string);
+                        console.log('stringfy links', link_to_string);
+
+                        let new_info = [];
+                        new_info.nodes = node_to_string;
+                        new_info.links = link_to_string;
+
+                        this.renderGraph(new_info);
+
+
+                        // this.renderGraph(this.info);
+                        this.ifClicked = false;
+                        this.selectClear();
+                        this.reference = '';
+
+
+                    } else {
+                        this.dialogFormVisible_link = true;
+                        this.$message(
+                            {
+                                type: 'warning',
+                                message: 'Invalid URL!'
+                            });
+                        this.reference = '';
+
 
 
                 }
@@ -3029,10 +3067,18 @@
                                     else {
                                         // console.log('start', _this.start.properties.name, _this.start.type);
                                         // console.log('end', _this.end.properties.name, _this.end.type);
+
+                                        _this.dialogFormVisible_relationship = true;
+
+
+
                                         if(_this.config.Citations === true){
-                                            _this.dialogFormVisible_relationship = true;
+
+                                            _this.dialogFormVisible_link = true;
+
                                         }
-                                        _this.dialogFormVisible_link = true;
+
+
                                         mouse_line.style('opacity', '0');
 
                                         d3.select('.g_circle_' + d.index).select('circle')
