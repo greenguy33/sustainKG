@@ -393,6 +393,40 @@
         </el-dialog>
 
 
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible_new_relationship"
+                :show-close="false"
+                title="Select New Relationships" center>
+
+
+            <el-select v-model="new_relationship"
+                       style='width: 300px; margin-left:150px;'
+                       placeholder="Please select the relationship">
+                <el-option
+                        v-for="item in link_list"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+
+
+
+
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    Cancel
+                </el-button>
+                <el-button type="primary"   @click="change_relationship_name">
+                    Submit
+                </el-button>
+            </div>
+
+        </el-dialog>
+
+
 
 
 
@@ -696,6 +730,7 @@
                 dialogFormVisible:false,
                 dialogFormVisible_link:false,
                 dialogFormVisible_relationship:false,
+                dialogFormVisible_new_relationship:false,
                 dialogFormVisible_viewCollective:false,
                 dialogFormVisible_change_node_name:false,
                 dialogFormVisible_change_link_name:false,
@@ -872,8 +907,12 @@
                         title: 'Change citation URL',
                         action:(link_id)=>
                         {
-
-                            this.dialogFormVisible_change_link_name = true;
+                            if(this.config.Citations === false){
+                                this.dialogFormVisible_new_relationship = true;
+                            }
+                            else {
+                                this.dialogFormVisible_change_link_name = true;
+                            }
 
                             this.link_id = link_id;
 
@@ -902,6 +941,7 @@
                 // config file
                 config,
                 relationship: '',
+                new_relationship:'',
                 relationship_name :'',
                 // ifTeamWork:true,
             }
@@ -2027,6 +2067,7 @@
                 this.dialogFormVisible_link = false;
                 this.dialogFormVisible_change_node_name = false;
                 this.dialogFormVisible_change_link_name = false;
+                this.dialogFormVisible_new_relationship = false;
                 this.dialogFormVisible_relationship  = false;
                 this.temp.length = 0;
                 // this.newPassword = '';
@@ -2135,6 +2176,44 @@
 
                 // this.renderGraph(this.info);
                 this.selectClear();
+
+            },
+
+            change_relationship_name(){
+                this.info.links[this.link_id].label = this.new_relationship;
+                this.dialogFormVisible_new_relationship = false;
+                this.new_relationship = '';
+
+                let node_to_string = this.info.nodes.map(function (element) {
+                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                    };
+                });
+
+
+                let link_to_string = this.info.links.map(function (element) {
+                    return {
+                        "source": element.source.id,
+                        "target": element.target.id,
+                        "id": element.id,
+                        "type": element.type,
+                        "properties": {},
+                        "label": element.label}
+
+                });
+
+                console.log('stringfy node', node_to_string);
+                console.log('stringfy links', link_to_string);
+
+                let new_info = [];
+                new_info.nodes = node_to_string;
+                new_info.links = link_to_string;
+
+                this.renderGraph(new_info);
+
+                // this.renderGraph(this.info);
+                this.selectClear();
+
 
             },
 
