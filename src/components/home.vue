@@ -319,7 +319,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            <el-button  :visible.sync="Relationship_Num">{{relationship}}}</el-button>
+            <el-button  !:visible.sync="Relationship_Num">{{relationship}}}</el-button>
 
             <span><el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
@@ -1182,7 +1182,7 @@
                 if(this.link_list.length === 1){
 
                     this.Relationship_Num = false;
-                    this.relationship = this.link_list[0];
+                    this.relationship = this.link_list[0].value;
                 }
 
 
