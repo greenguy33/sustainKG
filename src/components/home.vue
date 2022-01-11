@@ -2371,7 +2371,7 @@
                                 "target": this.end,
                                 "id": this.info.links.length,
                                 "type": 'link',
-                                "properties": {'citations': this.reference},
+                                "properties": {'citation': this.reference},
                                 "label": this.relationship
 
                             };
@@ -2429,7 +2429,7 @@
                                     "target": element.target.id,
                                     "id": element.id,
                                     "type": element.type,
-                                    "properties": {'citations': element.properties.citations},
+                                    "properties": {'citation': element.properties.citation},
                                     "label": element.label
                                 }
 
@@ -2939,10 +2939,10 @@
                                 circleText =  d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                if(d.properties.citations === undefined){
+                                if(d.properties.citation === undefined){
                                     circleText =  d.label.substring(0, 50) + '...)';
                                 }else {
-                                    circleText = d.label + ' (' + d.properties.citations.substring(0, 50) + '...)';
+                                    circleText = d.label + ' (' + d.properties.citation.substring(0, 50) + '...)';
                                 }
                             }
 
@@ -2952,10 +2952,10 @@
                                 circleText = d.label ;
                             }
                             else{
-                                if(d.properties.citations === undefined){
+                                if(d.properties.citation === undefined){
                                     circleText = d.label;
                                 }else {
-                                    circleText = d.label + ' (' + d.properties.citations + ')';
+                                    circleText = d.label + ' (' + d.properties.citation + ')';
                                 }
                             }
                         }
