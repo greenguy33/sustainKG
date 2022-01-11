@@ -307,6 +307,17 @@
                    :show-close="false"
                    title="Add Reference URL" center>
 
+            <el-select v-model="relationship"
+                       style='width: 300px;'
+                       placeholder="Please select the relationship">
+                <el-option
+                        v-for="item in link_list"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+
 
             <span>{{relationship_name}}<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
@@ -2337,7 +2348,7 @@
 
 
 
-                    if (pattern.test(this.reference) || (this.config.Citations === false )) {
+                    if ((pattern.test(this.reference) && this.config.Citations === true) || (this.config.Citations === false )) {
 
                         this.dialogFormVisible_link = false;
                         this.dialogFormVisible_relationship = false;
@@ -3147,7 +3158,9 @@
                                         // console.log('start', _this.start.properties.name, _this.start.type);
                                         // console.log('end', _this.end.properties.name, _this.end.type);
 
-                                        _this.dialogFormVisible_relationship = true;
+
+
+
 
 
 
@@ -3155,6 +3168,8 @@
 
                                             _this.dialogFormVisible_link = true;
 
+                                        }else{
+                                            _this.dialogFormVisible_relationship = true;
                                         }
 
 
