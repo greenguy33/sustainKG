@@ -1182,7 +1182,7 @@
                 if(this.link_list.length === 1){
 
                     this.Relationship_Num = false;
-                    this.relationship = this.link_list[0].value;
+                    this.relationship = this.link_list[0];
                 }
 
 
