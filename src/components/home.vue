@@ -307,7 +307,9 @@
                    :show-close="false"
                    title="Add Reference URL" center>
 
-            <el-select v-model="relationship"
+            <el-select
+                    :visible.sync="Relationship_Num"
+                    v-model="relationship"
                        style='width: 300px;'
                        placeholder="Please select the relationship">
                 <el-option
@@ -317,9 +319,9 @@
                         :value="item.value">
                 </el-option>
             </el-select>
+            <el-button  :visible.sync="Relationship_Num">{{relationship}}}</el-button>
 
-
-            <span>{{relationship_name}}<el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
+            <span><el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -740,6 +742,7 @@
 
                 dialogFormVisible:false,
                 dialogFormVisible_link:false,
+                Relationship_Num:true,
                 dialogFormVisible_relationship:false,
                 dialogFormVisible_new_relationship:false,
                 dialogFormVisible_viewCollective:false,
@@ -1175,6 +1178,12 @@
                     return {'value':element, 'label':element}
                 });
                 this.link_list = link_name;
+
+                if(this.link_list.length === 1){
+
+                    this.Relationship_Num = false;
+                    this.relationship = this.link_list[0];
+                }
 
 
 
