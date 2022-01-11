@@ -11,7 +11,7 @@ let config = {
     //concepts = {"Motion", "Momentum", "Impulse", "Torque", "Power"}
     //concepts = concepts.txt
     Voting : true,
-    Citations : true,
+    Citations : false,
     Collaborative : true
 
 };
