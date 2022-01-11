@@ -319,7 +319,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            <el-button  !:visible.sync="Relationship_Num">{{relationship}}}</el-button>
+            <el-button  :visible.sync="Relationship_Num_1">{{relationship}}}</el-button>
 
             <span><el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
@@ -743,6 +743,7 @@
                 dialogFormVisible:false,
                 dialogFormVisible_link:false,
                 Relationship_Num:true,
+                Relationship_Num_1:false,
                 dialogFormVisible_relationship:false,
                 dialogFormVisible_new_relationship:false,
                 dialogFormVisible_viewCollective:false,
@@ -1182,6 +1183,7 @@
                 if(this.link_list.length === 1){
 
                     this.Relationship_Num = false;
+                    this.Relationship_Num_1 = true;
                     this.relationship = this.link_list[0].value;
                 }
 
