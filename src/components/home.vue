@@ -342,7 +342,7 @@
                 :visible.sync="dialogFormVisible_change_link_name"
                    title="Change Relationships Citation" center>
 
-            <el-select v-model="relationship"
+            <el-select v-model="new_relationship"
                        style='width: 300px;'
                        placeholder="Please select the relationship">
                 <el-option
@@ -2241,11 +2241,13 @@
 
                 if(pattern.test(this.new_reference)) {
 
-                    this.info.links[this.link_id].label = this.new_reference;
+                    this.info.links[this.link_id].label = this.new_relationship;
+                    this.info.links[this.link_id].properties.citation = this.new_reference;
                     this.dialogFormVisible_change_link_name = false;
 
                     this.btnChangeEnable = true;
                     this.new_reference = '';
+                    this.new_relationship = '';
 
 
 
@@ -2262,7 +2264,7 @@
                             "target": element.target.id,
                             "id": element.id,
                             "type": element.type,
-                            "properties": {},
+                            "properties": element.properties,
                             "label": element.label}
 
                     });
