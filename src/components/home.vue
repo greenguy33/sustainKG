@@ -3432,7 +3432,7 @@
                         'properties': {'name': input},
                         'label': 'Concept',
                         'snippet':snippet,
-                        'if_expanded':false
+                        'if_expanded':false.
                     };
 
                     this.info.nodes.push(new_node);
@@ -3440,6 +3440,7 @@
                     let node_to_string = this.info.nodes.map(function (element) {
                         return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                             'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                            'x': element.x, 'y':element.y
                         };
                     });
 
@@ -3451,7 +3452,12 @@
                             "id": element.id,
                             "type": element.type,
                             "properties": {},
-                            "label": element.label}
+                            "label": element.label,
+                            'x_end':element.x_end,
+                            'x_start':element.x_start,
+                            'y_end':element.y_end,
+                            'y_start':element.y_start
+                        }
 
                     });
 
