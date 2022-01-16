@@ -3432,7 +3432,7 @@
                         'properties': {'name': input},
                         'label': 'Concept',
                         'snippet':snippet,
-                        'if_expanded':false.
+                        'if_expanded':false
                     };
 
                     this.info.nodes.push(new_node);
