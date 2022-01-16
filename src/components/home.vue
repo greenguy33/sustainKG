@@ -840,7 +840,7 @@
 
                                 // this.renderGraph(new_info);
 
-                                this.renderGraph(this.info);
+                                this.renderGraph(new_info);
 
                             })
 
