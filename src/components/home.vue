@@ -2600,7 +2600,7 @@
                 let force = d3.layout.force()//layout将json格式转化为力学图可用的格式
                     .nodes(nodes)//设定节点数组
                     .links(links)//设定连线数组
-                    .linkDistance(500)//连接线长度
+                    .linkDistance(700)//连接线长度
                     .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
                     .on("tick", function (){
                             tick()
@@ -2667,6 +2667,8 @@
                             if(d3.select(d3.event.target).datum() === undefined)
                                 this.dialogFormVisible = true;
                         }
+
+                        force.stop();
 
 
                     });
