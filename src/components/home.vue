@@ -826,7 +826,8 @@
                                         'x_end':element.x_end,
                                         'x_start':element.x_start,
                                         'y_end': element.y_end,
-                                        'y_start': element.y_start
+                                        'y_start': element.y_start,
+                                        'fixed': true,
                                     }
 
                                 });
