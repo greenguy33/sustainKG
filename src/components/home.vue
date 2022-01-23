@@ -852,9 +852,9 @@
                     {
                         title: 'Change Concept Name',
                         action:(node_id)=>{
-                            if(this.config.Citations === true) {
-                                this.dialogFormVisible_change_node_name = true;
-                            }
+                            // if(this.config.Citations === true) {
+                            this.dialogFormVisible_change_node_name = true;
+                            // }
 
                             // this.dialogFormVisible_relationship = true;
                             this.node_id = node_id;
