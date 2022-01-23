@@ -810,7 +810,7 @@
                                 let node_to_string = this.info.nodes.map(function (element) {
                                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                                         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                                        'x':element.x, 'y':element.y, 'fx':element.x, 'fy':element.y
+                                        'x':element.x, 'y':element.y, 'fx':element.x, 'fy':element.y, 'fixed': true
                                     };
                                 });
 
