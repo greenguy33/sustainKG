@@ -856,7 +856,7 @@
                                 this.dialogFormVisible_change_node_name = true;
                             }
 
-                            this.dialogFormVisible_relationship = true;
+                            // this.dialogFormVisible_relationship = true;
                             this.node_id = node_id;
 
                         },
