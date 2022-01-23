@@ -887,7 +887,7 @@
                                 let node_to_string = this.info.nodes.map(function (element) {
                                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                                         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                                        'x':element.x, 'y':element.y
+                                        'x':element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
                                     };
                                 });
 
@@ -903,7 +903,8 @@
                                         'x_end':element.x_end,
                                         'x_start':element.x_start,
                                         'y_end': element.y_end,
-                                        'y_start': element.y_start
+                                        'y_start': element.y_start,
+                                        'fixed': true
                                     }
 
                                 });
@@ -2180,9 +2181,11 @@
                 // this.optionVisible = false;
                 // this.optionVisible_link = false;
                 this.btnChangeEnable = true;
+
                 let node_to_string = this.info.nodes.map(function (element) {
                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                        'x': element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
                     };
                 });
 
@@ -2194,7 +2197,13 @@
                         "id": element.id,
                         "type": element.type,
                         "properties": {},
-                        "label": element.label}
+                        "label": element.label,
+                        'x_end':element.x_end,
+                        'x_start':element.x_start,
+                        'y_end':element.y_end,
+                        'y_start':element.y_start,
+                        'fixed': true
+                    }
 
                 });
 
@@ -2220,6 +2229,7 @@
                 let node_to_string = this.info.nodes.map(function (element) {
                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                        'x': element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
                     };
                 });
 
@@ -2231,7 +2241,13 @@
                         "id": element.id,
                         "type": element.type,
                         "properties": {},
-                        "label": element.label}
+                        "label": element.label,
+                        'x_end':element.x_end,
+                        'x_start':element.x_start,
+                        'y_end':element.y_end,
+                        'y_start':element.y_start,
+                        'fixed': true
+                    }
 
                 });
 
@@ -2276,6 +2292,7 @@
                     let node_to_string = this.info.nodes.map(function (element) {
                         return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                             'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                            'x': element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
                         };
                     });
 
@@ -2286,8 +2303,14 @@
                             "target": element.target.id,
                             "id": element.id,
                             "type": element.type,
-                            "properties": element.properties,
-                            "label": element.label}
+                            "properties": {},
+                            "label": element.label,
+                            'x_end':element.x_end,
+                            'x_start':element.x_start,
+                            'y_end':element.y_end,
+                            'y_start':element.y_start,
+                            'fixed': true
+                        }
 
                     });
 
@@ -2317,30 +2340,7 @@
                 }
             },
 
-            addLinks()
-            {
-                console.log('add link',this.optionVisible,this.optionVisible_link);
 
-                this.dialogFormVisible_link = false;
-
-                if (this.temp.length === 2) {
-                    this.singleClick(this.info, this.selected_Node, this.link_value);
-                }
-
-                this.$message(
-
-                    {
-                        type: 'success',
-                        message: 'Add Links!'
-                    });
-                this.btnChangeEnable = true;
-                // this.optionVisible = false;
-                // this.optionVisible_link = false;
-
-
-                this.selectClear()
-
-            },
 
             select_relationship(){
                 console.log('selected relationship: ',this.relationship);
@@ -2435,7 +2435,7 @@
                             return {
                                 'id': element.id, 'type': element.type, 'properties': {'name': element.properties.name},
                                 'label': element.label, 'snippet': element.snippet, 'if_expanded': element.if_expanded,
-                                'x':element.x, 'y':element.y
+                                'x':element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
                             };
                         });
                         let link_to_string;
@@ -2451,7 +2451,8 @@
                                     'x_end':element.x_end,
                                     'x_start':element.x_start,
                                     'y_end': element.y_end,
-                                    'y_start': element.y_start
+                                    'y_start': element.y_start,
+                                    'fixed': true
                                 }
 
                             });
@@ -2463,7 +2464,12 @@
                                     "id": element.id,
                                     "type": element.type,
                                     "properties": {'citation': element.properties.citation},
-                                    "label": element.label
+                                    "label": element.label,
+                                    'x_end':element.x_end,
+                                    'x_start':element.x_start,
+                                    'y_end': element.y_end,
+                                    'y_start': element.y_start,
+                                    'fixed': true
                                 }
 
                             });
@@ -3460,7 +3466,7 @@
                     let node_to_string = this.info.nodes.map(function (element) {
                         return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                             'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                            'x': element.x, 'y':element.y
+                            'x': element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
                         };
                     });
 
@@ -3476,7 +3482,8 @@
                             'x_end':element.x_end,
                             'x_start':element.x_start,
                             'y_end':element.y_end,
-                            'y_start':element.y_start
+                            'y_start':element.y_start,
+                            'fixed': true
                         }
 
                     });
