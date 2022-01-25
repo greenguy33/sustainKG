@@ -3617,37 +3617,37 @@
 
                     this.info.nodes.push(new_node);
 
-                    // let node_to_string = this.info.nodes.map(function (element) {
-                    //     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                    //         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                    //         'x': element.x, 'y':element.y, 'fixed': true
-                    //     };
-                    // });
-                    //
-                    //
-                    // let link_to_string = this.info.links.map(function (element) {
-                    //     return {
-                    //         "source": element.source.id,
-                    //         "target": element.target.id,
-                    //         "id": element.id,
-                    //         "type": element.type,
-                    //         "properties": {},
-                    //         "label": element.label,
-                    //         'x_end':element.x_end,
-                    //         'x_start':element.x_start,
-                    //         'y_end':element.y_end,
-                    //         'y_start':element.y_start,
-                    //         'fixed': true
-                    //     }
-                    //
-                    // });
-                    //
-                    // console.log('stringfy node', node_to_string);
-                    // console.log('stringfy links', link_to_string);
-                    //
-                    // let new_info = [];
-                    // new_info.nodes = node_to_string;
-                    // new_info.links = link_to_string;
+                    let node_to_string = this.info.nodes.map(function (element) {
+                        return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                            'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                            'fixed': true
+                        };
+                    });
+
+
+                    let link_to_string = this.info.links.map(function (element) {
+                        return {
+                            "source": element.source.id,
+                            "target": element.target.id,
+                            "id": element.id,
+                            "type": element.type,
+                            "properties": {},
+                            "label": element.label,
+                            'x_end':element.x_end,
+                            'x_start':element.x_start,
+                            'y_end':element.y_end,
+                            'y_start':element.y_start,
+                            'fixed': true
+                        }
+
+                    });
+
+                    console.log('stringfy node', node_to_string);
+                    console.log('stringfy links', link_to_string);
+
+                    let new_info = [];
+                    new_info.nodes = node_to_string;
+                    new_info.links = link_to_string;
 
                     this.renderGraph(this.info);
 
