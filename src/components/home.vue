@@ -1203,64 +1203,85 @@
                     }).then(response =>{
 
                         console.log('check the credential',response);
+                        if(response.status === 204)
+                        {
+
+                            this.$message(
+
+                                {
+                                    type: 'warning',
+                                    message: 'Password for '+ this.username +' is wrong!'
+                                });
+                            this.showLogin = true;
+                            this.changeUserVisible = true;
+                            this.username = '';
+                            this.password = '';
+                            this.newUsername = '';
+                            this.newPassword = '';
+                        }
+                        else{
+
+                            this.$axios({
+                                url: '/getUserGraph',
+                                method: 'post',
+                                data: {
+                                    user: this.change_username,
+
+                                }
+
+                            }).then(response => {
+                                if (response.status === 204) {
+                                    this.$message(
+                                        {
+                                            type: 'warning',
+                                            message: 'User username does not exist !'
+                                        });
+
+                                    this.changeUserVisible = true;
+                                }
+                                this.username = this.change_username;
+                                this.changeUserVisible = false;
+                                let user_nodes = response.data.nodes;
+                                let user_links = response.data.links;
+                                // let test = response.data;
+
+                                let change_node_type = user_nodes.map(function (element) {
+                                    element.id = Number(element.id);
+                                    return element
+                                });
+
+                                let change_link_type = user_links.map(function (element) {
+                                    element.id = Number(element.id);
+                                    element.source = Number(element.source);
+                                    element.target = Number(element.target);
+                                    return element
+                                });
+
+
+                                this.info.nodes = change_node_type;
+                                this.info.links = change_link_type;
+                                this.current_user = response.data.user;
+                                this.$message(
+
+                                    {
+                                        type: 'success',
+                                        message: 'Welcome Back, ' + this.current_user
+                                    });
+                                this.renderGraph(this.info);
+
+                                // else {
+                                //     this.$router.push({
+                                //         name: 'home',
+                                //         params: {username: this.username}
+                                //     })
+                                // }
+                            })
+
+                        }
 
                     });
 
-                    this.$axios({
-                        url: '/getUserGraph',
-                        method: 'post',
-                        data: {
-                            user: this.change_username,
 
-                        }
-
-                    }).then(response => {
-                        if (response.status === 204) {
-                            this.$message(
-                                {
-                                    type: 'warning',
-                                    message: 'Wrong username !'
-                                });
-
-                            this.changeUserVisible = true;
-                        }
-                        this.username = this.change_username;
-                        this.changeUserVisible = false;
-                        let user_nodes = response.data.nodes;
-                        let user_links = response.data.links;
-                        // let test = response.data;
-
-                        let change_node_type = user_nodes.map(function (element) {
-                            element.id = Number(element.id);
-                            return element
-                        });
-
-                        let change_link_type = user_links.map(function (element) {
-                            element.id = Number(element.id);
-                            element.source = Number(element.source);
-                            element.target = Number(element.target);
-                            return element
-                        });
-
-
-                        this.info.nodes = change_node_type;
-                        this.info.links = change_link_type;
-                        this.current_user = response.data.user;
-                        this.$message(
-
-                            {
-                                type: 'success',
-                                message: 'Welcome Back, ' + this.current_user
-                            });
-                        this.renderGraph(this.info);
-
-                        // else {
-                        //     this.$router.push({
-                        //         name: 'home',
-                        //         params: {username: this.username}
-                        //     })
-                        // }
-                    })
                 }
 
             },
@@ -1965,8 +1986,8 @@
                         }
                 }).then(response=>{
                     this.username = this.newUsername;
-                    // this.password = this.newPassword;
-                    // this.newPassword = '';
+                    this.password = this.newPassword;
+                    this.newPassword = '';
                     this.newUsername = '';
                     console.log(response);
                     if(response.status === 204)
@@ -1979,9 +2000,11 @@
                                 message: 'The username already exists!'
                             });
                         this.showLogin = true;
-                        this.dialog_createUser  = true;
+
                         this.username = '';
-                        // this.password = '';
+                        this.password = '';
+                        this.newUsername = '';
+                        this.newPassword = '';
                     }
                     else {
 
