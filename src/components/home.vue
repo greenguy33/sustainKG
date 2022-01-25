@@ -143,7 +143,7 @@
                 :visible.sync="changeUserVisible"
                 width="30%"
                 center>
-            <span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='login'></el-input></span>
+            <span>Username<el-input v-model="change_username" placeholder="Please Input Username" @keyup.native.enter='login'></el-input></span>
             <br><br>
             <!--<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>-->
             <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
@@ -682,6 +682,7 @@
                 username:this.$route.params.username,
                 // password:this.$route.params.password,
                 newUsername:'',
+                change_username:'',
                 // newPassword:'',
                 showLogin:true,
                 centerDialogVisible:false,
@@ -1176,7 +1177,7 @@
 
             login() {
 
-                if ( this.username === '') {
+                if ( this.change_username === '') {
                     this.$message(
                         {
                             type: 'warning',
@@ -1188,8 +1189,8 @@
                         url: '/getUserGraph',
                         method: 'post',
                         data: {
-                            user: this.username,
-                            password: this.password
+                            user: this.change_username,
+                            // password: this.password
 
                         }
 
@@ -1203,7 +1204,7 @@
 
                             this.changeUserVisible = true;
                         }
-
+                        this.username = this.change_username
                         // else {
                         //     this.$router.push({
                         //         name: 'home',
