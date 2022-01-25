@@ -1188,9 +1188,7 @@
                     this.axios({
                         url: '/checkUserCredentials',
                         method:' get',
-                        data: {
-                            user : this.change_username
-                        }
+
                     }).then(response =>{
 
                         console.log('check the credential',response);
@@ -1344,6 +1342,7 @@
                     this.$axios({
                         url: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=intitle:+"+this.input+"+&srprop=snippet&format=json&origin=*&callback=",
                         method:'get'
+
                     }).then(response =>{
                         let term = [];
                         console.log(response.data);
