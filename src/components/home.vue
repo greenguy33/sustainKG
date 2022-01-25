@@ -1210,14 +1210,14 @@
 
                                 {
                                     type: 'warning',
-                                    message: 'Password for '+ this.username +' is wrong!'
+                                    message: 'Password for '+ this.change_username +' is wrong!'
                                 });
                             this.showLogin = true;
                             this.changeUserVisible = true;
-                            this.username = '';
+                            // this.username = '';
                             this.password = '';
-                            this.newUsername = '';
-                            this.newPassword = '';
+                            this.change_username = '';
+
                         }
                         else{
 
@@ -1240,6 +1240,8 @@
                                     this.changeUserVisible = true;
                                 }
                                 this.username = this.change_username;
+                                this.change_username = '';
+                                this.password = '';
                                 this.changeUserVisible = false;
                                 let user_nodes = response.data.nodes;
                                 let user_links = response.data.links;
@@ -1985,11 +1987,7 @@
                             "password" : this.newPassword
                         }
                 }).then(response=>{
-                    this.username = this.newUsername;
-                    this.password = this.newPassword;
-                    this.newPassword = '';
-                    this.newUsername = '';
-                    console.log(response);
+
                     if(response.status === 204)
                     {
 
@@ -2001,13 +1999,18 @@
                             });
                         this.showLogin = true;
 
-                        this.username = '';
-                        this.password = '';
+                        // this.username = '';
+                        // this.password = '';
                         this.newUsername = '';
                         this.newPassword = '';
                     }
                     else {
 
+                        this.username = this.newUsername;
+                        this.password = this.newPassword;
+                        this.newPassword = '';
+                        this.newUsername = '';
+                        console.log(response);
 
                         this.$axios({
                             url: '/getUserGraph',
