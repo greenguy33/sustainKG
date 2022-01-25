@@ -1975,7 +1975,7 @@
 
             createUser:function(){
 
-                this.dialog_createUser  = false;
+
                 console.log('create user function',this.newUsername)
 
                 this.$axios({
@@ -1997,7 +1997,7 @@
                                 type: 'warning',
                                 message: 'The username already exists!'
                             });
-                        this.showLogin = true;
+                        // this.showLogin = true;
 
                         // this.username = '';
                         // this.password = '';
@@ -2005,7 +2005,7 @@
                         this.newPassword = '';
                     }
                     else {
-
+                        this.dialog_createUser  = false;
                         this.username = this.newUsername;
                         this.password = this.newPassword;
                         this.newPassword = '';
