@@ -1185,6 +1185,18 @@
                         });
                 }else {
 
+                    this.axios({
+                        url: '/checkUserCredentials',
+                        method:' get',
+                        data: {
+                            user : this.change_username
+                        }
+                    }).then(response =>{
+
+                        console.log('check the credential',response);
+
+                    });
+
                     this.$axios({
                         url: '/getUserGraph',
                         method: 'post',
