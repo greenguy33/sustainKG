@@ -1187,7 +1187,11 @@
 
                     this.axios({
                         url: '/checkUserCredentials',
-                        method:' get',
+                        method:' post',
+                        data: {
+                            user: this.change_username,
+
+                        }
 
                     }).then(response =>{
 
@@ -1200,7 +1204,6 @@
                         method: 'post',
                         data: {
                             user: this.change_username,
-                            // password: this.password
 
                         }
 
