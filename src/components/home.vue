@@ -1960,7 +1960,7 @@
                     data :
                         {
                             "user" : this.newUsername,
-                            // "password" : this.newPassword
+                            "password" : this.newPassword
                         }
                 }).then(response=>{
                     this.username = this.newUsername;
