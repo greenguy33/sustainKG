@@ -16,7 +16,7 @@
                     <el-button style="margin-right: 10px;"  @click="onTapLogin" v-show="showLogin" size="small" round
                                :disabled="true" type="primary" >Login</el-button>
 
-                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round>{{username}}</el-button>
+                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round @click="changeUser">{{username}}</el-button>
                     <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
 
                 </template>
@@ -137,7 +137,37 @@
         </el-container>
 
 
+        <el-dialog
+                :close-on-click-modal="false"
+                title="Login"
+                :visible.sync="changeUserVisible"
+                width="30%"
+                center>
+            <span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='login'></el-input></span>
+            <br><br>
+            <!--<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>-->
+            <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click.native="changeUserVisible=false">No</el-button>
+            <el-button type="primary" @click.native="login" >Yes</el-button>
+          </span>
+        </el-dialog>
 
+
+        <el-dialog
+                :close-on-click-modal="false"
+                title="Create New Account"
+                :visible.sync="dialog_createUser"
+                width="30%"
+                center>
+            <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
+            <br><br>
+            <!--<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>-->
+            <span slot="footer" class="dialog-footer">
+            <el-button @click.native="dialog_createUser=false; centerDialogVisible=true">No</el-button>
+            <el-button type="primary" @click="createUser" >Yes</el-button>
+          </span>
+        </el-dialog>
 
 
 
@@ -748,6 +778,7 @@
                 dialogFormVisible_change_node_name:false,
                 dialogFormVisible_change_link_name:false,
                 dialogFormVisible_instruction:false,
+                changeUserVisible:false,
                 temp : [],
                 clickTimeId : 0,
 
@@ -1136,6 +1167,51 @@
                     navigator.sendBeacon("https://graphdb.ics.uci.edu/api/postUserGraph", JSON.stringify(data));
                 }
 
+
+            },
+
+            changeUser(){
+                this.changeUserVisible = true;
+            },
+
+            login() {
+
+                if ( this.username === '') {
+                    this.$message(
+                        {
+                            type: 'warning',
+                            message: 'The username cannot be empty'
+                        });
+                }else {
+
+                    this.$axios({
+                        url: '/getUserGraph',
+                        method: 'post',
+                        data: {
+                            user: this.username,
+                            password: this.password
+
+                        }
+
+                    }).then(response => {
+                        if (response.status === 204) {
+                            this.$message(
+                                {
+                                    type: 'warning',
+                                    message: 'Wrong username !'
+                                });
+
+                            this.changeUserVisible = true;
+                        }
+
+                        // else {
+                        //     this.$router.push({
+                        //         name: 'home',
+                        //         params: {username: this.username}
+                        //     })
+                        // }
+                    })
+                }
 
             },
 
