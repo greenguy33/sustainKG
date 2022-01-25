@@ -2013,7 +2013,7 @@
                             this.info.nodes = change_node_type;
                             this.info.links = change_link_type;
                             this.current_user = response.data.user;
-
+                            this.changeUserVisible = false;
                             this.renderGraph(this.info)
 
 
