@@ -1184,10 +1184,10 @@
                             message: 'The username cannot be empty'
                         });
                 }else {
-
+                    console.log('hahahaha');
                     this.$axios({
                         url: '/checkUserCredentials',
-                        method:' post',
+                        method: 'post',
                         data: {
                             user: this.change_username,
 
