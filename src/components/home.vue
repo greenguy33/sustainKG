@@ -3649,7 +3649,7 @@
                     new_info.nodes = node_to_string;
                     new_info.links = link_to_string;
 
-                    this.renderGraph(this.info);
+                    this.renderGraph(new_info);
 
                     // this.renderGraph(this.info);
                     return true
