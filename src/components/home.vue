@@ -1204,7 +1204,36 @@
 
                             this.changeUserVisible = true;
                         }
-                        this.username = this.change_username
+                        this.username = this.change_username;
+                        this.changeUserVisible = false;
+                        let user_nodes = response.data.nodes;
+                        let user_links = response.data.links;
+                        // let test = response.data;
+
+                        let change_node_type = user_nodes.map(function (element) {
+                            element.id = Number(element.id);
+                            return element
+                        });
+
+                        let change_link_type = user_links.map(function (element) {
+                            element.id = Number(element.id);
+                            element.source = Number(element.source);
+                            element.target = Number(element.target);
+                            return element
+                        });
+
+
+                        this.info.nodes = change_node_type;
+                        this.info.links = change_link_type;
+                        this.current_user = response.data.user;
+                        this.$message(
+
+                            {
+                                type: 'success',
+                                message: 'Welcome Back, ' + this.current_user
+                            });
+                        this.renderGraph(this.info);
+
                         // else {
                         //     this.$router.push({
                         //         name: 'home',
