@@ -685,6 +685,7 @@
                 current_user:'',
                 username:this.$route.params.username,
                 // password:this.$route.params.password,
+                password:'',
                 newUsername:'',
                 change_username:'',
                 newPassword:'',
