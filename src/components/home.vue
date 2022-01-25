@@ -143,7 +143,9 @@
                 :visible.sync="changeUserVisible"
                 width="30%"
                 center>
-            <span>Username<el-input v-model="change_username" placeholder="Please Input Username" @keyup.native.enter='login'></el-input></span>
+            <span>Username<el-input v-model="change_username" placeholder="Please Input Username" ></el-input></span>
+            <span>Password<el-input v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>
+
             <br><br>
             <!--<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>-->
             <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
@@ -161,6 +163,7 @@
                 width="30%"
                 center>
             <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
+            <span>Password<el-input v-model="newPassword" placeholder="Please Input Password"></el-input></span>
             <br><br>
             <!--<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>-->
             <span slot="footer" class="dialog-footer">
@@ -172,37 +175,38 @@
 
 
         <!--下面是对话框集合 与界面无关-->
-        <el-dialog
-                :close-on-click-modal="false"
-                title="Login"
-                :visible.sync="centerDialogVisible"
+        <!--<el-dialog-->
+                <!--:close-on-click-modal="false"-->
+                <!--title="Login"-->
+                <!--:visible.sync="centerDialogVisible"-->
 
-                width="30%"
-                center>
-            <span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='handleShow'></el-input></span>
-            <br><br>
-            <!--<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='handleShow'></el-input></span>-->
-            <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
-            <span slot="footer" class="dialog-footer">
-            <el-button @click.native="centerDialogVisible=false">No</el-button>
-            <el-button type="primary" @click.native="handleShow" >Yes</el-button>
-          </span>
-        </el-dialog>
+                <!--width="30%"-->
+                <!--center>-->
+            <!--<span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='handleShow'></el-input></span>-->
 
-        <el-dialog
-                :close-on-click-modal="false"
-                title="Create New Account"
-                :visible.sync="dialog_createUser"
-                width="30%"
-                center>
-            <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
-            <br><br>
-            <!--<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>-->
-            <span slot="footer" class="dialog-footer">
-            <el-button @click.native="dialog_createUser=false">Cancel</el-button>
-            <el-button type="primary" @click="createUser" >Submit</el-button>
-          </span>
-        </el-dialog>
+            <!--<br><br>-->
+            <!--&lt;!&ndash;<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='handleShow'></el-input></span>&ndash;&gt;-->
+            <!--<el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>-->
+            <!--<span slot="footer" class="dialog-footer">-->
+            <!--<el-button @click.native="centerDialogVisible=false">No</el-button>-->
+            <!--<el-button type="primary" @click.native="handleShow" >Yes</el-button>-->
+          <!--</span>-->
+        <!--</el-dialog>-->
+
+        <!--<el-dialog-->
+                <!--:close-on-click-modal="false"-->
+                <!--title="Create New Account"-->
+                <!--:visible.sync="dialog_createUser"-->
+                <!--width="30%"-->
+                <!--center>-->
+            <!--<span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>-->
+            <!--<br><br>-->
+            <!--&lt;!&ndash;<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>&ndash;&gt;-->
+            <!--<span slot="footer" class="dialog-footer">-->
+            <!--<el-button @click.native="dialog_createUser=false">Cancel</el-button>-->
+            <!--<el-button type="primary" @click="createUser" >Submit</el-button>-->
+          <!--</span>-->
+        <!--</el-dialog>-->
 
 
 
@@ -683,7 +687,7 @@
                 // password:this.$route.params.password,
                 newUsername:'',
                 change_username:'',
-                // newPassword:'',
+                newPassword:'',
                 showLogin:true,
                 centerDialogVisible:false,
                 dialog_createUser:false,
@@ -1190,6 +1194,8 @@
                         method: 'post',
                         data: {
                             user: this.change_username,
+                            password: this.password
+
 
                         }
 
@@ -2727,6 +2733,7 @@
                 let force = d3.layout.force()//layout将json格式转化为力学图可用的格式
                     .nodes(nodes)//设定节点数组
                     .links(links)//设定连线数组
+
                     .linkDistance(700)//连接线长度
                     .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
                     .on("tick", function (){
