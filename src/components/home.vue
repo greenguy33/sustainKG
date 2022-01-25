@@ -1212,7 +1212,7 @@
                                     type: 'warning',
                                     message: 'Password for '+ this.change_username +' is wrong!'
                                 });
-                            this.showLogin = true;
+                            // this.showLogin = true;
                             this.changeUserVisible = true;
                             // this.username = '';
                             this.password = '';
