@@ -2,7 +2,7 @@
 
 <template>
 
-    <div id="app" v-title data-title="SustainKG" >
+    <div id="app" v-title data-title="SustainKG" @click="getMouseXY($event)" >
 
         <el-header style="text-align: right;height:40px;">
 
@@ -1093,6 +1093,12 @@
             //     let a = window.navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/postUserGraph",JSON.stringify(data));
             //
             // },
+
+            getMouseXY(e){
+                console.log('mouse position',e.x, e.y);
+
+
+            },
 
             beforeunloadHandler(e) {
 
@@ -2815,7 +2821,6 @@
 
                     .on("dblclick", (node, i)=>{
                         console.log('svg node',node,i,d3.select(d3.event.target).datum())
-                        getMousePos(this);
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
 
@@ -2957,10 +2962,7 @@
                 svg.on("dblclick.zoom", null);//取消svg和圆圈的双击放大事件（d3中默认开启7个事件，关闭防止与上面的双击事件冲突）
                 circle_g.on("dblclick.zoom", null);
 
-                function getMousePos(event) {            //event是一个声明了全局变量的一个对象
-                    let e = event || window.event;       //Firefox下是没有event这个对象的！！
-                    return { "x": e.screenX, "y": screenY };
-                }
+
 
 
 
