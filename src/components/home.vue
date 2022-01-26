@@ -1095,7 +1095,9 @@
             // },
 
             getMouseXY(e){
-                console.log('mouse position',e.x, e.y);
+                console.log('mouse position',e.x, e.y,
+                    e.currentTarget.getBoundingClientRect().x,
+                    e.currentTarget.getBoundingClientRect().y);
 
 
             },
