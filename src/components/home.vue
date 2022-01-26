@@ -2823,6 +2823,7 @@
 
                     .on("dblclick", (node, i)=>{
                         console.log('svg node',node,i,d3.select(d3.event.target).datum())
+                        console.log('d3 event', d3.event);
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
 
