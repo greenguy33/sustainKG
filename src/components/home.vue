@@ -2,7 +2,7 @@
 
 <template>
 
-    <div id="app" v-title data-title="SustainKG" @click="getMouseXY($event)" >
+    <div id="app" v-title data-title="SustainKG"  >
 
         <el-header style="text-align: right;height:40px;">
 
@@ -28,7 +28,7 @@
 
         <!--<el-divider direction="horizontal" content-position="center"/>-->
 
-        <el-container>
+        <el-container >
 
             <!--<el-row class="tac">-->
             <el-aside width="200px">
@@ -124,7 +124,7 @@
 
 
 
-            <el-main >
+            <el-main @click="getMouseXY($event)" >
                 <el-row id="graph"></el-row>
                 <!--<div id="graph"></div>-->
             </el-main>
