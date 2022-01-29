@@ -858,7 +858,7 @@
                                         "target": element.target.id,
                                         "id": element.id,
                                         "type": element.type,
-                                        "properties": {},
+                                        "citation": {},
                                         "label": element.label,
                                         'x_end':element.x_end,
                                         'x_start':element.x_start,
@@ -2357,7 +2357,7 @@
                         "target": element.target.id,
                         "id": element.id,
                         "type": element.type,
-                        "properties": {},
+                        "citation": {},
                         "label": element.label,
                         'x_end':element.x_end,
                         'x_start':element.x_start,
@@ -2401,7 +2401,7 @@
                         "target": element.target.id,
                         "id": element.id,
                         "type": element.type,
-                        "properties": {},
+                        "citation": {},
                         "label": element.label,
                         'x_end':element.x_end,
                         'x_start':element.x_start,
@@ -2441,7 +2441,7 @@
                 if(pattern.test(this.new_reference)) {
 
                     this.info.links[this.link_id].label = this.new_relationship;
-                    this.info.links[this.link_id].properties.citation = this.new_reference;
+                    this.info.links[this.link_id].citation = this.new_reference;
                     this.dialogFormVisible_change_link_name = false;
 
                     this.btnChangeEnable = true;
@@ -2464,7 +2464,7 @@
                             "target": element.target.id,
                             "id": element.id,
                             "type": element.type,
-                            "properties": {},
+                            "citation": {},
                             "label": element.label,
                             'x_end':element.x_end,
                             'x_start':element.x_start,
@@ -2547,7 +2547,7 @@
                                     "target": this.end,
                                     "id": this.info.links.length,
                                     "type": 'link',
-                                    "properties": {},
+                                    "citation": {},
                                     "label": this.relationship
 
                                 };
@@ -2558,7 +2558,7 @@
                                     "target": this.end,
                                     "id": this.info.links.length,
                                     "type": 'link',
-                                    "properties": {'citation': this.reference},
+                                    "citation": this.reference,
                                     "label": this.relationship
 
                                 };
@@ -2607,7 +2607,7 @@
                                     "target": element.target.id,
                                     "id": element.id,
                                     "type": element.type,
-                                    "properties": {},
+                                    "citation": {},
                                     "label": element.label,
                                     'x_end':element.x_end,
                                     'x_start':element.x_start,
@@ -2624,7 +2624,7 @@
                                     "target": element.target.id,
                                     "id": element.id,
                                     "type": element.type,
-                                    "properties": {'citation': element.properties.citation},
+                                    "citation": element.citation,
                                     "label": element.label,
                                     'x_end':element.x_end,
                                     'x_start':element.x_start,
@@ -2814,8 +2814,10 @@
 
                     .attr("pointer-event", "all")
                     .attr("preserveAspectRatio", "xMidYMid meet")//自适应容器大小
-                    .attr("viewBox", "-500 -200 2000 2000")
+                    // .attr("viewBox", "-500 -200 2000 2000")
+                    .attr("viewBox", "0 0 200 200")
                     .call(zoom)
+
 
                     // .call(svg_drag)
                     .on('touchmove',null)
@@ -3154,10 +3156,10 @@
                                 circleText =  d.label.substring(0, 50) + '...)';
                             }
                             else{
-                                if(d.properties.citation === undefined){
+                                if(d.citation === undefined){
                                     circleText =  d.label.substring(0, 50) + '...)';
                                 }else {
-                                    circleText = d.label + ' (' + d.properties.citation.substring(0, 50) + '...)';
+                                    circleText = d.label + ' (' + d.citation.substring(0, 50) + '...)';
                                 }
                             }
 
@@ -3167,10 +3169,10 @@
                                 circleText = d.label ;
                             }
                             else{
-                                if(d.properties.citation === undefined){
+                                if(d.citation === undefined){
                                     circleText = d.label;
                                 }else {
-                                    circleText = d.label + ' (' + d.properties.citation + ')';
+                                    circleText = d.label + ' (' + d.citation + ')';
                                 }
                             }
                         }
@@ -3627,39 +3629,39 @@
 
                     this.info.nodes.push(new_node);
 
-                    // let node_to_string = this.info.nodes.map(function (element) {
-                    //     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                    //         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                    //         'x': element.x, 'y':element.y
-                    //     };
-                    // });
-                    //
-                    //
-                    // let link_to_string = this.info.links.map(function (element) {
-                    //     return {
-                    //         "source": element.source.id,
-                    //         "target": element.target.id,
-                    //         "id": element.id,
-                    //         "type": element.type,
-                    //         "properties": {},
-                    //         "label": element.label,
-                    //         'x_end':element.x_end,
-                    //         'x_start':element.x_start,
-                    //         'y_end':element.y_end,
-                    //         'y_start':element.y_start,
-                    //         //
-                    //     }
-                    //
-                    // });
-                    //
-                    // console.log('stringfy node', node_to_string);
-                    // console.log('stringfy links', link_to_string);
-                    //
-                    // let new_info = [];
-                    // new_info.nodes = node_to_string;
-                    // new_info.links = link_to_string;
+                    let node_to_string = this.info.nodes.map(function (element) {
+                        return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                            'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                            'x': element.x, 'y':element.y
+                        };
+                    });
 
-                    this.renderGraph(this.info);
+
+                    let link_to_string = this.info.links.map(function (element) {
+                        return {
+                            "source": element.source.id,
+                            "target": element.target.id,
+                            "id": element.id,
+                            "type": element.type,
+                            "properties": {},
+                            "label": element.label,
+                            'x_end':element.x_end,
+                            'x_start':element.x_start,
+                            'y_end':element.y_end,
+                            'y_start':element.y_start,
+
+                        }
+
+                    });
+
+                    console.log('stringfy node', node_to_string);
+                    console.log('stringfy links', link_to_string);
+
+                    let new_info = [];
+                    new_info.nodes = node_to_string;
+                    new_info.links = link_to_string;
+
+                    this.renderGraph(new_info);
 
                     // this.renderGraph(this.info);
                     return true
