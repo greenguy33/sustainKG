@@ -2823,11 +2823,17 @@
 
                     // .call(svg_drag)
                     .on('touchmove',null)
+                    .on('mousemove',function(evt){
+                        let loc = cursorPoint(evt);
+                        console.log('svm mouse',loc.x, loc.y);
+
+                    })
 
 
                     .on("dblclick", (node, i)=>{
                         console.log('svg node',node,i,d3.select(d3.event.target).datum())
                         console.log('d3 event', d3.event);
+
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
 
@@ -2845,6 +2851,14 @@
 
 
                     });
+
+                let pt = svg.createSVGPoint();
+
+                function cursorPoint(evt){
+                    pt.x = evt.clientX; pt.y = evt.clientY;
+                    // console.log('svm mouse',pt.x, pt.y);
+                    return pt.matrixTransform(svg.getScreenCTM().inverse());
+                }
 
                 // d3.selectAll('rect').on('mousedown.drag',null);
 
