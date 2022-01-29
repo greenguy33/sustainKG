@@ -3739,10 +3739,10 @@
                         "type": element.type, "id": String(element.id), "label": element.label,
                         "source": String(element.source.id), "target": String(element.target.id),
                         "citation": element.citation,
-                        "x_start":element.x_start,
-                        "x_end":element.x_end,
-                        "y_start":element.y_start,
-                        "y_end" : element.y_end
+                        "x_start":String(element.x_start),
+                        "x_end":String(element.x_end),
+                        "y_start":String(element.y_start),
+                        "y_end" : String(element.y_end)
                     }
                 });
                 //
