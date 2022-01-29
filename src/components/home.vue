@@ -124,7 +124,7 @@
 
 
 
-            <el-main @click="getMouseXY($event)" id="graph" >
+            <el-main @click="getMouseXY($event)" id="graph" width="200px" height="200px" >
                 <!--<el-row id="graph"></el-row>-->
                 <!--<div id="graph"></div>-->
             </el-main>
@@ -2814,7 +2814,7 @@
 
                     .attr("pointer-event", "all")
                     .attr("preserveAspectRatio", "xMidYMid meet")//自适应容器大小
-                    // .attr("viewBox", "-500 -200 2000 2000")
+                    .attr("viewBox", "-500 -200 200 200")
                     // .attr("viewBox", "0 0 1000 1000")
                     .call(zoom)
 
