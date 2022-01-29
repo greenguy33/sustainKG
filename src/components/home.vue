@@ -124,7 +124,7 @@
 
 
 
-            <el-main @click="getMouseXY($event)" id="graph" width="200px" height="200px" >
+            <el-main @click="getMouseXY($event)" id="graph" width="600px" height="600px" >
                 <!--<el-row id="graph"></el-row>-->
                 <!--<div id="graph"></div>-->
             </el-main>
