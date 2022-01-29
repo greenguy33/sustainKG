@@ -2823,11 +2823,12 @@
 
                     // .call(svg_drag)
                     .on('touchmove',null)
-                    .on('mousemove',function(evt){
-                        let loc = cursorPoint(evt);
-                        console.log('svm mouse',loc.x, loc.y);
 
-                    })
+                    // .on('mousemove',function(evt){
+                    //     let loc = cursorPoint(evt);
+                    //     console.log('svm mouse',loc.x, loc.y);
+                    //
+                    // })
 
 
                     .on("dblclick", (node, i)=>{
@@ -2851,14 +2852,20 @@
 
 
                     });
-
-                let pt = svg.createSVGPoint();
+                let svg_select = document.querySelector('svg');
+                let pt = svg_select.createSVGPoint();
 
                 function cursorPoint(evt){
                     pt.x = evt.clientX; pt.y = evt.clientY;
                     // console.log('svm mouse',pt.x, pt.y);
                     return pt.matrixTransform(svg.getScreenCTM().inverse());
                 }
+
+                svg_select.addEventListener('mousemove',function(evt){
+                    let loc = cursorPoint(evt);
+                    console.log('svm mouse',loc.x, loc.y);
+                    // Use loc.x and loc.y here
+                },false);
 
                 // d3.selectAll('rect').on('mousedown.drag',null);
 
