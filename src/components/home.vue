@@ -2858,7 +2858,7 @@
                 function cursorPoint(evt){
                     pt.x = evt.clientX; pt.y = evt.clientY;
                     // console.log('svm mouse',pt.x, pt.y);
-                    return pt.matrixTransform(svg.getScreenCTM().inverse());
+                    return pt.matrixTransform(svg_select.getScreenCTM().inverse());
                 }
 
                 svg_select.addEventListener('mousemove',function(evt){
