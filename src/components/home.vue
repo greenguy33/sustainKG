@@ -2811,7 +2811,23 @@
                 //     .on('drag',null)
                 //     .on('dragend',()=>{console.log('end')})
 
+                // find the mouse positions of the svg
+                let svg_select = document.querySelector('svg');
+                let pt = svg_select.createSVGPoint();
 
+                function cursorPoint(evt){
+                    pt.x = evt.clientX; pt.y = evt.clientY;
+                    // console.log('svm mouse',pt.x, pt.y);
+                    return pt.matrixTransform(svg_select.getScreenCTM().inverse());
+                }
+
+                svg_select.addEventListener('mousemove',function(evt){
+                    let loc = cursorPoint(evt);
+                    this.mouse_x = loc.x;
+                    this.mouse_y = loc.y;
+                    console.log('svm mouse !!!',this.mouse_x, this.mouse_y);
+                    // Use loc.x and loc.y here
+                },false);
 
                 let svg = d3.select("#graph").append("svg")
 
@@ -2857,23 +2873,7 @@
 
                     });
 
-                // find the mouse positions of the svg
-                let svg_select = document.querySelector('svg');
-                let pt = svg_select.createSVGPoint();
 
-                function cursorPoint(evt){
-                    pt.x = evt.clientX; pt.y = evt.clientY;
-                    // console.log('svm mouse',pt.x, pt.y);
-                    return pt.matrixTransform(svg_select.getScreenCTM().inverse());
-                }
-
-                svg_select.addEventListener('mousemove',function(evt){
-                    let loc = cursorPoint(evt);
-                    this.mouse_x = loc.x;
-                    this.mouse_y = loc.y;
-                    console.log('svm mouse !!!',this.mouse_x, this.mouse_y);
-                    // Use loc.x and loc.y here
-                },false);
 
                 // d3.selectAll('rect').on('mousedown.drag',null);
 
