@@ -3513,15 +3513,29 @@
 
 
 
-                    console.log(edges_line,links);
+                    // console.log(edges_line,links);
 
                     circle.attr("transform", transform1);//圆圈
                     text.attr("transform", transform2);//顶点文字
 
                     edges_line
                         .attr('d', function (d) {
+                            if(!isNaN(d.x_start) || !isNaN(d.x_end) || !isNaN(d.y_start) || !isNaN(d.y_end)){
 
-                            return getNodesLine(d);//曲线路径
+                                if(d.x_start<d.x_end) {
+
+                                    return 'M' + d.x_start + ' ' + d.y_start + "L" + +d.x_end + ' ' + d.y_end;//绘制直线
+                                }
+                                else if(d.x_start>=d.x_end) {
+
+                                    return 'M' + d.x_end + ' ' + d.y_end + "L" + +d.x_start + ' ' + d.y_start;//绘制直线
+
+                                }
+
+                            }
+                            else {
+                                return getNodesLine(d);//曲线路径
+                            }
 
                         });
 
