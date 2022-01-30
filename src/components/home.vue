@@ -3510,8 +3510,8 @@
 
 
                 function tick() {
-                    
-                    links.attr("x_start", function (d) {d.source.x;})
+
+                    edges_line.attr("x_start", function (d) {d.source.x;})
                         .attr("x_end", function (d) {d.target.x;})
                         .attr("y_start", function (d) {d.source.y;})
                         .attr("y_end", function (d) {d.target.y;});
