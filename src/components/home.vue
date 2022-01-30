@@ -3522,13 +3522,13 @@
                         .attr('d', function (d) {
                             if(!isNaN(d.x_start) || !isNaN(d.x_end) || !isNaN(d.y_start) || !isNaN(d.y_end)){
 
-                                if(d.x_start<d.x_end) {
+                                if(d.source.x<d.target.x) {
 
-                                    return 'M' + d.x_start + ' ' + d.y_start + "L" + +d.x_end + ' ' + d.y_end;//绘制直线
+                                    return 'M' + d.source.x + ' ' + d.source.y + "L" + +d.target.x + ' ' + d.target.y;//绘制直线
                                 }
-                                else if(d.x_start>=d.x_end) {
+                                else if(d.source.x>=d.target.x) {
 
-                                    return 'M' + d.x_end + ' ' + d.y_end + "L" + +d.x_start + ' ' + d.y_start;//绘制直线
+                                    return 'M' + d.target.x + ' ' + d.target.y + "L" + +d.source.x + ' ' + d.source.y;//绘制直线
 
                                 }
 
