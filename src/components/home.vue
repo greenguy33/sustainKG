@@ -793,6 +793,9 @@
                 new_link_name:'',
                 new_node_name:'',
 
+                mouse_x:0,
+                mouse_y:0,
+
                 menu: [
                     {
                         title: 'Delete Concept',
@@ -2816,7 +2819,7 @@
                     .attr("preserveAspectRatio", "xMidYMid meet")//自适应容器大小
                     // .attr('width', 921)
                     // .attr('height', 899)
-                    .attr("viewBox", "-500 -200 3000 1500")
+                    .attr("viewBox", "-500 -200 2000 2000")
                     // .attr("viewBox", "0 0 1000 1000")
                     .call(zoom)
 
@@ -2832,8 +2835,9 @@
 
 
                     .on("dblclick", (node, i)=>{
-                        console.log('svg node',node,i,d3.select(d3.event.target).datum())
+                        console.log('svg node',node,i,d3.select(d3.event.target).datum());
                         console.log('d3 event', d3.event);
+                        console.log('svm mouse',this.mouse_x, this.mouse_y);
 
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
@@ -2863,7 +2867,9 @@
 
                 svg_select.addEventListener('mousemove',function(evt){
                     let loc = cursorPoint(evt);
-                    console.log('svm mouse',loc.x, loc.y);
+                    this.mouse_x = loc.x;
+                    this.mouse_y = loc.y;
+                    // console.log('svm mouse',loc.x, loc.y);
                     // Use loc.x and loc.y here
                 },false);
 
