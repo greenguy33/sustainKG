@@ -793,8 +793,8 @@
                 new_link_name:'',
                 new_node_name:'',
 
-                mouse_x:0,
-                mouse_y:0,
+                mouse_x,
+                mouse_y,
 
                 menu: [
                     {
@@ -2856,6 +2856,8 @@
 
 
                     });
+
+                // find the mouse positions of the svg 
                 let svg_select = document.querySelector('svg');
                 let pt = svg_select.createSVGPoint();
 
