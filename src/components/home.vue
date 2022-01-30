@@ -3515,7 +3515,8 @@
                     //     .attr("x_end", function (d) {d.target.x;})
                     //     .attr("y_start", function (d) {d.source.y;})
                     //     .attr("y_end", function (d) {d.target.y;});
-
+                    
+                    // initial position
                     nodes.attr("x", function(d) { return d.x; })
                         .attr("y", function(d) { return d.y; });
 
