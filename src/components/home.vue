@@ -2686,7 +2686,7 @@
 
             renderGraph(info) {
 
-
+                let that = this;
 
                 if (this.viewGraph_btn_status === false && this.showLogin === false) {
                     this.disable_submit = true;
@@ -2811,23 +2811,7 @@
                 //     .on('drag',null)
                 //     .on('dragend',()=>{console.log('end')})
 
-                // find the mouse positions of the svg
-                let svg_select = document.querySelector('svg');
-                let pt = svg_select.createSVGPoint();
 
-                function cursorPoint(evt){
-                    pt.x = evt.clientX; pt.y = evt.clientY;
-                    // console.log('svm mouse',pt.x, pt.y);
-                    return pt.matrixTransform(svg_select.getScreenCTM().inverse());
-                }
-
-                svg_select.addEventListener('mousemove',function(evt){
-                    let loc = cursorPoint(evt);
-                    this.mouse_x = loc.x;
-                    this.mouse_y = loc.y;
-                    console.log('svm mouse !!!',this.mouse_x, this.mouse_y);
-                    // Use loc.x and loc.y here
-                },false);
 
                 let svg = d3.select("#graph").append("svg")
 
@@ -2853,7 +2837,9 @@
                     .on("dblclick", (node, i)=>{
                         console.log('svg node',node,i,d3.select(d3.event.target).datum());
                         console.log('d3 event', d3.event);
-                        console.log('svm mouse',this.mouse_x, this.mouse_y);
+                        
+
+                        console.log('svm mouse',that.mouse_x, that.mouse_y);
 
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
@@ -2872,6 +2858,25 @@
 
 
                     });
+
+
+                // find the mouse positions of the svg
+                let svg_select = document.querySelector('svg');
+                let pt = svg_select.createSVGPoint();
+
+                function cursorPoint(evt){
+                    pt.x = evt.clientX; pt.y = evt.clientY;
+                    // console.log('svm mouse',pt.x, pt.y);
+                    return pt.matrixTransform(svg_select.getScreenCTM().inverse());
+                }
+
+                svg_select.addEventListener('mousemove',function(evt){
+                    let loc = cursorPoint(evt);
+                    that.mouse_x = loc.x;
+                    that.mouse_y = loc.y;
+                    // console.log('svm mouse !!!',this.mouse_x, this.mouse_y);
+                    // Use loc.x and loc.y here
+                },false);
 
 
 
@@ -3172,7 +3177,7 @@
 
 
 
-                let that = this;
+
                 //设置线条上的文字
                 edges_text.append('textPath')
                     .attr('xlink:href', function (d, i) { return '#edgepath' + i })
