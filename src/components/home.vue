@@ -3510,6 +3510,14 @@
 
 
                 function tick() {
+                    
+                    links.attr("x_start", function (d) {d.source.x;})
+                        .attr("x_end", function (d) {d.target.x;})
+                        .attr("y_start", function (d) {d.source.y;})
+                        .attr("y_end", function (d) {d.target.y;});
+
+                    nodes.attr("x", function(d) { return d.x; })
+                        .attr("y", function(d) { return d.y; });
 
                     circle.attr("transform", transform1);//圆圈
                     text.attr("transform", transform2);//顶点文字
