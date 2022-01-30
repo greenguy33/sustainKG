@@ -2779,10 +2779,10 @@
 
                     .linkDistance(700)//连接线长度
                     .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
-                    // .on("tick", function (){
-                    //         tick()
-                    //     },
-                    // )//指时间间隔，隔一段时间刷新一次画面
+                    .on("tick", function (){
+                            tick()
+                        }
+                    )//指时间间隔，隔一段时间刷新一次画面
 
                     .start();//开始转换
 
@@ -3513,10 +3513,11 @@
 
 
 
-
+                    console.log(edges_line,links);
 
                     circle.attr("transform", transform1);//圆圈
                     text.attr("transform", transform2);//顶点文字
+
                     edges_line
                         .attr('d', function (d) {
 
