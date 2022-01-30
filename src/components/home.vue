@@ -1267,6 +1267,11 @@
                                     element.id = Number(element.id);
                                     element.source = Number(element.source);
                                     element.target = Number(element.target);
+                                    element.x_start = String(element.x_start);
+                                    element.x_end = String(element.x_end);
+                                    element.y_start = String(element.y_start);
+                                    element.y_end = String(element.y_end);
+
                                     return element
                                 });
 
@@ -2837,7 +2842,7 @@
                     .on("dblclick", (node, i)=>{
                         console.log('svg node',node,i,d3.select(d3.event.target).datum());
                         console.log('d3 event', d3.event);
-                        
+
 
                         console.log('svm mouse',that.mouse_x, that.mouse_y);
 
