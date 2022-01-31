@@ -2154,15 +2154,15 @@
                                     {"type":"link","id":9,"label":"causes","source":2,"target":8,"citation":"www.xixi.com"}]
                             ,
                             "nodes":
-                                [{"id":0,"type":"node","label":"Concept","properties":{"name":"B"},"fx":-233.93094779272644 , "fy":480.40879504333293},
-                                    {"id":1,"type":"node","label":"Concept","properties":{"name":"A"},"fx": 412.16742175502173, "fy":288.3537231763124 },
-                                    {"id":2,"type":"node","label":"Concept","properties":{"name":"Unicode subscripts and superscripts"},"fx":-24.355730040504362 , "fy":-168.00840455899814},
-                                    {"id":3,"type":"node","label":"Concept","properties":{"name":"P"},"fx": -265.7761991054809, "fy":99.67607753879349},
-                                    {"id":4,"type":"node","label":"Concept","properties":{"name":"O"},"fx":340.69744120313834 , "fy":-168.02449472166003},
-                                    {"id":5,"type":"node","label":"Concept","properties":{"name":"50 (number)"},"fx":14.575617913417108 , "fy":413.94742531291297},
-                                    {"id":6,"type":"node","label":"Concept","properties":{"name":"V"},"fx":-313.91506028531705 , "fy":-168.10370929458034},
-                                    {"id":7,"type":"node","label":"Concept","properties":{"name":"Fraktur"},"fx":300.31972234599897 , "fy":79.8999407499341},
-                                    {"id":8,"type":"node","label":"Concept","properties":{"name":"Palatalization (phonetics)"},"fx": 614.2978475991977, "fy":312.2183201318606}]
+                                [{"id":0,"type":"node","label":"Concept","properties":{"name":"B"},"x":-233.93094779272644 , "y":480.40879504333293},
+                                    {"id":1,"type":"node","label":"Concept","properties":{"name":"A"},"x": 412.16742175502173, "y":288.3537231763124 },
+                                    {"id":2,"type":"node","label":"Concept","properties":{"name":"Unicode subscripts and superscripts"},"x":-24.355730040504362 , "y":-168.00840455899814},
+                                    {"id":3,"type":"node","label":"Concept","properties":{"name":"P"},"x": -265.7761991054809, "y":99.67607753879349},
+                                    {"id":4,"type":"node","label":"Concept","properties":{"name":"O"},"x":340.69744120313834 , "y":-168.02449472166003},
+                                    {"id":5,"type":"node","label":"Concept","properties":{"name":"50 (number)"},"x":14.575617913417108 , "y":413.94742531291297},
+                                    {"id":6,"type":"node","label":"Concept","properties":{"name":"V"},"x":-313.91506028531705 , "y":-168.10370929458034},
+                                    {"id":7,"type":"node","label":"Concept","properties":{"name":"Fraktur"},"x":300.31972234599897 , "y":79.8999407499341},
+                                    {"id":8,"type":"node","label":"Concept","properties":{"name":"Palatalization (phonetics)"},"x": 614.2978475991977, "y":312.2183201318606}]
                         };
 
 
