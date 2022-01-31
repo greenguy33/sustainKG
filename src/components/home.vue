@@ -2165,9 +2165,11 @@
                                     {"id":8,"type":"node","label":"Concept","properties":{"name":"Palatalization (phonetics)"},"x": 614.2978475991977, "y":312.2183201318606}]
                         };
 
+                        this.info = test_info;
 
 
-                        this.renderGraph(test_info)
+
+                        this.renderGraph(this.info);
                     }
 
                 }).catch(error=>{
