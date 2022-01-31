@@ -3541,32 +3541,13 @@
                 function tick() {
 
 
-
-                    // console.log(edges_line,links);
-
                     circle.attr("transform", transform1);//圆圈
                     text.attr("transform", transform2);//顶点文字
 
-                    edges_line
-                        .attr('d', function (d) {
-                        //     if(!isNaN(d.x_start) || !isNaN(d.x_end) || !isNaN(d.y_start) || !isNaN(d.y_end)){
-                        //
-                        //         if(d.source.x<d.target.x) {
-                        //
-                        //             return 'M' + d.source.x + ' ' + d.source.y + "L" + +d.target.x + ' ' + d.target.y;//绘制直线
-                        //         }
-                        //         else if(d.source.x>=d.target.x) {
-                        //
-                        //             return 'M' + d.target.x + ' ' + d.target.y + "L" + +d.source.x + ' ' + d.source.y;//绘制直线
-                        //
-                        //         }
-                        //
-                        //     }
-                        //     else {
-                                return getNodesLine(d);//曲线路径
-                            // }
+                    edges_line.attr('d', function (d) {
 
-                        });
+                                return getNodesLine(d);//曲线路径
+                    });
 
 
 
@@ -3715,7 +3696,8 @@
                         'properties': {'name': input},
                         'label': 'Concept',
                         'snippet':snippet,
-                        'if_expanded':false
+                        'if_expanded':false,
+                        'weight':0
                     };
 
                     this.info.nodes.push(new_node);
