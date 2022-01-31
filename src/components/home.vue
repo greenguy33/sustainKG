@@ -3696,6 +3696,8 @@
 //
             doubleClick(info,nodes, input,snippet){
 
+                console.log('dbl mouse coordinate:',this.mouse_x, this.mouse_y);
+
                 let containSame = false;
 
                 for (let i = 0; i < this.info.nodes.length; i++) {
