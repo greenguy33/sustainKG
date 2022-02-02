@@ -3810,7 +3810,7 @@
                 this.upload_nodes = this.info.nodes.map(function (element) {
                     return {
                         "id": String(element.id), "type": element.type, "label": element.label, "properties": {
-                            "name": element.properties.name, 'x':(element.x), 'y':(element.y)
+                            "name": element.properties.name, 'x':String(element.x), 'y':String(element.y)
                         }
                     }
 
