@@ -3704,7 +3704,8 @@
                         'snippet':snippet,
                         'if_expanded':false,
                         "x":this.mouse_x,
-                        "y":this.mouse_y
+                        "y":this.mouse_y,
+                        'fixed':true
                     };
 
                     this.info.nodes.push(new_node);
