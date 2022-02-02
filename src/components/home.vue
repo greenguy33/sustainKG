@@ -3703,8 +3703,8 @@
                         'label': 'Concept',
                         'snippet':snippet,
                         'if_expanded':false,
-                        "x":this.mouse_x,
-                        "y":this.mouse_y
+                        // "x":this.mouse_x,
+                        // "y":this.mouse_y
                     };
 
                     this.info.nodes.push(new_node);
@@ -3725,10 +3725,10 @@
                             "type": element.type,
                             "properties": {},
                             "label": element.label,
-                            'x_end':element.x_end,
-                            'x_start':element.x_start,
-                            'y_end':element.y_end,
-                            'y_start':element.y_start,
+                            // 'x_end':element.x_end,
+                            // 'x_start':element.x_start,
+                            // 'y_end':element.y_end,
+                            // 'y_start':element.y_start,
 
                         }
 
