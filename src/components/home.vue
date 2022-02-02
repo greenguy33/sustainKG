@@ -2140,32 +2140,32 @@
                             });
 
 
-                        let test_info = {
-                            "links":
-                                [{"type":"link","id":0,"label":"inhibits","source":0,"target":1,"citation":"www.1.com"},
-                                    {"type":"link","id":1,"label":"causes","source":1,"target":2},
-                                    {"type":"link","id":2,"label":"causes","source":2,"target":0},
-                                    {"type":"link","id":3,"label":"causes","source":1,"target":3,"citation":"www.1.com"},
-                                    {"type":"link","id":4,"label":"inhibits","source":3,"target":4,"citation":"www.2.com"},
-                                    {"type":"link","id":5,"label":"causes","source":4,"target":5,"citation":"www.1.com"},
-                                    {"type":"link","id":6,"label":"inhibits","source":5,"target":6,"citation":"www.3.com"},
-                                    {"type":"link","id":7,"label":"causes","source":0,"target":6,"citation":"www.baba.com"},
-                                    {"type":"link","id":8,"label":"inhibits","source":6,"target":7,"citation":"www.baidu.com"},
-                                    {"type":"link","id":9,"label":"causes","source":2,"target":8,"citation":"www.xixi.com"}]
-                            ,
-                            "nodes":
-                                [{"id":0,"type":"node","label":"Concept","properties":{"name":"B"},"x":-233.93094779272644 , "y":480.40879504333293},
-                                    {"id":1,"type":"node","label":"Concept","properties":{"name":"A"},"x": 412.16742175502173, "y":288.3537231763124 },
-                                    {"id":2,"type":"node","label":"Concept","properties":{"name":"Unicode subscripts and superscripts"},"x":-24.355730040504362 , "y":-168.00840455899814},
-                                    {"id":3,"type":"node","label":"Concept","properties":{"name":"P"},"x": -265.7761991054809, "y":99.67607753879349},
-                                    {"id":4,"type":"node","label":"Concept","properties":{"name":"O"},"x":340.69744120313834 , "y":-168.02449472166003},
-                                    {"id":5,"type":"node","label":"Concept","properties":{"name":"50 (number)"},"x":14.575617913417108 , "y":413.94742531291297},
-                                    {"id":6,"type":"node","label":"Concept","properties":{"name":"V"},"x":-313.91506028531705 , "y":-168.10370929458034},
-                                    {"id":7,"type":"node","label":"Concept","properties":{"name":"Fraktur"},"x":300.31972234599897 , "y":79.8999407499341},
-                                    {"id":8,"type":"node","label":"Concept","properties":{"name":"Palatalization (phonetics)"},"x": 614.2978475991977, "y":312.2183201318606}]
-                        };
-
-                        this.info = test_info;
+                        // let test_info = {
+                        //     "links":
+                        //         [{"type":"link","id":0,"label":"inhibits","source":0,"target":1,"citation":"www.1.com"},
+                        //             {"type":"link","id":1,"label":"causes","source":1,"target":2},
+                        //             {"type":"link","id":2,"label":"causes","source":2,"target":0},
+                        //             {"type":"link","id":3,"label":"causes","source":1,"target":3,"citation":"www.1.com"},
+                        //             {"type":"link","id":4,"label":"inhibits","source":3,"target":4,"citation":"www.2.com"},
+                        //             {"type":"link","id":5,"label":"causes","source":4,"target":5,"citation":"www.1.com"},
+                        //             {"type":"link","id":6,"label":"inhibits","source":5,"target":6,"citation":"www.3.com"},
+                        //             {"type":"link","id":7,"label":"causes","source":0,"target":6,"citation":"www.baba.com"},
+                        //             {"type":"link","id":8,"label":"inhibits","source":6,"target":7,"citation":"www.baidu.com"},
+                        //             {"type":"link","id":9,"label":"causes","source":2,"target":8,"citation":"www.xixi.com"}]
+                        //     ,
+                        //     "nodes":
+                        //         [{"id":0,"type":"node","label":"Concept","properties":{"name":"B"},"x":-233.93094779272644 , "y":480.40879504333293},
+                        //             {"id":1,"type":"node","label":"Concept","properties":{"name":"A"},"x": 412.16742175502173, "y":288.3537231763124 },
+                        //             {"id":2,"type":"node","label":"Concept","properties":{"name":"Unicode subscripts and superscripts"},"x":-24.355730040504362 , "y":-168.00840455899814},
+                        //             {"id":3,"type":"node","label":"Concept","properties":{"name":"P"},"x": -265.7761991054809, "y":99.67607753879349},
+                        //             {"id":4,"type":"node","label":"Concept","properties":{"name":"O"},"x":340.69744120313834 , "y":-168.02449472166003},
+                        //             {"id":5,"type":"node","label":"Concept","properties":{"name":"50 (number)"},"x":14.575617913417108 , "y":413.94742531291297},
+                        //             {"id":6,"type":"node","label":"Concept","properties":{"name":"V"},"x":-313.91506028531705 , "y":-168.10370929458034},
+                        //             {"id":7,"type":"node","label":"Concept","properties":{"name":"Fraktur"},"x":300.31972234599897 , "y":79.8999407499341},
+                        //             {"id":8,"type":"node","label":"Concept","properties":{"name":"Palatalization (phonetics)"},"x": 614.2978475991977, "y":312.2183201318606}]
+                        // };
+                        //
+                        // this.info = test_info;
 
 
 
@@ -3805,7 +3805,7 @@
                 this.upload_nodes = this.info.nodes.map(function (element) {
                     return {
                         "id": String(element.id), "type": element.type, "label": element.label, "properties": {
-                            "name": element.properties.name
+                            "name": element.properties.name, 'x':element.x, 'y':element.y
                         }
                     }
 
@@ -3816,10 +3816,10 @@
                         "type": element.type, "id": String(element.id), "label": element.label,
                         "source": String(element.source.id), "target": String(element.target.id),
                         "citation": element.citation,
-                        "x_start":String(element.x_start),
-                        "x_end":String(element.x_end),
-                        "y_start":String(element.y_start),
-                        "y_end" : String(element.y_end)
+                        // "x_start":String(element.x_start),
+                        // "x_end":String(element.x_end),
+                        // "y_start":String(element.y_start),
+                        // "y_end" : String(element.y_end)
                     }
                 });
                 //
