@@ -2682,8 +2682,8 @@
                         let new_info = [];
                         new_info.nodes = node_to_string;
                         new_info.links = link_to_string;
-
-                        this.renderGraph(new_info);
+                        this.info = new_info;
+                        this.renderGraph(this.info);
 
 
                         // this.renderGraph(this.info);
@@ -3703,8 +3703,8 @@
                         'label': 'Concept',
                         'snippet':snippet,
                         'if_expanded':false,
-                        // "x":this.mouse_x,
-                        // "y":this.mouse_y
+                        "x":this.mouse_x,
+                        "y":this.mouse_y
                     };
 
                     this.info.nodes.push(new_node);
@@ -3740,8 +3740,8 @@
                     let new_info = [];
                     new_info.nodes = node_to_string;
                     new_info.links = link_to_string;
-
-                    this.renderGraph(new_info);
+                    this.info = new_info;
+                    this.renderGraph(this.info);
 
                     // this.renderGraph(this.info);
                     return true
