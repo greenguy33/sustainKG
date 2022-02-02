@@ -2118,6 +2118,7 @@
 
                         let change_node_type = user_nodes.map(function (element) {
                             element.id = Number(element.id);
+                            
                             return element
                         });
 
@@ -2652,7 +2653,7 @@
                                     'x_start':element.x_start,
                                     'y_end': element.y_end,
                                     'y_start': element.y_start,
-                                    
+
                                 }
 
                             });
@@ -2831,6 +2832,9 @@
                     console.log(this.has_weight);
 
                     this.has_weight = noWeight_node.length === 0;
+                }
+                else{
+                    let noWeight_node = [];
                 }
 
 
