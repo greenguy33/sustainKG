@@ -2118,7 +2118,7 @@
 
                         let change_node_type = user_nodes.map(function (element) {
                             element.id = Number(element.id);
-                            
+
                             return element
                         });
 
@@ -3702,8 +3702,7 @@
                         'properties': {'name': input},
                         'label': 'Concept',
                         'snippet':snippet,
-                        'if_expanded':false,
-                        'weight':0
+                        'if_expanded':false
                     };
 
                     this.info.nodes.push(new_node);
