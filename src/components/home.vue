@@ -2636,7 +2636,7 @@
                             return {
                                 'id': element.id, 'type': element.type, 'properties': {'name': element.properties.name},
                                 'label': element.label, 'snippet': element.snippet, 'if_expanded': element.if_expanded,
-                                'x':element.x, 'y':element.y
+                                'x':element.x, 'y':element.y,'fixed':true
                             };
                         });
                         let link_to_string;
@@ -2649,10 +2649,7 @@
                                     "type": element.type,
                                     "citation": {},
                                     "label": element.label,
-                                    'x_end':element.x_end,
-                                    'x_start':element.x_start,
-                                    'y_end': element.y_end,
-                                    'y_start': element.y_start,
+
 
                                 }
 
@@ -2666,10 +2663,7 @@
                                     "type": element.type,
                                     "citation": element.citation,
                                     "label": element.label,
-                                    'x_end':element.x_end,
-                                    'x_start':element.x_start,
-                                    'y_end': element.y_end,
-                                    'y_start': element.y_start,
+                                
 
                                 }
 
@@ -3725,7 +3719,7 @@
                             "id": element.id,
                             "type": element.type,
                             "citation": element.citation,
-                            "label": element.label,
+                            "label": element.label
                             // 'x_end':element.x_end,
                             // 'x_start':element.x_start,
                             // 'y_end':element.y_end,
@@ -3823,7 +3817,7 @@
                 });
                 this.upload_links = this.info.links.map(function (element) {
 
-                    if(element.citation === ""){
+                    if(element.citation === {}){
 
                         return {
                             "type": element.type, "id": String(element.id), "label": element.label,
