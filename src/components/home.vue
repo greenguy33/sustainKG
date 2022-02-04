@@ -2810,7 +2810,7 @@
                             tick()
                         }
                     )//指时间间隔，隔一段时间刷新一次画面
-                    .stop()
+                  
                     .start();//开始转换
 
                 //此处不能换位置，因为需要先读取info信息
@@ -3542,10 +3542,7 @@
                 function tick() {
 
 
-                    circle
-                        .attr('x', function (d) { return d.x; })
-                        .attr('y',function (d) { return d.y; })
-                        .attr("transform", transform1);//圆圈
+                    circle.attr("transform", transform1);//圆圈
 
                     text.attr("transform", transform2);//顶点文字
 
