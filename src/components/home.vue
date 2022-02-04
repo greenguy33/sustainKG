@@ -3817,7 +3817,8 @@
                 });
                 this.upload_links = this.info.links.map(function (element) {
 
-                    if(JSON.stringify(element.citation) === {}){
+                    console.log('submit debug',JSON.stringify(element.citation) === {});
+                    if(JSON.stringify(element.citation) === '{}'){
 
                         return {
                             "type": element.type, "id": String(element.id), "label": element.label,
