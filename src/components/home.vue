@@ -2794,11 +2794,7 @@
                 d3.select("#graph").html('');
 
 
-                // fix the positions of the nodes
-                nodes.map(function (element) {
-                    element.fixed = true;
-                    // return element;
-                });
+
 
                 let force = d3.layout.force()//layout将json格式转化为力学图可用的格式
                     .nodes(nodes)//设定节点数组
@@ -2831,6 +2827,12 @@
                 else{
                     let noWeight_node = [];
                 }
+
+                // fix the positions of the nodes
+                nodes.map(function (element) {
+                    element.fixed = true;
+                    // return element;
+                });
 
 
 
