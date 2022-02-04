@@ -2795,11 +2795,15 @@
                 d3.select("#graph").html('');
 
 
-                
+
 
                 for(let i =0; i<nodes.length;i++){
                     nodes[i].fixed = 1;
                 }
+
+                links.map(function (element) {
+                    return element;
+                });
 
 
 
