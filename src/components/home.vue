@@ -2730,18 +2730,18 @@
                 let {links, nodes} = info;
 
                 //关系分组
-                setLinkGroup(links);
+                // setLinkGroup(links);
                 console.log('render graph link',links);
-                let nodes_name = ''
+                let nodes_name = '';
                 nodes.map(function (element) {
-                    nodes_name = nodes_name.concat(element.properties.name,'%7C')
+                    nodes_name = nodes_name.concat(element.properties.name,'%7C');
                      return nodes_name
 
                 });
 
-                for (let i = 0; i < this.info.nodes.length; i++) {
+                for (let i = 0; i < nodes.length; i++) {
 
-                    this.info.nodes[i].fixed =1 ;
+                    nodes[i].fixed =1 ;
 
                 }
 
