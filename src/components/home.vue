@@ -3537,11 +3537,7 @@
                 }
 
 
-                // fix the positions of the nodes
-                nodes.map(function (element) {
-                    element.fixed = true;
-                    return element;
-                });
+              
 
 
 
