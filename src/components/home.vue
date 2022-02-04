@@ -2735,15 +2735,16 @@
                 let nodes_name = '';
                 nodes.map(function (element) {
                     nodes_name = nodes_name.concat(element.properties.name,'%7C');
-                     return nodes_name
+                    return nodes_name
 
                 });
 
-                for (let i = 0; i < nodes.length; i++) {
-
-                    nodes[i].fixed =1 ;
-
-                }
+                let fixed_nodes = nodes.map(function (element) {
+                    element.fixed = 1;
+                    return element;
+                });
+                
+                nodes = fixed_nodes;
 
 
 
