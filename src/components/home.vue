@@ -2796,6 +2796,7 @@
 
 
 
+                console.log('store_nodes',localStorage.getItem('graph_nodes'));
 
                 for(let i =0; i<nodes.length;i++){
                     nodes[i].x = localStorage.getItem('graph_nodes')[i].x;
