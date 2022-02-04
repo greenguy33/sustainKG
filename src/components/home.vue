@@ -2795,12 +2795,13 @@
                 d3.select("#graph").html('');
 
 
-                let fixed_nodes = nodes.map(function (element) {
-                    element.fixed = 1;
-                    return element;
-                });
-
                 
+
+                for(let i =0; i<nodes.length;i++){
+                    nodes[i].fixed = 1;
+                }
+
+
 
 
                 let force = d3.layout.force()//layout将json格式转化为力学图可用的格式
