@@ -2817,6 +2817,10 @@
 
                     .linkDistance(700)//连接线长度
                     .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
+                    .on("tick", function (){
+                            tick()
+                        }
+                    )//指时间间隔，隔一段时间刷新一次画面
                     .start()//开始转换
 
                 .on('end', function () {
@@ -2824,10 +2828,7 @@
                 });
 
 
-                // force.on("tick", function (){
-                //         tick()
-                //     }
-                // );//指时间间隔，隔一段时间刷新一次画面
+
 
 
                 //此处不能换位置，因为需要先读取info信息
@@ -3572,7 +3573,7 @@
 
                     edges_line.attr('d', function (d) {
 
-                                return getNodesLine(d);//曲线路径
+                                return getNodesLine(d);//路径
                     });
 
 
@@ -3596,6 +3597,8 @@
 
                 //设置圆圈和文字的坐标
                 function transform1(d) {
+
+
 
                     // console.log(d)
                     if(isNaN(d.x) && isNaN(d.y))
