@@ -3604,8 +3604,7 @@
                         d.y = 700
                     }
 
-                    d.x = d.x + 0.1;
-                    d.y = d.y + 0.1;
+                 
 
                     return "translate(" + d.x  + "," + d.y  + ")";
                 }
@@ -3631,10 +3630,9 @@
                         d.y = 700
                     }
 
-                    d.x = d.x + 0.1;
-                    d.y = d.y + 0.1;
-                    
-                    return "translate(" + (d.x) + "," + d.y + ")";
+
+
+                    return "translate(" + d.x + "," + d.y + ")";
                 }
 
 
