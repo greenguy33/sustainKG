@@ -2739,12 +2739,12 @@
 
                 });
 
-                let fixed_nodes = nodes.map(function (element) {
-                    element.fixed = 1;
-                    return element;
-                });
-
-                nodes = fixed_nodes;
+                // let fixed_nodes = nodes.map(function (element) {
+                //     element.fixed = 1;
+                //     return element;
+                // });
+                //
+                // nodes = fixed_nodes;
 
 
 
