@@ -2798,7 +2798,8 @@
 
 
                 for(let i =0; i<nodes.length;i++){
-                    nodes[i].fixed = 1;
+                    nodes[i].x = localStorage.getItem('graph_nodes')[i].x;
+                    nodes[i].y = localStorage.getItem('graph_nodes')[i].y;
                 }
 
                 links.map(function (element) {
@@ -2819,7 +2820,11 @@
                         }
                     )//指时间间隔，隔一段时间刷新一次画面
 
-                    .start();//开始转换
+                    .start()//开始转换
+                .on('end', function () {
+                    localStorage.setItem('graph_nodes', JSON.stringify(info.nodes));
+                });
+
 
                 //此处不能换位置，因为需要先读取info信息
                 if(this.info !== []) {
