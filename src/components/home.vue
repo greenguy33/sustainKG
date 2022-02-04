@@ -2828,15 +2828,8 @@
                     let noWeight_node = [];
                 }
 
-                // fix the positions of the nodes
-                nodes.map(function (element) {
-                    element.fixed = true;
-                    return element;
-                });
 
-                links.map(function (element) {
-                    return element;
-                });
+
 
 
 
@@ -3542,6 +3535,14 @@
                     d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15)
                         .text(function(){ return circleText; });
                 }
+
+
+                // fix the positions of the nodes
+                nodes.map(function (element) {
+                    element.fixed = true;
+                    return element;
+                });
+
 
 
 
