@@ -3604,7 +3604,7 @@
                         d.y = 700
                     }
 
-                    return "translate(" + d.x + "," + d.y + ")";
+                    return "translate(" + d.x + 0.1 + "," + d.y + 0.1 + ")";
                 }
 
                 function transform2(d) {
