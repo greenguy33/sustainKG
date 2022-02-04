@@ -3604,7 +3604,10 @@
                         d.y = 700
                     }
 
-                    return "translate(" + d.x + 0.1 + "," + d.y + 0.1 + ")";
+                    d.x = d.x + 0.1;
+                    d.y = d.y + 0.1;
+
+                    return "translate(" + d.x  + "," + d.y  + ")";
                 }
 
                 function transform2(d) {
@@ -3627,6 +3630,10 @@
                     else if (d.y >=700){
                         d.y = 700
                     }
+
+                    d.x = d.x + 0.1;
+                    d.y = d.y + 0.1;
+                    
                     return "translate(" + (d.x) + "," + d.y + ")";
                 }
 
