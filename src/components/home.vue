@@ -3823,6 +3823,15 @@
                 });
                 this.upload_links = this.info.links.map(function (element) {
 
+                    if(element.citation === ""){
+
+                        return {
+                            "type": element.type, "id": String(element.id), "label": element.label,
+                            "source": String(element.source.id), "target": String(element.target.id)
+                        }
+
+                    }
+
                     return {
                         "type": element.type, "id": String(element.id), "label": element.label,
                         "source": String(element.source.id), "target": String(element.target.id),
