@@ -2730,7 +2730,7 @@
                 let {links, nodes} = info;
 
                 //关系分组
-                // setLinkGroup(links);
+                setLinkGroup(links);
                 console.log('render graph link',links);
                 let nodes_name = '';
                 nodes.map(function (element) {
