@@ -2799,9 +2799,9 @@
                 console.log('store_nodes',localStorage.getItem('graph_nodes'));
 
                 for(let i =0; i<nodes.length;i++){
-                    // nodes[i].x = localStorage.getItem('graph_nodes')[i].x;
-                    // nodes[i].y = localStorage.getItem('graph_nodes')[i].y;
-                    nodes[i].fixed = 1;
+                    nodes[i].x = localStorage.getItem('graph_nodes')[i].x;
+                    nodes[i].y = localStorage.getItem('graph_nodes')[i].y;
+                    // nodes[i].fixed = 1;
                 }
 
                 links.map(function (element) {
@@ -2818,15 +2818,16 @@
                     .linkDistance(700)//连接线长度
                     .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
                     .start()//开始转换
+
                 .on('end', function () {
                     localStorage.setItem('graph_nodes', JSON.stringify(info.nodes));
                 });
 
 
-                force.on("tick", function (){
-                        tick()
-                    }
-                );//指时间间隔，隔一段时间刷新一次画面
+                // force.on("tick", function (){
+                //         tick()
+                //     }
+                // );//指时间间隔，隔一段时间刷新一次画面
 
 
                 //此处不能换位置，因为需要先读取info信息
