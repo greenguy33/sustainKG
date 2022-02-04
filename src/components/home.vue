@@ -3534,8 +3534,8 @@
 
 
                     circle
-                        .attr('cx', function (d) { return d.x; })
-                        .attr('cy',function (d) { return d.y; })
+                        .attr('x', function (d) { return d.x; })
+                        .attr('y',function (d) { return d.y; })
                         .attr("transform", transform1);//圆圈
 
                     text.attr("transform", transform2);//顶点文字
