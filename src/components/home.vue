@@ -2663,7 +2663,7 @@
                                     "type": element.type,
                                     "citation": element.citation,
                                     "label": element.label,
-                                
+
 
                                 }
 
@@ -3817,7 +3817,7 @@
                 });
                 this.upload_links = this.info.links.map(function (element) {
 
-                    if(element.citation === {}){
+                    if(JSON.stringify(element.citation) === {}){
 
                         return {
                             "type": element.type, "id": String(element.id), "label": element.label,
