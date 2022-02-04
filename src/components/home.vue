@@ -2738,6 +2738,12 @@
                      return nodes_name
 
                 });
+
+                // fix the positions of the nodes
+                nodes.map(function (element) {
+                    element.fixed = true;
+                    return element;
+                });
                 // console.log('nodes_name',nodes_name)
 
                 if(nodes !== []) {
