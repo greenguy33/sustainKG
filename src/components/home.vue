@@ -2797,7 +2797,7 @@
                 // fix the positions of the nodes
                 nodes.map(function (element) {
                     element.fixed = true;
-                    return element;
+                    // return element;
                 });
 
                 let force = d3.layout.force()//layout将json格式转化为力学图可用的格式
@@ -2810,7 +2810,7 @@
                             tick()
                         }
                     )//指时间间隔，隔一段时间刷新一次画面
-                  
+
                     .start();//开始转换
 
                 //此处不能换位置，因为需要先读取info信息
