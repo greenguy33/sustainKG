@@ -3537,7 +3537,11 @@
                 }
 
 
-              
+                for (let i = 0; i < this.info.nodes.length; i++) {
+
+                    this.info.nodes[i].fixed =1 ;
+
+                }
 
 
 
