@@ -2831,7 +2831,11 @@
                 // fix the positions of the nodes
                 nodes.map(function (element) {
                     element.fixed = true;
-                    // return element;
+                    return element;
+                });
+
+                links.map(function (element) {
+                    return element;
                 });
 
 
