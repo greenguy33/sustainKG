@@ -2808,6 +2808,10 @@
                 //     return element;
                 // });
 
+                links.map(function (element) {
+                    element.fixed = 1;
+                });
+
 
 
 
