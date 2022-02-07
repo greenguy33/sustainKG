@@ -2799,8 +2799,8 @@
                 console.log('store_nodes',localStorage.getItem('graph_nodes'));
 
                 for(let i =0; i<nodes.length;i++){
-                    // nodes[i].x = localStorage.getItem('graph_nodes')[i].x;
-                    // nodes[i].y = localStorage.getItem('graph_nodes')[i].y;
+                    nodes[i].x = parseInt(nodes[i].x);
+                    nodes[i].y = parseInt(nodes[i].y);
                     nodes[i].fixed = 1;
                 }
 
@@ -3848,8 +3848,8 @@
                         "properties": {
                             "name": element.properties.name
                         },
-                        'x':String(element.x),
-                        'y':String(element.y)
+                        'x':(element.x),
+                        'y':(element.y)
                     }
 
                 });
