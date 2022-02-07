@@ -2798,12 +2798,12 @@
 
                 console.log('store_nodes',localStorage.getItem('graph_nodes'));
 
-                // for(let i =0; i<nodes.length;i++){
-                //     nodes[i].x = localStorage.getItem('graph_nodes')[i].x;
-                //     nodes[i].y = localStorage.getItem('graph_nodes')[i].y;
-                //     // nodes[i].fixed = 1;
-                // }
-                //
+                for(let i =0; i<nodes.length;i++){
+                    // nodes[i].x = localStorage.getItem('graph_nodes')[i].x;
+                    // nodes[i].y = localStorage.getItem('graph_nodes')[i].y;
+                    nodes[i].fixed = 1;
+                }
+
                 // links.map(function (element) {
                 //     return element;
                 // });
