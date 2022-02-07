@@ -3848,8 +3848,8 @@
                         "properties": {
                             "name": element.properties.name
                         },
-                        'x':(element.x),
-                        'y':(element.y)
+                        'x':String(element.x),
+                        'y':String(element.y)
                     }
 
                 });
