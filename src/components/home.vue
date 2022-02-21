@@ -683,7 +683,8 @@
                 readOnly : false,
                 // log function parameters
                 current_user:'',
-                username:this.$route.params.username,
+                // username:this.$route.params.username,
+                username:'',
                 // password:this.$route.params.password,
                 password:'',
                 newUsername:'',
@@ -1255,6 +1256,7 @@
                                 this.change_username = '';
                                 this.password = '';
                                 this.changeUserVisible = false;
+                                this.disable_dbclick = false;
                                 let user_nodes = response.data.nodes;
                                 let user_links = response.data.links;
                                 // let test = response.data;
@@ -1268,11 +1270,6 @@
                                     element.id = Number(element.id);
                                     element.source = Number(element.source);
                                     element.target = Number(element.target);
-                                    element.x_start = String(element.x_start);
-                                    element.x_end = String(element.x_end);
-                                    element.y_start = String(element.y_start);
-                                    element.y_end = String(element.y_end);
-
                                     return element
                                 });
 
