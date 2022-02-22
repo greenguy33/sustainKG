@@ -8,8 +8,8 @@ let config = {
     // relationships : ["causes"],
         //relationships = 'relations.txt',
     //concepts : 'Wikipedia',
-    concepts = ["Motion", "Momentum", "Impulse", "Torque", "Power"]
-    //concepts = concepts.txt
+    concepts = ["Motion", "Momentum", "Impulse", "Torque", "Power"],
+    //concepts = concepts.txt,
     Voting : true,
     Citations : false,
     Collaborative : true
