@@ -86,11 +86,11 @@
                            :disabled='disable_viewGraph'  @click="getAllConcepts" size="small" round
                            type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
 
-                <el-button style="margin-top: 80px; margin-left: 15px;"
-                           @click="submitData()" size="small" round
-                           type="primary">
-                    <i class="el-icon-info"></i>
-                    Save</el-button>
+<!--                <el-button style="margin-top: 80px; margin-left: 15px;"-->
+<!--                           @click="submitData()" size="small" round-->
+<!--                           type="primary">-->
+<!--                    <i class="el-icon-info"></i>-->
+<!--                    Save</el-button>-->
 
                 <el-button style="margin-top: 80px; margin-left: 15px;"
                             @click="instruction" size="small" round
@@ -608,6 +608,7 @@
 
     import {config} from './../assets/config'
     // Vue.prototype.appConfig = config;
+
     //test branch
     import Vue from 'vue'
     import $ from 'jquery'
@@ -683,7 +684,8 @@
                 readOnly : false,
                 // log function parameters
                 current_user:'',
-                username:this.$route.params.username,
+                // username:this.$route.params.username,
+                username:'',
                 // password:this.$route.params.password,
                 password:'',
                 newUsername:'',
@@ -882,6 +884,7 @@
                                 // this.renderGraph(new_info);
 
                                 this.renderGraph(new_info);
+                                this.submitData();
 
                             })
 
@@ -957,6 +960,7 @@
                                 new_info.links = link_to_string;
 
                                 this.renderGraph(new_info);
+                                this.submitData();
                                 // this.renderGraph(this.info);
 
                             }).catch(() => {
@@ -1015,18 +1019,21 @@
         },
 
         mounted() {
+            if(this.config.useShibboleth === true) {
+                this.$axios({
+                    url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
+                    method:'get'
+                }).then(response =>{
+                    console.log(response);
+                    this.username = response.data.attributes[0].values[0];
+                    console.log('shibboleth username',this.username);
+                    this.handleShow();
+                });
+            }
+            else {
 
-            this.$axios({
-                url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
-                method:'get'
-            }).then(response =>{
-                console.log(response);
-                this.username = response.data.attributes[0].values[0];
-                console.log('shibboleth username',this.username);
-                this.handleShow();
-            });
-
-
+                this.changeUserVisible = true;
+            }
 
 
             console.log('route name',this.$route.name);
@@ -1251,10 +1258,12 @@
 
                                     this.changeUserVisible = true;
                                 }
+                                this.showLogin = false;
                                 this.username = this.change_username;
                                 this.change_username = '';
                                 this.password = '';
                                 this.changeUserVisible = false;
+                                this.disable_dbclick = false;
                                 let user_nodes = response.data.nodes;
                                 let user_links = response.data.links;
                                 // let test = response.data;
@@ -1268,11 +1277,6 @@
                                     element.id = Number(element.id);
                                     element.source = Number(element.source);
                                     element.target = Number(element.target);
-                                    element.x_start = String(element.x_start);
-                                    element.x_end = String(element.x_end);
-                                    element.y_start = String(element.y_start);
-                                    element.y_end = String(element.y_end);
-
                                     return element
                                 });
 
@@ -2413,7 +2417,7 @@
                 new_info.links = link_to_string;
 
                 this.renderGraph(new_info);
-
+                this.submitData();
                 // this.renderGraph(this.info);
                 this.selectClear();
 
@@ -2514,7 +2518,9 @@
                     this.renderGraph(new_info);
 
                     // this.renderGraph(this.info);
+                    this.submitData();
                     this.selectClear();
+
                 }else{
 
                     this.dialogFormVisible_change_link_name = true;
@@ -2667,13 +2673,12 @@
                         new_info.links = link_to_string;
                         this.info = new_info;
                         this.renderGraph(this.info);
-
-
-                        // this.renderGraph(this.info);
                         this.ifClicked = false;
                         this.selectClear();
                         this.reference = '';
-                        }else{
+                        this.submitData();
+                        }
+                        else{
                             this.dialogFormVisible_link = true;
                             this.$message(
                                 {
@@ -3514,6 +3519,7 @@
 
                                 force.resume();
                             }
+                            _this.submitData();
 
 
                         });
