@@ -1018,18 +1018,21 @@
         },
 
         mounted() {
+            if(this.config.useShibboleth === true) {
+                this.$axios({
+                    url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
+                    method:'get'
+                }).then(response =>{
+                    console.log(response);
+                    this.username = response.data.attributes[0].values[0];
+                    console.log('shibboleth username',this.username);
+                    this.handleShow();
+                });
+            }
+            else {
 
-            // this.$axios({
-            //     url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
-            //     method:'get'
-            // }).then(response =>{
-            //     console.log(response);
-            //     this.username = response.data.attributes[0].values[0];
-            //     console.log('shibboleth username',this.username);
-            //     this.handleShow();
-            // });
-
-            this.changeUserVisible = true;
+                this.changeUserVisible = true;
+            }
 
 
             console.log('route name',this.$route.name);
