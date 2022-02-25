@@ -13,7 +13,7 @@ let config = {
     Voting : true,
     Citations : false,
     Collaborative : true,
-    useShibboleth : false
+    useShibboleth : true
 
 };
 
