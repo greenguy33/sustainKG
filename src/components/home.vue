@@ -608,7 +608,8 @@
 
     import {config} from './../assets/config'
     // Vue.prototype.appConfig = config;
-    // test branch
+
+    //test branch
     import Vue from 'vue'
     import $ from 'jquery'
     import {
