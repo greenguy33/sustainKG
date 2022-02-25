@@ -12,7 +12,8 @@ let config = {
     //concepts = concepts.txt
     Voting : true,
     Citations : false,
-    Collaborative : true
+    Collaborative : true,
+    useShibboleth : false
 
 };
 
