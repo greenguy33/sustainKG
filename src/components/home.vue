@@ -175,49 +175,14 @@
 
 
         <!--下面是对话框集合 与界面无关-->
-        <!--<el-dialog-->
-                <!--:close-on-click-modal="false"-->
-                <!--title="Login"-->
-                <!--:visible.sync="centerDialogVisible"-->
-
-                <!--width="30%"-->
-                <!--center>-->
-            <!--<span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='handleShow'></el-input></span>-->
-
-            <!--<br><br>-->
-            <!--&lt;!&ndash;<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='handleShow'></el-input></span>&ndash;&gt;-->
-            <!--<el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>-->
-            <!--<span slot="footer" class="dialog-footer">-->
-            <!--<el-button @click.native="centerDialogVisible=false">No</el-button>-->
-            <!--<el-button type="primary" @click.native="handleShow" >Yes</el-button>-->
-          <!--</span>-->
-        <!--</el-dialog>-->
-
-        <!--<el-dialog-->
-                <!--:close-on-click-modal="false"-->
-                <!--title="Create New Account"-->
-                <!--:visible.sync="dialog_createUser"-->
-                <!--width="30%"-->
-                <!--center>-->
-            <!--<span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>-->
-            <!--<br><br>-->
-            <!--&lt;!&ndash;<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>&ndash;&gt;-->
-            <!--<span slot="footer" class="dialog-footer">-->
-            <!--<el-button @click.native="dialog_createUser=false">Cancel</el-button>-->
-            <!--<el-button type="primary" @click="createUser" >Submit</el-button>-->
-          <!--</span>-->
-        <!--</el-dialog>-->
 
 
-
+        <!-- when the concept list is empty or use Wikipedia, this dialog will be used -->
         <el-dialog
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible"
                    title="Create Concept" center
                  >
-
-
-
             <el-form :inline="true"  class="demo-form-inline" >
                 <el-form-item label="Concept Name" >
                     <el-input v-model="input"
@@ -245,9 +210,6 @@
                                 clearable
                                 @keyup.native.enter="addNodes"
                                 no-data-text="No Concept Name found"
-
-
-
                     >
                         <el-option
 
@@ -271,6 +233,38 @@
                 </el-button>
             </div>
         </el-dialog>
+
+
+        <!-- when the concept list is not empty and don't use Wikipedia, this dialog will be used -->
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible_conceptName"
+                :show-close="false"
+                title="Create Concept" center>
+            <el-select v-model="node_value"
+                       style='width: 300px; margin-left:150px;'
+                       placeholder="Please select the concept name"
+
+                       @change="select_concept_name"
+            >
+                <!--  the change is for the value's selection to search the wikipedia snippet  -->
+                <el-option
+                        v-for="item in concept_name_list"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    Cancel
+                </el-button>
+                <el-button type="primary"   @click="">
+                    Submit
+                </el-button>
+            </div>
+        </el-dialog>
+
 
 
         <el-dialog
@@ -410,8 +404,6 @@
                 :visible.sync="dialogFormVisible_relationship"
                 :show-close="false"
                 title="Select Relationships" center>
-
-
             <el-select v-model="relationship"
                        style='width: 300px; margin-left:150px;'
                        placeholder="Please select the relationship">
@@ -422,11 +414,6 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-
-
-
-
-
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     Cancel
@@ -435,7 +422,6 @@
                     Submit
                 </el-button>
             </div>
-
         </el-dialog>
 
 
@@ -675,9 +661,11 @@
             return {
                 has_weight:true,
                 input:'',
+                concept_name : '',
+                concept_name_list : '',
                 reference:'',
                 new_reference:'',
-                searchDialog:false,
+
                 disableSelect: true,
                 dashboard_show:false,
                 //////////////////////////////////////
@@ -777,7 +765,8 @@
                 searchNode: false,
                 selected_Node: '',
 
-                dialogFormVisible:false,
+                dialogFormVisible:false, // when the concept = 'Wikipedia'
+                dialogFormVisible_conceptName:false, //when the concept list is not empty
                 dialogFormVisible_link:false,
 
                 dialogFormVisible_relationship:false,
@@ -1030,14 +1019,32 @@
                     this.handleShow();
                 });
             }
-            else {
 
+            else {
                 this.changeUserVisible = true;
             }
 
 
             console.log('route name',this.$route.name);
             console.log('config js',this.config, config.admin_users);
+
+
+            if(this.config.concepts !== 'Wikipedia'){
+                let concept_list = this.config.concepts.sort(); // make the concept name in order
+
+                // this.$axios({
+                //     url: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=intitle:+"+this.input+"+&srprop=snippet&format=json&origin=*&callback=",
+                //     method:'get'
+                //
+                // }).then(response =>{})
+
+                this.concept_name_list = concept_list.map(function (element){
+                    return {value: element , label: element, snippet:'test'};
+                })
+
+                console.log('sorted concept name', this.concept_name_list);
+            }
+
 
             // this.handleShow();
             this.renderGraph(this.info);
@@ -1047,62 +1054,12 @@
 
 
 
-
-            // window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
-            // window.addEventListener('unload', e => this.unloadHandler(e))
-
-
-
         },
 
-        // destroyed() {
-        //
-        //         window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
-        //         window.addEventListener('unload', e => this.unloadHandler(e))
-        //
-        //
-        // },
+
 
         methods: {
 
-            // submit2() {
-            //     let url = "http://graphdb.ics.uci.edu:8080/api/postUserGraph";
-            //
-            //     this.upload_nodes = this.info.nodes.map(function (element) {
-            //         return {
-            //             "id": String(element.id), "type": element.type, "label": element.label, "properties": {
-            //                 "name": element.properties.name
-            //             }
-            //         }
-            //
-            //     });
-            //     this.upload_links = this.info.links.map(function (element) {
-            //
-            //         return {
-            //             "type": element.type, "id": String(element.id), "label": element.label,
-            //             "source": String(element.source.index), "target": String(element.target.index),
-            //             "properties": element.properties
-            //         }
-            //     });
-            //
-            //     console.log(this.info);
-            //     console.log(this.current_user);
-            //     console.log('nn', JSON.stringify(this.upload_nodes));
-            //     console.log('nn', JSON.stringify(this.upload_links));
-            //
-            //
-            //     const data =
-            //         {
-            //
-            //             user: this.current_user,
-            //             nodes: this.upload_nodes,
-            //             links: this.upload_links
-            //         }
-            //
-            //
-            //     let a = window.navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/postUserGraph",JSON.stringify(data));
-            //
-            // },
 
 
             getMouseXY(e){
@@ -1132,23 +1089,6 @@
                 }
             },
             unloadHandler(e){
-
-                // let flag = true;
-                // let noWeight_node = []
-                // for (let i = 0; i < this.info.nodes.length; i++) {
-                //     if (this.info.nodes[i].weight === 0) {
-                //         flag = false;
-                //         noWeight_node.push(this.info.nodes[i].properties.name)
-                //     }
-                // }
-
-                // let selected_nodes = [] // to find those nodes without links
-                // for(let i =0; i < this.info.length; i++){
-                //     if (this.info.nodes[i].weight === 0) {
-                //
-                //                 selected_nodes.push(this.info.nodes[i])
-                //             }
-                // }
 
                 if (this.$route.name === 'home' && this.viewGraph_btn_status===true ) {
 
@@ -1373,6 +1313,16 @@
 
             },
 
+            // when the concept name is used from config file, each time we change the selection
+            // this function will be called.
+
+            select_concept_name(){
+
+                console.log(this.input);
+            },
+
+
+
 
             search:function(nextRef){
 
@@ -1381,17 +1331,6 @@
                     this.node_value = [];
                     this.new_node_name = [];
                     this.disableSelect = false;
-
-                    // this.$axios({
-                    //     url:'https://en.wikipedia.org/w/api.php?action=query&generator=prefixsearch&gpssearch='+this.input+'&gpslimit=10&prop=extracts&exsentences=1&format=json&exintro&origin=*&callback=',
-                    //     method:'get'
-                    // }).then(response=>{
-                    //     response.data = response.data.slice(5);
-                    //     response.data = response.data.slice(0,response.data.length-1);
-                    //     let node_info = JSON.parse(response.data).query.pages;
-                    //     console.log(node_info)
-                    //
-                    // });
 
                     this.$axios({
                         url: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=intitle:+"+this.input+"+&srprop=snippet&format=json&origin=*&callback=",
@@ -2314,6 +2253,7 @@
                 this.newUsername = '';
                 this.btnChangeEnable = true;
                 this.dialogFormVisible_initGraph = false;
+                this.dialogFormVisible_conceptName = false;
 
 
                 // this.ifClicked = false;
@@ -2362,13 +2302,25 @@
                         let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
                         this.btnChangeEnable = true;
                         console.log('flag', flag)
-                        if (flag === true) {
-                            this.dialogFormVisible = false;
-                            this.selectClear();
-                        }
-                        else {
-                            this.dialogFormVisible = true;
-                            this.selectClear();
+                        if(this.config.concepts === 'Wikipedia') {
+                            if (flag === true) {
+                                this.dialogFormVisible = false;
+                                this.selectClear();
+                            } else {
+                                this.dialogFormVisible = true;
+                                this.selectClear();
+
+                            }
+                        }else{
+
+                            if (flag === true) {
+                                this.dialogFormVisible_conceptName = false;
+                                this.selectClear();
+                            } else {
+                                this.dialogFormVisible_conceptName = true;
+                                this.selectClear();
+
+                            }
 
                         }
 
