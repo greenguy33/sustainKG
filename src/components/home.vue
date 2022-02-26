@@ -2864,8 +2864,13 @@
                         }
 
                         else {
-                            if(d3.select(d3.event.target).datum() === undefined)
-                                this.dialogFormVisible = true;
+                            if(d3.select(d3.event.target).datum() === undefined) {
+                                if(this.config.concepts === 'Wikipedia') {
+                                    this.dialogFormVisible = true;
+                                }else{
+                                    this.dialogFormVisible_conceptName = true;
+                                }
+                            }
                         }
 
 
