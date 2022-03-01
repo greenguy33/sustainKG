@@ -1045,6 +1045,8 @@
                 console.log('sorted concept name', this.concept_name_list);
             }else if(this.config.concepts.length === 0){
                 this.config.concepts = 'Wikipedia';
+            }else{
+                this.config.concepts = 'Wikipedia';
             }
 
 
