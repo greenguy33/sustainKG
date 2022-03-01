@@ -1029,7 +1029,7 @@
             console.log('config js',this.config, config.admin_users);
 
 
-            if(this.config.concepts !== 'Wikipedia'){
+            if(this.config.concepts !== 'Wikipedia' && this.config.concepts.length !== 0){
                 let concept_list = this.config.concepts.sort(); // make the concept name in order
 
 
