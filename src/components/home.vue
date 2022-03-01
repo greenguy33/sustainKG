@@ -1043,6 +1043,8 @@
                 })
 
                 console.log('sorted concept name', this.concept_name_list);
+            }else if(this.config.concepts.length === 0){
+                this.config.concepts = 'Wikipedia';
             }
 
 
@@ -2732,7 +2734,6 @@
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
                             nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' + String(nodes[i].properties.name);
-                            console.log("https://en.m.wikipedia.org/wiki/" + String(nodes[i].properties.name));
                         }
 
 
