@@ -1032,11 +1032,6 @@
             if(this.config.concepts !== 'Wikipedia'){
                 let concept_list = this.config.concepts.sort(); // make the concept name in order
 
-                // this.$axios({
-                //     url: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=intitle:+"+this.input+"+&srprop=snippet&format=json&origin=*&callback=",
-                //     method:'get'
-                //
-                // }).then(response =>{})
 
                 this.concept_name_list = concept_list.map(function (element){
                     return {value: element , label: element, snippet:'test'};
@@ -1044,6 +1039,7 @@
 
                 console.log('sorted concept name', this.concept_name_list);
             }else if(this.config.concepts.length === 0){
+                console.log('lalala array length is 0')
                 this.config.concepts = 'Wikipedia';
             }else{
                 this.config.concepts = 'Wikipedia';
