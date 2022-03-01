@@ -526,7 +526,7 @@
 
                     <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
                     <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
-                    <!--<h4 :style="{ color: '#aaaaff' }"></h4>-->
+                    <el-link type="primary">{{detailValue.wiki_link}}}</el-link>
                     <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
                 </div>
             </el-card>
@@ -2730,7 +2730,8 @@
                         }
                         // console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
-                            nodes[i].snippet = localStorage.getItem(nodes[i].properties.name)
+                            nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
+                            nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' + nodes_name;
                         }
 
 
