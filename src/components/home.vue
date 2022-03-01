@@ -2731,8 +2731,8 @@
                         // console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
-                            nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' + String(nodes_name);
-                            console.log("https://en.m.wikipedia.org/wiki/" + String(nodes_name));
+                            nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' + String(nodes[i].properties.name);
+                            console.log("https://en.m.wikipedia.org/wiki/" + String(nodes[i].properties.name));
                         }
 
 
