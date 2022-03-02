@@ -3854,11 +3854,53 @@
                 }
 
                 if (this.has_weight === false) {
+
+                    let filter_node = this.upload_nodes.filter(item =>{
+                        if(item.id !== noWeight_node.toString()) {
+                            return true;
+                        }
+                    })
                     // this.$message({
                     //     'type': 'warning',
                     //     'message': 'The concept [ ' + noWeight_node.toString()+' ] needs a least one relationship, please check it.'
                     // })
-                    return false;
+                    // return false;
+                    this.$axios({
+
+                        headers: {
+                            'Content-Type': 'application/json;'
+                        },
+                        url: '/postUserGraph',
+                        method: 'post',
+                        data: {
+                            user: this.current_user,
+                            nodes: filter_node,
+                            links: this.upload_links
+
+                        }
+
+
+                    }).then(response => {
+                        console.log('pp', JSON.stringify(filter_node));
+                        console.log('pp', JSON.stringify(this.upload_links));
+                        console.log('success', response)
+                        // this.$message({
+                        //     'type':'success',
+                        //     'message':'Saved Successfully!'
+                        // });
+                        // this.renderGraph(this.info)
+                        return true
+                    })
+                        .catch(error=>{
+                            console.log('error',error);
+                            this.$message({
+                                'type':'warning',
+                                'message':'The database server is busy, please try again!'
+                            });
+                            return false
+
+                        });
+
                 }
                 else{
 
