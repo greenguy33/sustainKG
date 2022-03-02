@@ -2731,7 +2731,8 @@
                         // console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
-                            nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' + String(nodes[i].properties.name);
+                            nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' +
+                                String(nodes[i].properties.name.replace(/\s+/g,'_'));
                         }
 
 
@@ -3853,10 +3854,10 @@
                 }
 
                 if (this.has_weight === false) {
-                    this.$message({
-                        'type': 'warning',
-                        'message': 'The concept [ ' + noWeight_node.toString()+' ] needs a least one relationship, please check it.'
-                    })
+                    // this.$message({
+                    //     'type': 'warning',
+                    //     'message': 'The concept [ ' + noWeight_node.toString()+' ] needs a least one relationship, please check it.'
+                    // })
                     return false;
                 }
                 else{
@@ -3880,10 +3881,10 @@
                         console.log('pp', JSON.stringify(this.upload_nodes));
                         console.log('pp', JSON.stringify(this.upload_links));
                         console.log('success', response)
-                        this.$message({
-                            'type':'success',
-                            'message':'Saved Successfully!'
-                        });
+                        // this.$message({
+                        //     'type':'success',
+                        //     'message':'Saved Successfully!'
+                        // });
                         // this.renderGraph(this.info)
                         return true
                     })
