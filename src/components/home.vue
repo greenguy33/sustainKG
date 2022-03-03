@@ -3359,7 +3359,7 @@
 
 
                             if (_this.ifClicked === true && _this.dragNode === d) {
-                                force.stop();
+                                // force.stop();
 
                                 mouse_line.style('opacity', '1');
                                 mouse_line.attr('d', function () {
