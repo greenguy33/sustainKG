@@ -2409,6 +2409,7 @@
                 new_info.links = link_to_string;
 
                 this.renderGraph(new_info);
+                this.submitData();
 
                 // this.renderGraph(this.info);
                 this.selectClear();
@@ -3331,7 +3332,7 @@
                             _this.dragStartIndex = d;
                             _this.mouseLinkLineStartLoc = [d.x, d.y];
 
-                            force.stop();
+                            // force.stop();
                             _this.original_dx =  d.px
                             _this.original_dy = d.py;
                             console.log('start position',_this.original_dx, _this.original_dy)
