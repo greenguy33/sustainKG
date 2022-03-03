@@ -3332,7 +3332,7 @@
                             _this.dragStartIndex = d;
                             _this.mouseLinkLineStartLoc = [d.x, d.y];
 
-                            // force.stop();
+                            force.stop();
                             _this.original_dx =  d.px
                             _this.original_dy = d.py;
                             console.log('start position',_this.original_dx, _this.original_dy)
@@ -3359,7 +3359,7 @@
 
 
                             if (_this.ifClicked === true && _this.dragNode === d) {
-                                // force.stop();
+                                force.stop();
 
                                 mouse_line.style('opacity', '1');
                                 mouse_line.attr('d', function () {
