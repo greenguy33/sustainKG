@@ -3014,6 +3014,8 @@
                         else {
                             if(this.ifClicked === false) {
                                 Menu(this.menu)(d, d3.event, node)
+                            }else{
+                                d3.event.defaultPrevented();
                             }
                         }
 
