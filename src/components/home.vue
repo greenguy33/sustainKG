@@ -338,7 +338,7 @@
                 <el-button @click="cancel">
                     Cancel
                 </el-button>
-                <el-button type="primary"   @click="">
+                <el-button type="primary"   @click="change_node_name">
                     Submit
                 </el-button>
             </div>
