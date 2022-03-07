@@ -3857,7 +3857,7 @@
                 if (this.has_weight === false) {
 
                     let filter_node = this.upload_nodes.filter(item =>{
-                        if(item.id !== noWeight_node.toString()) {
+                        if(item.properties.name !== noWeight_node.toString()) {
                             return true;
                         }
                     })
