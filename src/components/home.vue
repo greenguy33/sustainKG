@@ -3340,7 +3340,7 @@
                         }
 
                         d3.event.sourceEvent.stopPropagation(); //取消默认事件
-                        // d.fixed = true;//拖拽开始后设定被拖拽对象为固定
+                        d.fixed = true;//拖拽开始后设定被拖拽对象为固定
 
                     })
 
