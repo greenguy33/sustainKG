@@ -2877,9 +2877,6 @@
 
                         }
 
-
-
-
                     });
 
 
@@ -3162,6 +3159,8 @@
                         }else {
                             if(this.ifClicked === false) {
                                 Menu(this.menu_edge)(d, d3.event, link)
+                            }else{
+                                d3.event.preventDefault();
                             }
                         }
 
