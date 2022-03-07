@@ -2852,28 +2852,29 @@
 
 
                     .on("dblclick", (node, i)=>{
-                        console.log('svg node',node,i,d3.select(d3.event.target).datum());
-                        console.log('d3 event', d3.event);
 
-
-                        console.log('svm mouse',that.mouse_x, that.mouse_y);
+                        // console.log('svg node',node,i,d3.select(d3.event.target).datum());
+                        // console.log('d3 event', d3.event);
+                        // console.log('svm mouse',that.mouse_x, that.mouse_y);
 
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
 
                         if(this.readOnly === true || this.disable_dbclick === true){
-
                             console.log('read mode only')
                         }
 
                         else {
-                            if(d3.select(d3.event.target).datum() === undefined) {
-                                if(this.config.concepts === 'Wikipedia') {
-                                    this.dialogFormVisible = true;
-                                }else{
-                                    this.dialogFormVisible_conceptName = true;
+                            if(this.ifClicked === false) {
+                                if (d3.select(d3.event.target).datum() === undefined) {
+                                    if (this.config.concepts === 'Wikipedia') {
+                                        this.dialogFormVisible = true;
+                                    } else {
+                                        this.dialogFormVisible_conceptName = true;
+                                    }
                                 }
                             }
+
                         }
 
 
@@ -2995,9 +2996,6 @@
                                 node.if_expanded = true;
                                 this.expandConcept(node.properties.name);
                             }
-
-
-
                         }
                         else {
                             this.dialogFormVisible = true;
@@ -3014,7 +3012,9 @@
                             console.log('read only mode')
                         }
                         else {
-                            Menu(this.menu)(d, d3.event, node)
+                            if(this.ifClicked === false) {
+                                Menu(this.menu)(d, d3.event, node)
+                            }
                         }
 
                     });
@@ -3158,7 +3158,9 @@
                             //     });
                             console.log('read only mode')
                         }else {
-                            Menu(this.menu_edge)(d, d3.event, link)
+                            if(this.ifClicked === false) {
+                                Menu(this.menu_edge)(d, d3.event, link)
+                            }
                         }
 
                     });
