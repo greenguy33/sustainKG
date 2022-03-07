@@ -266,33 +266,24 @@
         </el-dialog>
 
 
-
+        <!-- when the concept list is empty or use Wikipedia, this dialog will be used for changing the node name -->
         <el-dialog
                 :close-on-click-modal="false"
-
                 :visible.sync="dialogFormVisible_change_node_name"
                    title="Change Concept Name"
                     center
         >
-
             <el-form :inline="true"  class="demo-form-inline" center>
                 <el-form-item label="Node Name">
                     <el-input v-model="input"
-
                               style='width: 200px'
-
                               @keyup.native.enter="search('select_changeNode'); "
-
                               placeholder="Concept Name"></el-input>
-
                 </el-form-item>
-
                 <el-form-item>
                     <el-button type="primary"
-
                                @click="search('select_changeNode'); ">Search</el-button>
                 </el-form-item>
-
                 <el-form-item label="Result">
                     <el-select  style='width: 200px; margin-left:30px;'
                                 v-model="new_node_name" placeholder="Result"
@@ -311,11 +302,7 @@
                                 :value="item.value" ></el-option>
                     </el-select>
                 </el-form-item>
-
             </el-form>
-
-
-
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     No
@@ -324,8 +311,39 @@
                     Yes
                 </el-button>
             </div>
-
         </el-dialog>
+
+
+        <!-- when the concept list is not empty and don't use Wikipedia, this dialog will be used -->
+        <el-dialog
+                :close-on-click-modal="false"
+                :visible.sync="dialogFormVisible_change_concept_name"
+                :show-close="false"
+                title="Change Concept Name" center>
+            <el-select v-model="new_node_name"
+                       style='width: 300px; margin-left:150px;'
+                       placeholder="Please select the concept name"
+
+                       @change="select_concept_name"
+            >
+                <!--  the change is for the value's selection to search the wikipedia snippet  -->
+                <el-option
+                        v-for="item in concept_name_list"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">
+                    Cancel
+                </el-button>
+                <el-button type="primary"   @click="">
+                    Submit
+                </el-button>
+            </div>
+        </el-dialog>
+
 
 
 
@@ -772,7 +790,8 @@
                 dialogFormVisible_relationship:false,
                 dialogFormVisible_new_relationship:false,
                 dialogFormVisible_viewCollective:false,
-                dialogFormVisible_change_node_name:false,
+                dialogFormVisible_change_node_name:false,//when the concept list is not empty
+                dialogFormVisible_change_concept_name:false, // when the concept = 'Wikipedia'
                 dialogFormVisible_change_link_name:false,
                 dialogFormVisible_instruction:false,
                 changeUserVisible:false,
@@ -885,7 +904,11 @@
                         title: 'Change Concept Name',
                         action:(node_id)=>{
                             // if(this.config.Citations === true) {
-                            this.dialogFormVisible_change_node_name = true;
+                            if(this.config.concept_name !== 'Wikipedia' || this.config.concept_name.length !== 0){
+                                this.dialogFormVisible_change_concept_name = true;
+                            }else {
+                                this.dialogFormVisible_change_node_name = true;
+                            }
                             // }
 
                             // this.dialogFormVisible_relationship = true;
@@ -2224,6 +2247,10 @@
                     this.new_node_name = val
                     this.select_snippet = this.snippet[this.node_value]
                     console.log('snippet',this.select_snippet)
+                }else if(this.dialogFormVisible_change_concept_name === true){
+                    this.new_node_name = val
+                    this.select_snippet = this.snippet[this.node_value]
+                    console.log('snippet',this.select_snippet)
                 }
                 else if(this.dialogFormVisible === true){
                     this.node_value = val;
@@ -2335,6 +2362,7 @@
                 this.info.nodes[this.node_id].properties.name = this.new_node_name;
                 this.info.nodes[this.node_id].snippet = this.select_snippet;
                 this.dialogFormVisible_change_node_name = false;
+                this.dialogFormVisible_change_concept_name = false;
 
                 // this.optionVisible = false;
                 // this.optionVisible_link = false;
