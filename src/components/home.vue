@@ -3211,7 +3211,7 @@
 
                     .text(function (d ) {
                         let circleText = '';
-                        console.log('text relationship', d, that);
+                        // console.log('text relationship', d, that);
                         if(d.label && d.label.length > 50){
                             if(that.config.Citations === false) {
                                 circleText =  d.label.substring(0, 50) + '...)';
@@ -3836,10 +3836,7 @@
                         "type": element.type, "id": String(element.id), "label": element.label,
                         "source": String(element.source.id), "target": String(element.target.id),
                         "citation": element.citation,
-                        // "x_start":String(element.x_start),
-                        // "x_end":String(element.x_end),
-                        // "y_start":String(element.y_start),
-                        // "y_end" : String(element.y_end)
+
                     }
                 });
                 //
@@ -3849,7 +3846,7 @@
 
                 let flag = true;
                 let noWeight_node = [];
-                console.log('testtest',this.info);
+                // console.log('testtest',this.info);
                 for (let i = 0; i < this.info.nodes.length; i++) {
                     if (this.info.nodes[i].weight === 0) {
                         flag = false;
@@ -3864,6 +3861,8 @@
                             return true;
                         }
                     })
+                    console.log('filter node', filter_node);
+
                     // this.$message({
                     //     'type': 'warning',
                     //     'message': 'The concept [ ' + noWeight_node.toString()+' ] needs a least one relationship, please check it.'
