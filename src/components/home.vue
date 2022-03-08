@@ -2283,6 +2283,7 @@
                 this.btnChangeEnable = true;
                 this.dialogFormVisible_initGraph = false;
                 this.dialogFormVisible_conceptName = false;
+                this.dialogFormVisible_change_concept_name = false;
 
 
                 // this.ifClicked = false;
@@ -2361,51 +2362,66 @@
 
             change_node_name(){
 
+                let containSame = false;
 
+                for (let i = 0; i < this.info.nodes.length; i++) {
 
-                this.info.nodes[this.node_id].properties.name = this.new_node_name;
-                this.info.nodes[this.node_id].snippet = this.select_snippet;
-                this.dialogFormVisible_change_node_name = false;
-
-                // this.optionVisible = false;
-                // this.optionVisible_link = false;
-
-
-
-                this.btnChangeEnable = true;
-
-                let node_to_string = this.info.nodes.map(function (element) {
-                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                        'x': element.x, 'y':element.y,'fixed': true
-                    };
-                });
-
-
-                let link_to_string = this.info.links.map(function (element) {
-                    return {
-                        "source": element.source.id,
-                        "target": element.target.id,
-                        "id": element.id,
-                        "type": element.type,
-                        "citation": element.citation,
-                        "label": element.label,
-
+                    if (this.info.nodes[i].properties.name === this.new_node_name) {
+                        containSame =  true;
                     }
+                }
 
-                });
+                if(containSame === false) {
 
-                console.log('stringfy node', node_to_string);
-                console.log('stringfy links', link_to_string);
+                    this.info.nodes[this.node_id].properties.name = this.new_node_name;
+                    this.info.nodes[this.node_id].snippet = this.select_snippet;
+                    this.dialogFormVisible_change_node_name = false;
 
-                let new_info = [];
-                new_info.nodes = node_to_string;
-                new_info.links = link_to_string;
+                    // this.optionVisible = false;
+                    // this.optionVisible_link = false;
 
-                this.renderGraph(new_info);
-                this.submitData();
-                // this.renderGraph(this.info);
-                this.selectClear();
+
+                    this.btnChangeEnable = true;
+
+                    let node_to_string = this.info.nodes.map(function (element) {
+                        return {
+                            'id': element.id, 'type': element.type, 'properties': {'name': element.properties.name},
+                            'label': element.label, 'snippet': element.snippet, 'if_expanded': element.if_expanded,
+                            'x': element.x, 'y': element.y, 'fixed': true
+                        };
+                    });
+
+
+                    let link_to_string = this.info.links.map(function (element) {
+                        return {
+                            "source": element.source.id,
+                            "target": element.target.id,
+                            "id": element.id,
+                            "type": element.type,
+                            "citation": element.citation,
+                            "label": element.label,
+
+                        }
+
+                    });
+
+                    console.log('stringfy node', node_to_string);
+                    console.log('stringfy links', link_to_string);
+
+                    let new_info = [];
+                    new_info.nodes = node_to_string;
+                    new_info.links = link_to_string;
+
+                    this.renderGraph(new_info);
+                    this.submitData();
+                    // this.renderGraph(this.info);
+                    this.selectClear();
+                }else{
+                    this.$message({
+                        'type': 'warning',
+                        'message': 'There is already a concept with that name!'
+                    })
+                }
 
             },
 

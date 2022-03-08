@@ -7,7 +7,7 @@ let config = {
     // relationships : ["causes"],
     //relationships =: 'relations.txt',
     // concepts : 'Wikipedia',
-    concepts : ["Motion", "Momentum", "Impulse", "Torque", "Power"],
+    concepts : ["Motion", "Momentum", "Impulse", "Torque", "Power","Help Out"],
     // concepts : [],
     //concepts : concepts.txt,
     Voting : true,
