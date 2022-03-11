@@ -1612,16 +1612,6 @@
                 console.log('Nodes 最后的结果', this.info.nodes);
                 console.log('Links 最后的结果', this.info.links);
 
-
-                // let new_node = {
-                //     'id': nodes.length,
-                //     "type": "node",
-                //     'properties': {'name': input},
-                //     'label': 'Concept',
-                //     'snippet':snippet,
-                //     'if_expanded':false
-                // };
-
                 let node_to_string = this.info.nodes.map(function (element) {
                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                     'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded};
@@ -1748,16 +1738,6 @@
                 //
                 // this.renderGraph(this.info);
 
-
-
-
-
-
-
-
-
-
-
             },
 
 
@@ -1883,7 +1863,7 @@
                     old_node_id = arr2[i].id;
                     if(arr1_name.indexOf(arr2[i].properties.name) > -1){ // 去重
                         node_map[old_node_id] = arr1_name.indexOf(arr2[i].properties.name);
-                        continue
+                        continue;
                     }
                     else{
                         arr2[i].id = arr1.length;
@@ -2036,10 +2016,6 @@
 
 
             handleShow:function(){
-
-
-
-
 
                 console.log('cccc');
                 console.log('handleshow username', this.username);
@@ -2201,13 +2177,6 @@
             },
 
 
-
-
-
-
-
-
-
             selectClear() {
                 this.node_value = '';
                 this.link_value = '';
@@ -2284,8 +2253,6 @@
                 this.dialogFormVisible_initGraph = false;
                 this.dialogFormVisible_conceptName = false;
                 this.dialogFormVisible_change_concept_name = false;
-
-
                 // this.ifClicked = false;
                 this.selectClear();
 
@@ -2315,20 +2282,13 @@
                 };
 
                 this.dialogFormVisible_initGraph  = false;
-
-
                 this.info.nodes.push(init_node);
-
-
                 this.renderGraph(this.info);
                 this.selectClear();
             },
 
 
             addNodes(){
-
-
-
                         let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
                         this.btnChangeEnable = true;
                         console.log('flag', flag)
@@ -2339,25 +2299,16 @@
                             } else {
                                 this.dialogFormVisible = true;
                                 this.selectClear();
-
                             }
                         }else{
-
                             if (flag === true) {
                                 this.dialogFormVisible_conceptName = false;
                                 this.selectClear();
                             } else {
                                 this.dialogFormVisible_conceptName = true;
                                 this.selectClear();
-
                             }
-
                         }
-
-
-
-
-
             },
 
             change_node_name(){
@@ -2509,9 +2460,7 @@
                         "type": element.type,
                         "citation": element.citation,
                         "label": element.label,
-
                     }
-
                 });
 
                 console.log('stringfy node', node_to_string);
@@ -3545,6 +3494,7 @@
 
                                 _this.end  = data;
                                 _this.start = d;
+                                console.log('start',d, 'end',data);
 
 
 
