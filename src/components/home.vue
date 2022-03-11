@@ -352,7 +352,7 @@
                 :visible.sync="dialogFormVisible_link"
                    :show-close="false"
                    title="Add Reference URL" center>
-            {{start.properties.name}}
+            {{start_name}}
             <el-select
 
                     v-model="relationship"
@@ -365,7 +365,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            {{end.properties.name}}
+            {{end_name}}
             <span><el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
@@ -422,7 +422,7 @@
                 :visible.sync="dialogFormVisible_relationship"
                 :show-close="false"
                 title="Select Relationships" center>
-            {{start.properties.name}}
+            {{start_name}}
             <el-select v-model="relationship"
                        style='width: 300px; margin-left:150px;'
                        placeholder="Please select the relationship">
@@ -433,7 +433,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            {{end.properties.name}}
+            {{end_name}}
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     Cancel
@@ -1016,6 +1016,8 @@
                 dragNode:null,
                 start:null,
                 end:null,
+                start_name:'',
+                end_name:'',
                 target_node_index : '',
                 initial_links_count :0,
                 temp_linklist:[],
@@ -3496,7 +3498,9 @@
 
                                 _this.end  = data;
                                 _this.start = d;
-                                console.log('start',d, 'end',data);
+                                _this.start_name = d.properties.name;
+                                _this.end_name = data.properties.name;
+                                console.log('start',_this.start_name, 'end',_this.end_name);
 
 
 
