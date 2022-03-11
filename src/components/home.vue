@@ -422,6 +422,7 @@
                 :visible.sync="dialogFormVisible_relationship"
                 :show-close="false"
                 title="Select Relationships" center>
+            {{start}}
             <el-select v-model="relationship"
                        style='width: 300px; margin-left:150px;'
                        placeholder="Please select the relationship">
@@ -432,6 +433,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
+            {{end}}
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     Cancel
