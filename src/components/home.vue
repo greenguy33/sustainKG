@@ -356,8 +356,9 @@
             <el-select
 
                     v-model="relationship"
-                       style='width: 300px;'
-                       placeholder="Please select the relationship">
+                       style='width: 300px; font-weight: bold;'
+                       placeholder="Please select the relationship"
+            >
                 <el-option
                         v-for="item in link_list"
                         :key="item.value"
@@ -424,7 +425,7 @@
                 title="Select Relationships" center>
             {{start_name}}
             <el-select v-model="relationship"
-                       style='width: 300px; margin-left:150px;'
+                       style='width: 300px; margin-left:150px; font-weight: bold;'
                        placeholder="Please select the relationship">
                 <el-option
                         v-for="item in link_list"
