@@ -436,10 +436,10 @@
             </el-select>
 <!--            <div>{{start_name}} {{relationship}} {{end_name}} </div>-->
             <el-row>
-                <el-col :span="24">
-                    <el-tag type="info">{{start_name}}</el-tag>
-                    <el-tag type="info" style="font-weight: bold">{{relationship}} </el-tag>
-                    <el-tag type="info">{{end_name}}</el-tag>
+                <el-col :span="24" style="margin-left:150px;">
+                    <el-tag >{{start_name}}</el-tag>
+                    <el-tag  style="font-weight: bold">{{relationship}} </el-tag>
+                    <el-tag >{{end_name}}</el-tag>
                 </el-col>
             </el-row>
 
