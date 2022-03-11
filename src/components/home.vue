@@ -434,7 +434,11 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            <div>{{start_name}} {{relationship}} {{end_name}} </div>
+<!--            <div>{{start_name}} {{relationship}} {{end_name}} </div>-->
+
+            <el-tag type="info">{{start_name}}</el-tag>
+            <el-tag type="info" style="font-weight: bold">{{relationship}} </el-tag>
+            <el-tag type="info">{{end_name}}</el-tag>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
@@ -4110,6 +4114,8 @@
     .el-card__header {
         border-bottom: 1px solid #50596d;
     }
+
+
 
 
 
