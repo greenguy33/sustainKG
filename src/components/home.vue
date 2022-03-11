@@ -352,7 +352,7 @@
                 :visible.sync="dialogFormVisible_link"
                    :show-close="false"
                    title="Add Reference URL" center>
-            {{start}}
+            {{start.properties.name}}
             <el-select
 
                     v-model="relationship"
@@ -365,7 +365,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            {{end}}
+            {{end.properties.name}}
             <span><el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
@@ -422,7 +422,7 @@
                 :visible.sync="dialogFormVisible_relationship"
                 :show-close="false"
                 title="Select Relationships" center>
-            {{start}}
+            {{start.properties.name}}
             <el-select v-model="relationship"
                        style='width: 300px; margin-left:150px;'
                        placeholder="Please select the relationship">
@@ -433,7 +433,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            {{end}}
+            {{end.properties.name}}
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     Cancel
