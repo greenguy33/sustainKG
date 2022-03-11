@@ -352,7 +352,7 @@
                 :visible.sync="dialogFormVisible_link"
                    :show-close="false"
                    title="Add Reference URL" center>
-
+            {{start}}
             <el-select
 
                     v-model="relationship"
@@ -365,7 +365,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-
+            {{end}}
             <span><el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
