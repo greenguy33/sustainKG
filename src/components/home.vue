@@ -3744,7 +3744,7 @@
                         d3.selectAll('.d3-context-menu').html('');
                         let list = d3.selectAll('.d3-context-menu').append('ul');
                         console.log('right-select',data,select)
-                        list.insert('li',select.source.properties.name + ' ' +
+                        list.append('span',select.source.properties.name + ' ' +
                                 select.label + ' ' + select.target.properties.name )
                         // list.select('ul').append('li')
                         //     .html(select.source.properties.name + ' ' +
