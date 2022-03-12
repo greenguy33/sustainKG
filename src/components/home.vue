@@ -933,7 +933,8 @@
                 ],
 
                 menu_edge:[
-                    {title: this.start_name +' '+ this.relationship + ' ' + this.end_name},
+                    {title: this.right_select_link.source.properties.name
+                            +' '+ this.right_select_link.label + ' ' + this.this.right_select_link.target.properties.name},
                     {
                         title: 'Delete Relationship',
                         action: (link,selected_link) => {
@@ -1041,6 +1042,7 @@
                 relationship: '',
                 new_relationship:'',
                 relationship_name :'',
+                right_select_link:'', // for showing the source concept, label and target source in the context menu
                 // ifTeamWork:true,
             }
         },
@@ -3234,6 +3236,7 @@
                             console.log('read only mode')
                         }else {
                             if(this.ifClicked === false) {
+                                this.right_select_link = d;
                                 Menu(this.menu_edge)(d, d3.event, link)
                             }else{
                                 d3.event.preventDefault();
