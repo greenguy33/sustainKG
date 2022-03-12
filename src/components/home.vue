@@ -933,11 +933,13 @@
                 ],
 
                 menu_edge:[
-                    // {
-                    //     title: this.right_select_link.source.properties.name
-                    //         +' '+ this.right_select_link.label + ' ' + this.this.right_select_link.target.properties.name
-                    //
-                    // },
+                    {
+
+                        title: this.right_select_link
+                            //     .source.properties.name
+                            // +' '+ this.right_select_link.label + ' ' + this.right_select_link.target.properties.name
+
+                    },
                     {
                         title: 'Delete Relationship',
                         action: (link,selected_link) => {
