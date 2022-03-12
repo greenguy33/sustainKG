@@ -933,6 +933,7 @@
                 ],
 
                 menu_edge:[
+                    {title: this.start_name +' '+ this.relationship + ' ' + this.end_name},
                     {
                         title: 'Delete Relationship',
                         action: (link,selected_link) => {
