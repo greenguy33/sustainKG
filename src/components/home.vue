@@ -936,12 +936,12 @@
 
 
                 menu_edge:[
-                    {
-
-                        title: this.right_select_link.source.properties.name
-                            +' '+ this.right_select_link.label + ' ' + this.right_select_link.target.properties.name
-
-                    },
+                    // {
+                    //
+                    //     title: this.right_select_link.source.properties.name
+                    //         +' '+ this.right_select_link.label + ' ' + this.right_select_link.target.properties.name
+                    //
+                    // },
                     {
                         title: 'Delete Relationship',
                         action: (link,selected_link) => {
@@ -3745,6 +3745,8 @@
                         let list = d3.selectAll('.d3-context-menu').append('ul');
                         console.log('right-select',data,select)
                         list.selectAll('li').data(menu).enter()
+                            .append('li')
+                            .html(select.source.properties.name)
                             .append('li')
                             .html(function (d) {
                                 return d.title
