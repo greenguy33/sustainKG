@@ -3735,7 +3735,7 @@
 
                         d3.selectAll('.d3-context-menu').html('');
                         let list = d3.selectAll('.d3-context-menu').append('ul');
-                        console.log('right-select',data)
+                        console.log('right-select',data,select)
                         list.selectAll('li').data(menu).enter()
                             .append('li')
                             .html(function (d) {
