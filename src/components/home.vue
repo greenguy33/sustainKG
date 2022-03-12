@@ -3744,9 +3744,10 @@
                         d3.selectAll('.d3-context-menu').html('');
                         let list = d3.selectAll('.d3-context-menu').append('ul');
                         console.log('right-select',data,select)
+                        list.append('li')
+                            .html(select.source.properties.name + ' ' +
+                                select.label + ' ' + select.target.properties.name )
                         list.selectAll('li').data(menu).enter()
-                            .append('li')
-                            .html(select.source.properties.name)
                             .append('li')
                             .html(function (d) {
                                 return d.title
