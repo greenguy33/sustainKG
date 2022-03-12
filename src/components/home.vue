@@ -3243,6 +3243,7 @@
                         }else {
                             if(this.ifClicked === false) {
                                 _this.right_select_link = d;
+                                console.log('wula',this.right_select_link)
                                 Menu(this.menu_edge)(d, d3.event, link)
                             }else{
                                 d3.event.preventDefault();
@@ -3335,6 +3336,7 @@
                         edges_line.style("stroke-width", 3);
                     })
                     .on('contextmenu',(d,link)=>{
+                        let _this = this;
                         console.log('huahua',d,link);
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
@@ -3349,6 +3351,8 @@
                         }
                         else {
                             if(this.ifClicked === false) {
+                                _this.right_select_link = d;
+                                console.log('wula',this.right_select_link)
                                 Menu(this.menu_edge)(d, d3.event, link)
                             }else{
                                 d3.event.preventDefault();
