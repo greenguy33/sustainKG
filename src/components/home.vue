@@ -933,8 +933,11 @@
                 ],
 
                 menu_edge:[
-                    {title: this.right_select_link.source.properties.name
-                            +' '+ this.right_select_link.label + ' ' + this.this.right_select_link.target.properties.name},
+                    {
+                        title: this.right_select_link.source.properties.name
+                            +' '+ this.right_select_link.label + ' ' + this.this.right_select_link.target.properties.name
+
+                    },
                     {
                         title: 'Delete Relationship',
                         action: (link,selected_link) => {
@@ -1042,7 +1045,7 @@
                 relationship: '',
                 new_relationship:'',
                 relationship_name :'',
-                right_select_link:'', // for showing the source concept, label and target source in the context menu
+                right_select_link:{'source':null, 'label':null, 'target':null}, // for showing the source concept, label and target source in the context menu
                 // ifTeamWork:true,
             }
         },
