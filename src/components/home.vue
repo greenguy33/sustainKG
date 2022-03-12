@@ -935,9 +935,8 @@
                 menu_edge:[
                     {
 
-                        title: this.right_select_link
-                            //     .source.properties.name
-                            // +' '+ this.right_select_link.label + ' ' + this.right_select_link.target.properties.name
+                        title: this.right_select_link.source.properties.name
+                            +' '+ this.right_select_link.label + ' ' + this.right_select_link.target.properties.name
 
                     },
                     {
@@ -1047,7 +1046,7 @@
                 relationship: '',
                 new_relationship:'',
                 relationship_name :'',
-                right_select_link:{'source':null, 'label':null, 'target':null}, // for showing the source concept, label and target source in the context menu
+                right_select_link:{source: {properties:{name:'1'}}, label:null, target:{properties:{name:'1'}}}, // for showing the source concept, label and target source in the context menu
                 // ifTeamWork:true,
             }
         },
