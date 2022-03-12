@@ -932,6 +932,9 @@
 
                 ],
 
+                right_select_link:{source: {properties:{name:'1'}}, label:null, target:{properties:{name:'1'}}}, // for showing the source concept, label and target source in the context menu
+
+
                 menu_edge:[
                     {
 
@@ -1046,7 +1049,6 @@
                 relationship: '',
                 new_relationship:'',
                 relationship_name :'',
-                right_select_link:{source: {properties:{name:'1'}}, label:null, target:{properties:{name:'1'}}}, // for showing the source concept, label and target source in the context menu
                 // ifTeamWork:true,
             }
         },
