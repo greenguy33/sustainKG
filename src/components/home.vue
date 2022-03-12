@@ -3231,6 +3231,7 @@
                     })
                     // .on('click', (link) => { this.deleteLine(this.info,link); })
                     .on('contextmenu',(d,link)=>{
+                        let _this = this;
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
                             // this.$message(
@@ -3241,7 +3242,7 @@
                             console.log('read only mode')
                         }else {
                             if(this.ifClicked === false) {
-                                this.right_select_link = d;
+                                _this.right_select_link = d;
                                 Menu(this.menu_edge)(d, d3.event, link)
                             }else{
                                 d3.event.preventDefault();
