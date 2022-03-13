@@ -2221,7 +2221,7 @@
                 this.input = '';
                 this.node_list  =[];
                 this.relationship = '';
-                this.bold_relationship = '?'
+                // this.bold_relationship = '?'
 
 
 
