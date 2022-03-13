@@ -436,11 +436,16 @@
             </el-select>
 <!--            <div>{{start_name}} {{relationship}} {{end_name}} </div>-->
             <el-row>
-                <el-col :span="24" style="margin-left:150px;">
-                    <el-tag >{{start_name}}</el-tag>
-                    <el-tag  style="font-weight: bold">{{relationship}} </el-tag>
-                    <el-tag >{{end_name}}</el-tag>
-                </el-col>
+                <el-radio-group  style="margin-bottom: 20px;">
+                    <el-radio-button >{{start_name}}</el-radio-button>
+                    <el-radio-button >{{relationship}}</el-radio-button>
+                    <el-radio-button >{{end_name}}</el-radio-button>
+                </el-radio-group>
+<!--                <el-col :span="24" style="margin-left:150px;">-->
+<!--                    <el-tag >{{start_name}}</el-tag>-->
+<!--                    <el-tag  style="font-weight: bold">{{relationship}} </el-tag>-->
+<!--                    <el-tag >{{end_name}}</el-tag>-->
+<!--                </el-col>-->
             </el-row>
 
             <div slot="footer" class="dialog-footer">
