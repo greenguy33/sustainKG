@@ -438,7 +438,7 @@
             <el-row>
                 <el-col :span="24" style="margin-left:150px;">
                     <el-tag >{{start_name}}</el-tag>
-                    <el-tag  style="font-weight: bold">{{relationship}} </el-tag>
+                    <el-tag  style="font-weight: bold">{{bold_relationship}} </el-tag>
                     <el-tag >{{end_name}}</el-tag>
                 </el-col>
             </el-row>
@@ -1351,6 +1351,7 @@
                 if(this.link_list.length === 1){
 
                     this.relationship = this.link_list[0].value;
+                    this.bold_relationship = this.link_list[0].value;
                     this.new_relationship = this.link_list[0].value;
 
                 }
@@ -2219,6 +2220,8 @@
                 this.input = '';
                 this.node_list  =[];
                 this.relationship = '';
+                this.bold_relationship = '?'
+
 
 
                 this.$forceUpdate()
@@ -2275,6 +2278,7 @@
                 this.dialogFormVisible_initGraph = false;
                 this.dialogFormVisible_conceptName = false;
                 this.dialogFormVisible_change_concept_name = false;
+                this.bold_relationship = '?';
                 // this.ifClicked = false;
                 this.selectClear();
 
