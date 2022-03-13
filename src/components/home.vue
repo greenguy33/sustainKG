@@ -3375,8 +3375,10 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
-                    // svg.selectAll("circle").attr("transform", "scale(" +d3.event.scale + ")");
-                    svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    svg.selectAll("circle").attr("transform", "scale(" +d3.event.scale + ")");
+                    svg.selectAll("path").attr("transform", "scale(" +d3.event.scale + ")");
+                    svg.selectAll(".edgepath").attr("transform", "scale(" +d3.event.scale + ")");
+                    // svg.attr("transform", "scale(" +d3.event.scale + ")");
                     //
                     // d3.select('.g_circle_'+ '1').select('circle')
                     //     .attr("transform", "scale(" +d3.event.scale + ")")
@@ -3530,6 +3532,8 @@
                                 let data = d3.select(d3.event.sourceEvent.srcElement).datum()
                                 // console.log('data',d3.event.sourceEvent.srcElement)
                                 // console.log('datum',data);
+                                _this.end  = data;
+                                _this.start = d;
 
                                 if(data!==undefined && _this.end.type!=='link') {
                                     // console.log('clicked',_this.ifClicked);
@@ -3572,8 +3576,7 @@
                                     _this.ifClicked = false;
                                     mouse_line.style('opacity', '0');
 
-                                    _this.end  = data;
-                                    _this.start = d;
+
                                     _this.start_name = d.properties.name;
                                     _this.end_name = data.properties.name;
                                     console.log('start',_this.start_name, 'end',_this.end_name);
