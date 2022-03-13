@@ -112,6 +112,24 @@
                 <el-button style="margin-top: 80px; margin-left: 15px;"
                 v-show="dashboard_show"   @click="getGraphStatistics" size="small" round
                 type="primary">Dashboard</el-button>
+                
+
+                <div id="node_info" v-show="showdetail_node"  style="z-index: -1">
+                    <el-card
+                            :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
+                            class="node-card"
+                            style="height: 250px"
+                    >
+                        <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
+                        <div>
+
+                            <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
+                            <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
+                            <el-link type="primary">{{detailValue.wiki_link}}</el-link>
+                            <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
+                        </div>
+                    </el-card>
+                </div>
 
 
 
@@ -545,22 +563,22 @@
 
 
 
-        <div id="node_info" v-show="showdetail_node"  style="z-index: -1">
-            <el-card
-                    :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
-                    class="node-card"
-                    style="height: 250px"
-            >
-                <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
-                <div>
+<!--        <div id="node_info" v-show="showdetail_node"  style="z-index: -1">-->
+<!--            <el-card-->
+<!--                    :style="{ backgroundColor: 'rgb(253, 216, 186)' }"-->
+<!--                    class="node-card"-->
+<!--                    style="height: 250px"-->
+<!--            >-->
+<!--                <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>-->
+<!--                <div>-->
 
-                    <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
-                    <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
-                    <el-link type="primary">{{detailValue.wiki_link}}</el-link>
-                    <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
-                </div>
-            </el-card>
-        </div>
+<!--                    &lt;!&ndash;<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>&ndash;&gt;-->
+<!--                    &lt;!&ndash;<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>&ndash;&gt;-->
+<!--                    <el-link type="primary">{{detailValue.wiki_link}}</el-link>-->
+<!--                    <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>-->
+<!--                </div>-->
+<!--            </el-card>-->
+<!--        </div>-->
 
 
         <div id="link_info" v-show="showdetail_link" >
