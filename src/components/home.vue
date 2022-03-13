@@ -1352,7 +1352,7 @@
                 if(this.link_list.length === 1){
 
                     this.relationship = this.link_list[0].value;
-                    this.bold_relationship =this.relationship;
+                    this.bold_relationship =this.link_list[0].value;
                     this.new_relationship = this.link_list[0].value;
 
                 }
@@ -2583,6 +2583,7 @@
             select_relationship(){
                 console.log('selected relationship: ',this.relationship);
                 this.relationship_name = this.relationship;
+                this.bold_relationship = this.relationship;
                 this.dialogFormVisible_relationship = false;
                 this.selectClear();
 
