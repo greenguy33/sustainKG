@@ -3531,17 +3531,6 @@
                                 // console.log('data',d3.event.sourceEvent.srcElement)
                                 // console.log('datum',data);
 
-
-
-
-                                _this.end  = data;
-                                _this.start = d;
-                                _this.start_name = d.properties.name;
-                                _this.end_name = data.properties.name;
-                                console.log('start',_this.start_name, 'end',_this.end_name);
-
-
-
                                 if(data!==undefined && _this.end.type!=='link') {
                                     // console.log('clicked',_this.ifClicked);
                                     if(_this.start.index === _this.end.index)
@@ -3554,12 +3543,6 @@
                                     else {
                                         // console.log('start', _this.start.properties.name, _this.start.type);
                                         // console.log('end', _this.end.properties.name, _this.end.type);
-
-
-
-
-
-
 
                                         if(_this.config.Citations === true){
 
@@ -3588,6 +3571,13 @@
 
                                     _this.ifClicked = false;
                                     mouse_line.style('opacity', '0');
+
+                                    _this.end  = data;
+                                    _this.start = d;
+                                    _this.start_name = d.properties.name;
+                                    _this.end_name = data.properties.name;
+                                    console.log('start',_this.start_name, 'end',_this.end_name);
+
                                 }
 
 
