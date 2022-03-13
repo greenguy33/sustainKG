@@ -2914,7 +2914,7 @@
 
                 let zoom = d3.behavior.zoom()
                     .scaleExtent([.4, 2])
-                    .on("zoom", zoomed)
+                    // .on("zoom", zoomed)
                 ;
 
 
