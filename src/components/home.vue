@@ -3375,8 +3375,11 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
-                    svg.selectAll("circle").attr("transform", "scale(" +d3.event.scale + ")");
+                    // svg.selectAll("circle").attr("transform", "scale(" +d3.event.scale + ")");
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
+
+                    d3.select('.g_circle_'+ '1').select('circle')
+                        .attr("transform", "scale(" +d3.event.scale + ")")
 
                 }
                 console.log('edge line',edges_line);
