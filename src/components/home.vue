@@ -3375,8 +3375,8 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
-                    // svg.selectAll("g").attr("transform", "scale(" +d3.event.scale + ")");
-                    svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    svg.selectAll("g").attr("transform", "scale(" +d3.event.scale + ")");
+                    // svg.attr("transform", "scale(" +d3.event.scale + ")");
 
                 }
                 console.log('edge line',edges_line);
