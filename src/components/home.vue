@@ -426,6 +426,7 @@
 
             <el-select v-model="relationship"
                        style='width: 300px; margin-left:150px; font-weight: bold;'
+                       @change="change_bold_rel"
                        placeholder="Please select the relationship">
                 <el-option
                         v-for="item in link_list"
@@ -2221,11 +2222,15 @@
                 this.input = '';
                 this.node_list  =[];
                 this.relationship = '';
-                // this.bold_relationship = '?'
+                this.bold_relationship = '?'
 
 
 
                 this.$forceUpdate()
+            },
+
+            change_bold_rel(val){
+                this.bold_relationship = val;
             },
 
             selectChange(val) {
