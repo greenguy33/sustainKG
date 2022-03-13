@@ -112,7 +112,7 @@
                 <el-button style="margin-top: 80px; margin-left: 15px;"
                 v-show="dashboard_show"   @click="getGraphStatistics" size="small" round
                 type="primary">Dashboard</el-button>
-                
+
 
                 <div id="node_info" v-show="showdetail_node"  style="z-index: -1">
                     <el-card
@@ -4147,7 +4147,7 @@
     #node_info {
         position: absolute;
         bottom: 40px;
-        right: 30px;
+        left: 30px;
         width: 270px;
     }
     #link_info {
