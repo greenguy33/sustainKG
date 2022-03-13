@@ -3551,11 +3551,17 @@
                                         // console.log('start', _this.start.properties.name, _this.start.type);
                                         // console.log('end', _this.end.properties.name, _this.end.type);
 
+                                        _this.start_name = d.properties.name;
+                                        _this.end_name = data.properties.name;
+                                        console.log('start',_this.start_name, 'end',_this.end_name);
+
                                         if(_this.config.Citations === true){
+
 
                                             _this.dialogFormVisible_link = true;
 
                                         }else{
+
                                             _this.dialogFormVisible_relationship = true;
                                         }
 
@@ -3579,9 +3585,7 @@
                                     _this.ifClicked = false;
                                     mouse_line.style('opacity', '0');
 
-                                    _this.start_name = d.properties.name;
-                                    _this.end_name = data.properties.name;
-                                    console.log('start',_this.start_name, 'end',_this.end_name);
+
                                 }
 
 
