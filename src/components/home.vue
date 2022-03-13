@@ -1046,7 +1046,8 @@
 
                 // config file
                 config,
-                relationship: '?',
+                relationship: '',
+                bold_relationship:'?',
                 new_relationship:'',
                 relationship_name :'',
                 // ifTeamWork:true,
