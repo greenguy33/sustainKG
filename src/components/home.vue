@@ -114,7 +114,7 @@
                 type="primary">Dashboard</el-button>
 
 
-                <div id="node_info" v-show="showdetail_node"  style="z-index: -1">
+                <div id="node_info" v-show="showdetail_node"  style="z-index: 1">
                     <el-card
                             :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                             class="node-card"
@@ -4152,7 +4152,8 @@
         position: absolute;
         bottom: 40px;
         left: 30px;
-        width: 230px;
+        width: 210px;
+        height: 300px;
     }
     #node_content
     {
