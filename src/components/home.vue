@@ -4154,7 +4154,7 @@
         position: absolute;
         bottom: 40px;
         right: 30px;
-        width: 270px;
+        width: 240px;
     }
     .node-card {
         border: 1px solid #9faecf;
