@@ -118,7 +118,7 @@
                     <el-card
                             :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                             class="node-card"
-                            style="height: 300px"
+                            style="height: 320px"
                     >
                         <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
                         <div id="node_content">
@@ -4152,7 +4152,7 @@
         position: absolute;
         bottom: 40px;
         left: 30px;
-        width: 200px;
+        width: 190px;
         height: 250px;
     }
     #node_content
