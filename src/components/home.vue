@@ -124,7 +124,7 @@
                         <div id="node_content">
                             <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
                             <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
-                            <a :href="pass_Wiki_link(detailValue.properties.name)">{{detailValue.wiki_link}}</a></div>
+                            <a :href="pass_Wiki_link(detailname)">{{detailValue.wiki_link}}</a></div>
                         <div>
                             <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
                         </div>
