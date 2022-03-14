@@ -118,13 +118,13 @@
                     <el-card
                             :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                             class="node-card"
-                            style="height: 250px"
+                            style="height: 300px"
                     >
                         <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
                         <div id="node_content">
                             <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
                             <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
-                            <a :href="pass_Wiki_link(detailname)">{{detailValue.wiki_link}}</a></div>
+                            <a :href="pass_Wiki_link(detailname)" target="_blank">{{detailValue.wiki_link}}</a></div>
                         <div>
                             <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
                         </div>
@@ -4152,8 +4152,8 @@
         position: absolute;
         bottom: 40px;
         left: 30px;
-        width: 210px;
-        height: 300px;
+        width: 200px;
+        height: 250px;
     }
     #node_content
     {
