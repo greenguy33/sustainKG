@@ -122,10 +122,10 @@
                     >
                         <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
                         <div id="node_content">
-
                             <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
                             <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
-                            <el-link type="primary">{{detailValue.wiki_link}}</el-link>
+                            <el-link type="primary">{{detailValue.wiki_link}}</el-link></div>
+                        <div>
                             <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
                         </div>
                     </el-card>
