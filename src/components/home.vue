@@ -4148,7 +4148,7 @@
         position: absolute;
         bottom: 40px;
         left: 30px;
-        width: 270px;
+        width: 230px;
     }
     #link_info {
         position: absolute;
