@@ -121,7 +121,7 @@
                             style="height: 250px"
                     >
                         <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
-                        <div>
+                        <div id="node_content">
 
                             <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
                             <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
@@ -4149,6 +4149,10 @@
         bottom: 40px;
         left: 30px;
         width: 230px;
+    }
+    #node_content
+    {
+        word-wrap: break-word;
     }
     #link_info {
         position: absolute;
