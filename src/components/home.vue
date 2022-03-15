@@ -3015,6 +3015,49 @@
                     // Use loc.x and loc.y here
                 },false);
 
+                // draw lines first to avoid overlapping the circles
+
+                const edges_line = svg.append("g").selectAll(".edgepath")
+                    .data(force.links())
+                    .enter()
+                    .append("path")
+
+                    .style("stroke", 'black')
+                    .style("stroke-width", 2)//线条粗细
+                    .style("fill-opacity",0)
+                    .style("cursor","pointer")
+                    .style('z-index',0)
+                    .attr("id", function (d, i) { return 'edgepath' + i; })
+                    .on("mouseover", function(d,i){
+                        return getStrokeWidth(d,i);
+                    })
+                    .on("mouseout", function() {
+                        edges_line.style("stroke-width", 3);
+                        edges_text.selectAll('textPath').attr("font-size", 20);
+                    })
+                    // .on('click', (link) => { this.deleteLine(this.info,link); })
+                    .on('contextmenu',(d,link)=>{
+                        let _this = this;
+                        if (d3.event.defaultPrevented) return;
+                        if(this.readOnly === true){
+                            // this.$message(
+                            //     {
+                            //         type: 'Warning',
+                            //         message: 'Read Only Mode'
+                            //     });
+                            console.log('read only mode')
+                        }else {
+                            if(this.ifClicked === false) {
+                                _this.right_select_link = d;
+                                console.log('wula',this.right_select_link)
+                                Menu(this.menu_edge)(d, d3.event, link)
+                            }else{
+                                d3.event.preventDefault();
+                            }
+                        }
+
+                    });
+
 
 
                 // d3.selectAll('rect').on('mousedown.drag',null);
@@ -3089,11 +3132,6 @@
 
 
                     })
-                    // .on('dblclick',()=>{
-                    //     if (d3.event.defaultPrevented) return;
-                    //     console.log('dblclick')
-                    //
-                    // })
                     .on("dblclick", (node )=>{
 
 
@@ -3247,46 +3285,7 @@
 
 
 
-                const edges_line = svg.append("g").selectAll(".edgepath")
-                    .data(force.links())
-                    .enter()
-                    .append("path")
 
-                    .style("stroke", 'black')
-                    .style("stroke-width", 2)//线条粗细
-                    .style("fill-opacity",0)
-                    .style("cursor","pointer")
-                    .style('z-index',0)
-                    .attr("id", function (d, i) { return 'edgepath' + i; })
-                    .on("mouseover", function(d,i){
-                        return getStrokeWidth(d,i);
-                    })
-                    .on("mouseout", function() {
-                        edges_line.style("stroke-width", 3);
-                        edges_text.selectAll('textPath').attr("font-size", 20);
-                    })
-                    // .on('click', (link) => { this.deleteLine(this.info,link); })
-                    .on('contextmenu',(d,link)=>{
-                        let _this = this;
-                        if (d3.event.defaultPrevented) return;
-                        if(this.readOnly === true){
-                            // this.$message(
-                            //     {
-                            //         type: 'Warning',
-                            //         message: 'Read Only Mode'
-                            //     });
-                            console.log('read only mode')
-                        }else {
-                            if(this.ifClicked === false) {
-                                _this.right_select_link = d;
-                                console.log('wula',this.right_select_link)
-                                Menu(this.menu_edge)(d, d3.event, link)
-                            }else{
-                                d3.event.preventDefault();
-                            }
-                        }
-
-                    });
 
                 const edges_text = svg.append("g").selectAll(".edgetext")
                     .data(links)
@@ -3307,24 +3306,6 @@
 
 
                     })
-
-                // .attr("x",250)
-                // .attr('y',25)
-                // .attr('text-anchor',"middle")
-
-
-
-
-
-
-
-                function edge_text_Position(){
-
-                    return 'rotate(180,40,5)'
-                }
-
-
-
 
                 //设置线条上的文字
                 edges_text.append('textPath')
