@@ -3255,6 +3255,7 @@
                     .style("stroke-width", 2)//线条粗细
                     .style("fill-opacity",0)
                     .style("cursor","pointer")
+                    .style('z-index',0)
                     .attr("id", function (d, i) { return 'edgepath' + i; })
                     .on("mouseover", function(d,i){
                         return getStrokeWidth(d,i);
