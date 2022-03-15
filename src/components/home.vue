@@ -3187,6 +3187,7 @@
                     .style("stroke-width", "2px")
                     .attr("r", 40)//设置圆圈半径
                     .style("fill", function (node) { return getCircleColor(node); })
+                    .style('z-index',2)
 
                 ;
                 console.log('circle',circle)
