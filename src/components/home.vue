@@ -3295,7 +3295,7 @@
                     .attr('text-anchor', "middle")
                     .attr("fill-opacity", 0.8)
                     .style("cursor","pointer")
-                    .style('z-index',0)
+                    .style('z-index',1)
 
                     .attr({'class': 'edgelabel',
                         'id': function (d, i) { return 'edgepath' + i; },
