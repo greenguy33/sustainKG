@@ -2825,7 +2825,9 @@
 
                         response.data = response.data.slice(5);
                         response.data = response.data.slice(0, response.data.length - 1);
-                        let wiki = JSON.parse(response.data).query.pages;
+                        // let wiki = JSON.parse(response.data).query.pages;
+                        let wiki = JSON.parse(response.data).query;
+
                         console.log('wiki', wiki);
                         let extract = [];
                         for(let i =0; i<Object.keys(wiki).length;i++){
