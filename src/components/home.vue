@@ -3787,6 +3787,7 @@
                         if(select.type ==='link') {
                             list.append('span').append('h3').html(select.source.properties.name + ' ' +
                                 select.label + ' ' + select.target.properties.name)
+                            list.selectAll('h3').style('font-weight','bold')
                         }
 
                         list.selectAll('li').data(menu).enter()
