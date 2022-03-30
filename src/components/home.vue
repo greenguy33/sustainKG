@@ -32,9 +32,9 @@
 
             <!--<el-row class="tac">-->
             <el-aside width="200px">
-                <h1 style="margin-left: 25px">Sustainability</h1>
-                <h1 style="margin-left: 25px">Knowledge</h1>
-                <h1 style="margin-left: 25px">Mapper</h1>
+                <h3 style="margin-left: 25px">Sustainability</h3>
+                <h3 style="margin-left: 25px">Knowledge</h3>
+                <h3 style="margin-left: 25px">Mapper</h3>
                 <el-menu
 
                         default-active="2"
@@ -92,7 +92,7 @@
 <!--                    <i class="el-icon-info"></i>-->
 <!--                    Save</el-button>-->
 
-                <el-button style="margin-top: 80px; margin-left: 15px;"
+                <el-button style="margin-top: 50px; margin-left: 15px;"
                             @click="instruction" size="small" round
                            type="primary">
                     <i class="el-icon-info"></i>
@@ -109,7 +109,7 @@
                             <!--@click="submit2" size="small" round-->
                            <!--type="primary">test</el-button>-->
 
-                <el-button style="margin-top: 80px; margin-left: 15px;"
+                <el-button style="margin-top: 50px; margin-left: 15px;"
                 v-show="dashboard_show"   @click="getGraphStatistics" size="small" round
                 type="primary">Dashboard</el-button>
 
@@ -120,7 +120,7 @@
                             class="node-card"
                             style="height: 320px"
                     >
-                        <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
+                        <h3 :style="{ color: '#ca635f' }">{{ detailname }}</h3>
                         <div id="node_content">
                             <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
                             <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
@@ -2825,8 +2825,8 @@
 
                         response.data = response.data.slice(5);
                         response.data = response.data.slice(0, response.data.length - 1);
-                        // let wiki = JSON.parse(response.data).query.pages;
-                        let wiki = JSON.parse(response.data).query;
+                        let wiki = JSON.parse(response.data).query.pages;
+                        // let wiki = JSON.parse(response.data).query;
 
                         console.log('wiki', wiki);
                         let extract = [];
@@ -4138,7 +4138,7 @@
     #node_info {
         position: absolute;
         bottom: 40px;
-        left: 30px;
+        left: 20px;
         width: 190px;
         height: 250px;
     }
