@@ -6,17 +6,15 @@
 
         <el-header style="text-align: right;height:40px;">
 
-
-
-
-
             <div class="grid-content " >
                 <template >
                     <!--<el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>-->
                     <el-button style="margin-right: 10px;"  @click="onTapLogin" v-show="showLogin" size="small" round
                                :disabled="true" type="primary" >Login</el-button>
 
-                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round @click="changeUser">{{username}}</el-button>
+            <!--                    the changeUser function is disabled for now     -->
+<!--                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round @click="changeUser">{{username}}</el-button>-->
+                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round >{{username}}</el-button>
                     <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
 
                 </template>
@@ -118,7 +116,7 @@
                     <el-card
                             :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                             class="node-card"
-                            style="height: 320px"
+                            style="height: 250px"
                     >
                         <h3 :style="{ color: '#ca635f' }">{{ detailname }}</h3>
                         <div id="node_content">
@@ -1127,7 +1125,7 @@
         methods: {
 
             pass_Wiki_link(val){
-                return  'https://en.m.wikipedia.org/wiki/' + String(val);
+                return  'https://en.wikipedia.org/wiki/' + String(val);
                     // String(nodes[i].properties.name.replace(/\s+/g,'_'));
             },
 
@@ -1420,6 +1418,9 @@
                                 node_info[i].title.search('list of') !== -1 )
                                 continue;
                             node_info[i].snippet = node_info[i].snippet.replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'')
+                            if(node_info[i].snippet === 'undefined'){
+                                node_info[i].snippet = '';
+                            }
                             term.push(node_info[i]);
                             // console.log(node_info[i].snippet.replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,''));
                             this.snippet[node_info[i].title] = node_info[i].snippet;
