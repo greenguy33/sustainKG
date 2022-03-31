@@ -2834,10 +2834,7 @@
                         for(let i =0; i<Object.keys(wiki).length;i++){
                             let snippet = String(wiki[Object.keys(wiki)[i]].extract).replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'');
                             snippet = snippet.replaceAll('\n','');
-                            console.log('wulala',snippet);
-                            if(snippet === undefined){
-                                snippet = '';
-                            }
+
                             let title = String(wiki[Object.keys(wiki)[i]].title)
                             extract[title] = snippet
                         }
@@ -2845,6 +2842,7 @@
                         // for(let i  = 0; i<nodes.length;i++){
                         //     nodes[i].snippet = extract[nodes[i].properties.name]
                         // }
+                        console.log(extract);
 
                         for(let i =0; i< Object.keys(extract).length; i++){
                             if(localStorage.hasOwnProperty(Object.keys(extract)[i])){
