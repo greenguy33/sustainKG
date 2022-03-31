@@ -2839,7 +2839,7 @@
                             console.log(snippet, typeof snippet);
                             if(snippet === "undefined"){
                                 console.log('nonononon');
-                                extract[title] = '';
+                                extract[title] = 'a';
                             }else {
                                 extract[title] = snippet
                             }
