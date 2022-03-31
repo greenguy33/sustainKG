@@ -2837,7 +2837,7 @@
 
                             let title = String(wiki[Object.keys(wiki)[i]].title)
                             console.log(snippet, typeof snippet);
-                            if(typeof(snippet) === "undefined"){
+                            if(snippet === "undefined"){
                                 console.log('nonononon');
                                 extract[title] = '';
                             }else {
