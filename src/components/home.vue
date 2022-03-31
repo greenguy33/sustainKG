@@ -2835,7 +2835,7 @@
                             let snippet = String(wiki[Object.keys(wiki)[i]].extract).replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'');
                             snippet = snippet.replaceAll('\n','');
                             console.log('wulala',snippet);
-                            if(snippet === 'undefined'){
+                            if(snippet === undefined){
                                 snippet = '';
                             }
                             let title = String(wiki[Object.keys(wiki)[i]].title)
