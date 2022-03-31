@@ -2834,6 +2834,9 @@
                         for(let i =0; i<Object.keys(wiki).length;i++){
                             let snippet = String(wiki[Object.keys(wiki)[i]].extract).replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'');
                             snippet = snippet.replaceAll('\n','');
+                            if(snippet === 'undefined'){
+                                snippet = '';
+                            }
                             let title = String(wiki[Object.keys(wiki)[i]].title)
                             extract[title] = snippet
                         }
@@ -2852,7 +2855,8 @@
                         // console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
-                            nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' +
+
+                            nodes[i].wiki_link =  'https://en.wikipedia.org/wiki/' +
                                 String(nodes[i].properties.name.replace(/\s+/g,'_'));
                         }
 
