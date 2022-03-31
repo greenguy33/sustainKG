@@ -2836,7 +2836,11 @@
                             snippet = snippet.replaceAll('\n','');
 
                             let title = String(wiki[Object.keys(wiki)[i]].title)
-                            extract[title] = snippet
+                            if(snippet === undefined){
+                                extract[title] = '';
+                            }else {
+                                extract[title] = snippet
+                            }
                         }
                         // console.log('extract',extract)
                         // for(let i  = 0; i<nodes.length;i++){
