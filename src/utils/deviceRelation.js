@@ -19,7 +19,7 @@ export const getNodeSelfPath = d => {
   }
 };
 
-export const getNodesLine = (d)=> {
+export const getNodesLine = (d,ratio)=> {
   d.sourceRadius = 40;
   d.targetRadius = 40;
   let tan = Math.abs((d.target.y - d.source.y) / (d.target.x - d.source.x)); //圆心连线tan值
@@ -77,10 +77,10 @@ export const getNodesLine = (d)=> {
   }
 
   //记录连线起始和终止坐标，用于定位线上文字
-  d.x_start = xs;
-  d.y_start = ys;
-  d.x_end = xt;
-  d.y_end = yt;
+  d.x_start = xs * ratio;
+  d.y_start = ys * ratio;
+  d.x_end = xt * ratio;
+  d.y_end = yt * ratio;
   // console.log('xixixi',edges_line);
   //   edge_line.attr('marker-end', function(d,i) {
   //       if (d.x_start < d.x_end) {

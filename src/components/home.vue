@@ -3678,7 +3678,7 @@
 
                     edges_line.attr('d', function (d) {
 
-                                return getNodesLine(d);//路径
+                                return getNodesLine(d, that.ratio);//路径
                     });
 
 
