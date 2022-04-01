@@ -77,10 +77,10 @@ export const getNodesLine = (d,ratio)=> {
   }
 
   //记录连线起始和终止坐标，用于定位线上文字
-  d.x_start = xs * ratio;
-  d.y_start = ys * ratio;
-  d.x_end = xt * ratio;
-  d.y_end = yt * ratio;
+  d.x_start = xs;
+  d.y_start = ys;
+  d.x_end = xt;
+  d.y_end = yt;
   // console.log('xixixi',edges_line);
   //   edge_line.attr('marker-end', function(d,i) {
   //       if (d.x_start < d.x_end) {
@@ -95,6 +95,10 @@ export const getNodesLine = (d,ratio)=> {
   //               return "url(#start)";
   //           }
   //           return ''})
+  xs = xs * ratio;
+  ys = ys * ratio;
+  xt = xt * ratio;
+  yt = yt * ratio;
 
   if(xs<xt) {
 
