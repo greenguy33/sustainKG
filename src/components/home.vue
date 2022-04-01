@@ -3122,14 +3122,13 @@
                     .on('mouseover', (node) => {
                         if (d3.event.defaultPrevented) return;
                         this.showdetail_node = true;
-                        console.log('scale',d3.event.scale);
                         this.detailValue = node;
                         this.detailname = node.properties.name;
                         d3.select('.g_circle_'+ node.index).select('circle')
                             .attr('r',50 * that.ratio)
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
-                            .attr('font-size',25)
+                            .attr('font-size',25 * that.ratio)
 
                         // showNodeInfo(node, this);
                         // showCircleBorderOuterArc(node, i);
@@ -3137,10 +3136,10 @@
                     .on('mouseout',(node)=>{
                         // this.showdetail_node = false;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',40 *that.ratio);
+                            .attr('r',40 * that.ratio);
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
-                            .attr('font-size',15)
+                            .attr('font-size',15 * that.ratio)
 
 
 
@@ -3404,7 +3403,8 @@
 
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
                     that.ratio = d3.event.scale;
-                    circle.attr('r',40 * d3.event.scale)
+                    circle.attr('r',40 * that.ratio)
+                    text.attr("font-size", 15 * that.ratio)
 
 
                     // d3.select('.g_circle_'+ '1').select('circle')
@@ -3662,7 +3662,7 @@
 
                         d3.select(_this).text(function(){return '';});
                     }
-                    d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15)
+                    d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15 )
                         .text(function(){ return circleText; });
                 }
 
