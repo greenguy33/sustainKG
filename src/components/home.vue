@@ -3400,7 +3400,9 @@
                     // svg.selectAll(".edgepath").attr("transform", "scale(" +d3.event.scale + ")");
                     // svg.selectAll("text").attr("transform", "scale(" +d3.event.scale + ")");
                     // svg.selectAll("maker").attr("transform", "scale(" +d3.event.scale + ")");
-                    svg.attr("transform", "scale(" +d3.event.scale + ")");
+
+                    // svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    circle.attr("transform","scale(" +d3.event.scale + ")");
 
                     // d3.select('.g_circle_'+ '1').select('circle')
                     //     .attr("transform", "scale(" +d3.event.scale + ")")
