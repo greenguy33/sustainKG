@@ -3393,18 +3393,12 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
-                    // svg.selectAll("circle").attr("transform", "scale(" +d3.event.scale + ")");
-                    // svg.selectAll("path").attr("transform", "scale(" +d3.event.scale + ")");
-                    // svg.selectAll("textPath").attr("transform", "scale(" +d3.event.scale + ")");
-                    // svg.selectAll(".edgetext").attr("transform", "scale(" +d3.event.scale + ")");
-                    // svg.selectAll(".edgepath").attr("transform", "scale(" +d3.event.scale + ")");
-                    // svg.selectAll("text").attr("transform", "scale(" +d3.event.scale + ")");
-                    // svg.selectAll("maker").attr("transform", "scale(" +d3.event.scale + ")");
+
 
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
                     that.ratio = d3.event.scale;
                     circle.attr('r',40 * that.ratio)
-                    text.attr("font-size", 15 * that.ratio)
+                    text.selectAll('text').attr("font-size", 15 * that.ratio)
 
 
                     // d3.select('.g_circle_'+ '1').select('circle')
