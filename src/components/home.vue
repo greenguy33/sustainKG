@@ -3400,6 +3400,7 @@
                     circle.attr('r',40 * that.ratio)
                     text.selectAll('tspan').attr("font-size", 15 * that.ratio)
                     // edges_line.distance(700 * that.ratio);
+                    console.log('zoom!!!')
                     force.linkDistance(700 * that.ratio);
 
 
