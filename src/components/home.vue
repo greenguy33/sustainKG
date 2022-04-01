@@ -3125,7 +3125,7 @@
                         this.detailValue = node;
                         this.detailname = node.properties.name;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',50)
+                            .attr('r',50 * d3.event.scale)
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
                             .attr('font-size',25)
@@ -3136,7 +3136,7 @@
                     .on('mouseout',(node)=>{
                         // this.showdetail_node = false;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',40);
+                            .attr('r',40 * d3.event.scale);
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
                             .attr('font-size',15)
@@ -3402,7 +3402,7 @@
                     // svg.selectAll("maker").attr("transform", "scale(" +d3.event.scale + ")");
 
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
-                    circle.attr('r',25 * d3.event.scale)
+                    circle.attr('r',40 * d3.event.scale)
 
 
                     // d3.select('.g_circle_'+ '1').select('circle')
