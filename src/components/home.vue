@@ -29,7 +29,7 @@
         <el-container >
 
             <!--<el-row class="tac">-->
-            <el-aside width="200px">
+            <el-aside width="300px">
                 <h3 style="margin-left: 25px">Sustainability</h3>
                 <h3 style="margin-left: 25px">Knowledge</h3>
                 <h3 style="margin-left: 25px">Mapper</h3>
@@ -116,7 +116,7 @@
                     <el-card
                             :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
                             class="node-card"
-                            style="height: 250px"
+                            style="height: 300px"
                     >
                         <h3 :style="{ color: '#ca635f' }">{{ detailname }}</h3>
                         <div id="node_content">
@@ -4149,8 +4149,9 @@
         position: absolute;
         bottom: 40px;
         left: 20px;
+        right:10px;
         width: 190px;
-        height: 250px;
+        height: 300px;
     }
     #node_content
     {
