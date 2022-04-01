@@ -2836,10 +2836,10 @@
                             snippet = snippet.replaceAll('\n','');
 
                             let title = String(wiki[Object.keys(wiki)[i]].title)
-                            console.log(snippet, typeof snippet);
+                            // console.log(snippet, typeof snippet);
                             if(snippet === "undefined"){
-                                console.log('nonononon');
-                                extract[title] = 'a';
+                                // console.log('nonononon');
+                                extract[title] = '';
                             }else {
                                 extract[title] = snippet
                             }
@@ -2857,7 +2857,7 @@
                             localStorage.setItem(Object.keys(extract)[i], extract[Object.keys(extract)[i]])
 
                         }
-                        // console.log('local storage',localStorage.valueOf())
+                        console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
 
