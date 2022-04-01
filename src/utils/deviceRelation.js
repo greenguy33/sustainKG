@@ -20,8 +20,8 @@ export const getNodeSelfPath = d => {
 };
 
 export const getNodesLine = (d,ratio)=> {
-  d.sourceRadius = 40;
-  d.targetRadius = 40;
+  d.sourceRadius = 40 * ratio;
+  d.targetRadius = 40 * ratio;
   let tan = Math.abs((d.target.y - d.source.y) / (d.target.x - d.source.x)); //圆心连线tan值
   let x1 = d.target.x - d.source.x > 0 ? Math.sqrt(d.sourceRadius * d.sourceRadius / (tan * tan + 1)) + d.source.x :
     d.source.x - Math.sqrt(d.sourceRadius * d.sourceRadius / (tan * tan + 1)); //起点x坐标
@@ -95,10 +95,7 @@ export const getNodesLine = (d,ratio)=> {
   //               return "url(#start)";
   //           }
   //           return ''})
-  xs = xs * ratio;
-  ys = ys * ratio;
-  xt = xt * ratio;
-  yt = yt * ratio;
+
 
   if(xs<xt) {
 
