@@ -1068,6 +1068,7 @@
                 new_relationship:'',
                 relationship_name :'',
                 // ifTeamWork:true,
+                ratio:1.0 // the ratio of zooming or reducing the size of the elements
             }
         },
 
@@ -2951,7 +2952,7 @@
                     .on("zoom", zoomed)
                 ;
 
-
+                // that.ratio = d3.event.scale;
                 // let svg_drag = d3.behavior.drag()
                 //     .on('dragstart',null)
                 //     .on('drag',null)
@@ -3125,7 +3126,7 @@
                         this.detailValue = node;
                         this.detailname = node.properties.name;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',50 )
+                            .attr('r',50 * that.ratio)
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
                             .attr('font-size',25)
@@ -3136,7 +3137,7 @@
                     .on('mouseout',(node)=>{
                         // this.showdetail_node = false;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',40 );
+                            .attr('r',40 *that.ratio);
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
                             .attr('font-size',15)
@@ -3402,6 +3403,7 @@
                     // svg.selectAll("maker").attr("transform", "scale(" +d3.event.scale + ")");
 
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    that.ratio = d3.event.scale;
                     circle.attr('r',40 * d3.event.scale)
 
 
