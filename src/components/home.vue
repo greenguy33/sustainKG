@@ -3402,7 +3402,8 @@
                     // svg.selectAll("maker").attr("transform", "scale(" +d3.event.scale + ")");
 
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
-                    circle.attr('r',15)
+                    circle.attr('r',25 * d3.event.scale)
+
 
                     // d3.select('.g_circle_'+ '1').select('circle')
                     //     .attr("transform", "scale(" +d3.event.scale + ")")
