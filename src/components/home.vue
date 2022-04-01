@@ -3235,7 +3235,7 @@
                 //圆圈
                 let circle = circle_g.append("circle")
                     .style("stroke-width", "2px")
-                    .attr("r", 40)//设置圆圈半径
+                    .attr("r", 40 * that.ratio)//设置圆圈半径
                     .style("fill", function (node) { return getCircleColor(node); })
                     .style('z-index',2)
 
