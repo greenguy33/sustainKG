@@ -3399,6 +3399,7 @@
                     that.ratio = d3.event.scale;
                     circle.attr('r',40 * that.ratio)
                     text.selectAll('tspan').attr("font-size", 15 * that.ratio)
+                    edges_line.distance(700 * that.ratio);
 
 
                     // d3.select('.g_circle_'+ '1').select('circle')
