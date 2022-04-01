@@ -2851,13 +2851,13 @@
                         console.log(extract);
 
                         for(let i =0; i< Object.keys(extract).length; i++){
-                            if(localStorage.hasOwnProperty(Object.keys(extract)[i])){
-                                continue
-                            }
+                            // if(localStorage.hasOwnProperty(Object.keys(extract)[i])){
+                            //     continue
+                            // }
                             localStorage.setItem(Object.keys(extract)[i], extract[Object.keys(extract)[i]])
 
                         }
-                        console.log('local storage',localStorage.valueOf())
+                        // console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
 
