@@ -3272,7 +3272,7 @@
                     .attr("markerHeight", 20 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
                     .attr("refX", 12)//箭头坐标
-                    .attr("refY", 0)
+                    .attr("refY", 4)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
                     .attr("stroke-width",7 * that.ratio)//箭头宽度
