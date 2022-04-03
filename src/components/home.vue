@@ -3268,8 +3268,8 @@
                     .attr("id", "end")
                     .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 40 * that.ratio)//标识的大小
-                    .attr("markerHeight", 40 * that.ratio)
+                    .attr("markerWidth", 30 * that.ratio)//标识的大小
+                    .attr("markerHeight", 30 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
                     .attr("refX", 8)//箭头坐标
                     .attr("refY", 0)
@@ -3283,8 +3283,8 @@
                     .attr("id", "start")
                     .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 20 * that.ratio)//标识的大小
-                    .attr("markerHeight", 20 * that.ratio)
+                    .attr("markerWidth", 30 * that.ratio)//标识的大小
+                    .attr("markerHeight", 30 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
                     .attr("refX", 0)//箭头坐标
                     .attr("refY", 0)
