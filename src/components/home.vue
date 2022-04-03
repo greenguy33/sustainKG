@@ -634,21 +634,10 @@
 <script>
     import * as d3 from "d3";
 
-
-    import { list } from 'node-7z'
-    import linkfile from 'raw-loader!./../assets/temp_link.txt'
-
     import {config} from './../assets/config'
     // Vue.prototype.appConfig = config;
-
     //test branch
-    import Vue from 'vue'
-    import $ from 'jquery'
-    import {
-        getNodeSelfPath,
-        setLinkGroup,
-        getNodesLine,} from './../utils/deviceRelation'
-
+    import {getNodesLine, setLinkGroup,} from './../utils/deviceRelation'
 
 
     export default {
@@ -3041,6 +3030,12 @@
                     .style("cursor","pointer")
                     .style('z-index',0)
                     .attr("id", function (d, i) { return 'edgepath' + i; })
+                    .attr('sourceRadius',function (d){
+                        return d.sourceRadius;
+                    })
+                    .attr('targetRadius', function(d){
+                        return d.targetRadius;
+                    })
                     .on("mouseover", function(d,i){
                         return getStrokeWidth(d,i);
                     })
@@ -3398,6 +3393,9 @@
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
                     that.ratio = d3.event.scale;
                     circle.attr('r',40 * that.ratio)
+                    edges_line.attr('sourceRadius', 40 * that.ratio)
+                    edges_line.attr('targetRadius', 40 * that.ratio)
+
                     text.selectAll('tspan').attr("font-size", 15 * that.ratio)
                     // edges_line.distance(700 * that.ratio);
                     console.log('zoom!!!')
