@@ -3271,12 +3271,12 @@
                     .attr("markerWidth", 20 * that.ratio)//标识的大小
                     .attr("markerHeight", 20 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
-                    .attr("refX", 6)//箭头坐标
+                    .attr("refX", 8)//箭头坐标
                     .attr("refY", 0)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
                     .attr("stroke-width",7 * that.ratio)//箭头宽度
-                    .attr("d", "M0,-8L10,0L0,8")//箭头的路径
+                    .attr("d", "M4,0L6,6L0,4")//箭头的路径
                     .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
 
                 defs.append("marker")
