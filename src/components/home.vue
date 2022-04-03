@@ -3393,8 +3393,12 @@
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
                     that.ratio = d3.event.scale;
                     circle.attr('r',40 * that.ratio)
+
                     edges_line.attr('sourceRadius', 40 * that.ratio)
                     edges_line.attr('targetRadius', 40 * that.ratio)
+                    edges_line.attr('d', function (d) {
+                        return getNodesLine(d, that.ratio);//路径
+                    });
 
                     text.selectAll('tspan').attr("font-size", 15 * that.ratio)
                     // edges_line.distance(700 * that.ratio);
