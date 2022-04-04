@@ -5,7 +5,15 @@
     <div id="app" v-title data-title="SustainKG"  >
 
         <el-header style="text-align: right;height:40px;">
+            <el-aside width="400px">
 
+                <h5 style="margin-left: 25px">Sustainability</h5>
+                <h5 style="margin-left: 25px">Knowledge</h5>
+                <h5 style="margin-left: 25px">Mapper</h5>
+
+            </el-aside>
+
+            <el-main>
             <div class="grid-content " >
                 <template >
                     <!--<el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>-->
@@ -19,6 +27,7 @@
 
                 </template>
             </div>
+            </el-main>
 
         </el-header>
 
@@ -30,9 +39,9 @@
 
             <!--<el-row class="tac">-->
             <el-aside width="300px">
-                <h3 style="margin-left: 25px">Sustainability</h3>
-                <h3 style="margin-left: 25px">Knowledge</h3>
-                <h3 style="margin-left: 25px">Mapper</h3>
+<!--                <h3 style="margin-left: 25px">Sustainability</h3>-->
+<!--                <h3 style="margin-left: 25px">Knowledge</h3>-->
+<!--                <h3 style="margin-left: 25px">Mapper</h3>-->
                 <el-menu
 
                         default-active="2"
@@ -3393,9 +3402,6 @@
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
                     that.ratio = d3.event.scale;
                     circle.attr('r',40 * that.ratio)
-
-                    edges_line.attr('sourceRadius', 40 * that.ratio)
-                    edges_line.attr('targetRadius', 40 * that.ratio)
                     edges_line.attr('d', function (d) {
                         return getNodesLine(d, that.ratio);//路径
                     });
