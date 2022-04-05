@@ -119,7 +119,7 @@
 <!--                <div id="node_info"  >-->
                     <el-card
                             v-show="showdetail_node"
-                            style=" background-color: rgb(253, 216, 186) ; z-index:1"
+                            style=" background-color: rgb(253, 216, 186) ; z-index:1; margin-top: 35px"
                             class="node-card"
 
                             :height="card_height"
