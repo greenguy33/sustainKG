@@ -116,11 +116,13 @@
                 type="primary">Dashboard</el-button>
 
 
-                <div id="node_info" v-show="showdetail_node"  style="z-index: 1">
+<!--                <div id="node_info"  >-->
                     <el-card
-                            :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
+                            v-show="showdetail_node"
+                            style=" background-color: rgb(253, 216, 186) ; z-index:1"
                             class="node-card"
-                            style="height: auto"
+
+                            :height="card_height"
                     >
                         <h3 :style="{ color: '#ca635f' }">{{ detailname }}</h3>
                         <div id="node_content">
@@ -131,7 +133,7 @@
                             <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
                         </div>
                     </el-card>
-                </div>
+<!--                </div>-->
 
 
 
@@ -698,6 +700,7 @@
 
 
             return {
+                card_height : window.innerHeight/3,
                 has_weight:true,
                 input:'',
                 concept_name : '',
@@ -4174,6 +4177,7 @@
         background-color: #00aeff6b;
         color: #fff;
         text-align: left;
+        height:auto;
 
     }
     .link-card {
