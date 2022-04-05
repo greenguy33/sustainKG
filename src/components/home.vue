@@ -4,12 +4,12 @@
 
     <div id="app" v-title data-title="SustainKG"  >
 
-        <el-header style="text-align: right;height:40px;">
+        <el-header style="text-align: left;height:40px;">
             <el-aside width="400px">
 
-                <h5 style="margin-left: 25px">Sustainability</h5>
-                <h5 style="margin-left: 25px">Knowledge</h5>
-                <h5 style="margin-left: 25px">Mapper</h5>
+                <h5 style="margin-left: 25px">Sustainability Knowledge Mapper</h5>
+<!--                <h5 style="margin-left: 25px"></h5>-->
+<!--                <h5 style="margin-left: 25px"></h5>-->
 
             </el-aside>
 
