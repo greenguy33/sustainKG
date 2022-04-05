@@ -95,7 +95,7 @@
 <!--                    Save</el-button>-->
 
                 <el-button style="margin-top: 50px; margin-left: 15px;"
-                            @click="instruction" size="small" round
+                            @click="instruction" size="mini" round
                            type="primary">
                     <i class="el-icon-info"></i>
                     Instructions</el-button>
@@ -112,7 +112,7 @@
                            <!--type="primary">test</el-button>-->
 
                 <el-button style="margin-top: 50px; margin-left: 15px;"
-                v-show="dashboard_show"   @click="getGraphStatistics" size="small" round
+                v-show="dashboard_show"   @click="getGraphStatistics" size="mini" round
                 type="primary">Dashboard</el-button>
 
 
