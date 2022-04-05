@@ -3400,6 +3400,12 @@
                     // svg.attr("transform", "scale(" +d3.event.scale + ")");
                     that.ratio = d3.event.scale;
                     circle.attr('r',40 * that.ratio)
+                    circle.attr('transform',function (d){
+
+                        d.x = d.x * that.ratio;
+                        d.y = d.y * that.ratio;
+                    })
+
                     edges_line.attr('d', function (d) {
                         return getNodesLine(d, that.ratio);//路径
                     });
