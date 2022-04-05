@@ -5,15 +5,11 @@
     <div id="app" v-title data-title="SustainKG"  >
 
         <el-header style="text-align: left;height:40px;">
-            <el-aside width="400px">
 
-                <h5 style="margin-left: 25px">Sustainability Knowledge Mapper</h5>
-<!--                <h5 style="margin-left: 25px"></h5>-->
-<!--                <h5 style="margin-left: 25px"></h5>-->
+            <el-row>
+                <el-col :span="12"> <h5 style="margin-left: 25px">Sustainability Knowledge Mapper</h5></el-col>
+                <el-col :span="12">
 
-            </el-aside>
-
-            <el-main>
             <div class="grid-content " >
                 <template >
                     <!--<el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>-->
@@ -27,7 +23,8 @@
 
                 </template>
             </div>
-            </el-main>
+                </el-col>
+            </el-row>
 
         </el-header>
 
