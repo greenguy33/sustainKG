@@ -3402,8 +3402,29 @@
                     circle.attr('r',40 * that.ratio)
                     circle.attr('transform',function (d){
 
+                        if(isNaN(d.x) && isNaN(d.y))
+                        {
+                            d.x = 360 * that.ratio;
+                            d.y = 266 * that.ratio;
+                        }
+                        if (d.x <=-430)
+                        {
+                            d.x = -430 * that.ratio
+                        }
+                        else if (d.x >=1150){
+                            d.x = 1150 * that.ratio
+                        }
+
+                        if(d.y <= -168){
+                            d.y = -168 * that.ratio
+                        }
+                        else if (d.y >=700){
+                            d.y = 700 * that.ratio
+                        }
                         d.x = d.x * that.ratio;
                         d.y = d.y * that.ratio;
+                        return "translate(" + d.x  + "," + d.y  + ")";
+
                     })
 
                     edges_line.attr('d', function (d) {
