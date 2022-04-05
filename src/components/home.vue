@@ -700,7 +700,7 @@
 
 
             return {
-                card_height : window.innerHeight/3,
+                card_height : window.innerHeight/4,
                 has_weight:true,
                 input:'',
                 concept_name : '',
@@ -4181,7 +4181,7 @@
         left: 20px;
         right:10px;
         width: 190px;
-        height:auto;
+        /*height:auto;*/
 
     }
     .link-card {
