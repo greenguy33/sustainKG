@@ -4,11 +4,9 @@
 
     <div id="app" v-title data-title="SustainKG"  >
 
-        <el-header style="text-align: left;height:40px;">
+        <el-header style="text-align: right;height:40px;">
 
-            <el-row>
-                <el-col :span="12"> <h5 style="margin-left: 25px">Sustainability Knowledge Mapper</h5></el-col>
-                <el-col :span="12">
+
 
             <div class="grid-content " >
                 <template >
@@ -23,8 +21,7 @@
 
                 </template>
             </div>
-                </el-col>
-            </el-row>
+
 
         </el-header>
 
@@ -36,6 +33,7 @@
 
             <!--<el-row class="tac">-->
             <el-aside width="300px">
+                <h5 style="margin-left: 25px">Sustainability Knowledge Mapper</h5>
 <!--                <h3 style="margin-left: 25px">Sustainability</h3>-->
 <!--                <h3 style="margin-left: 25px">Knowledge</h3>-->
 <!--                <h3 style="margin-left: 25px">Mapper</h3>-->
