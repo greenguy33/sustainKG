@@ -94,7 +94,7 @@
 <!--                    <i class="el-icon-info"></i>-->
 <!--                    Save</el-button>-->
 
-                <el-button style="margin-top: 50px; margin-left: 15px;"
+                <el-button style="margin-top: 35px; margin-left: 15px;"
                             @click="instruction" size="mini" round
                            type="primary">
                     <i class="el-icon-info"></i>
@@ -111,7 +111,7 @@
                             <!--@click="submit2" size="small" round-->
                            <!--type="primary">test</el-button>-->
 
-                <el-button style="margin-top: 50px; margin-left: 15px;"
+                <el-button style="margin-top: 35px; margin-left: 15px;"
                 v-show="dashboard_show"   @click="getGraphStatistics" size="mini" round
                 type="primary">Dashboard</el-button>
 
