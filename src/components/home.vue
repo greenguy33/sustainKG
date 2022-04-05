@@ -4177,6 +4177,10 @@
         background-color: #00aeff6b;
         color: #fff;
         text-align: left;
+        bottom: 40px;
+        left: 20px;
+        right:10px;
+        width: 190px;
         height:auto;
 
     }
