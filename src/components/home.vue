@@ -3902,6 +3902,7 @@
                     return false;
                 }
                 else{
+                    console.log('submit user', this.current_user);
 
                     this.$axios({
 
