@@ -3127,10 +3127,12 @@
                         this.detailValue = node;
                         this.detailname = node.properties.name;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',50 * that.ratio)
+                            .attr('r',50 )
+                            // .attr('r',50 * that.ratio)
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
-                            .attr('font-size',25 * that.ratio)
+                            .attr('font-size',25 )
+                            // .attr('font-size',25 * that.ratio)
 
                         // showNodeInfo(node, this);
                         // showCircleBorderOuterArc(node, i);
@@ -3138,10 +3140,12 @@
                     .on('mouseout',(node)=>{
                         // this.showdetail_node = false;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',40 * that.ratio);
+                            .attr('r',40 )
+                            // .attr('r',40 * that.ratio);
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
-                            .attr('font-size',15 * that.ratio)
+                            .attr('font-size',15 )
+                            // .attr('font-size',15 * that.ratio)
 
 
 
@@ -3237,7 +3241,8 @@
                 //圆圈
                 let circle = circle_g.append("circle")
                     .style("stroke-width", "2px")
-                    .attr("r", 40 * that.ratio)//设置圆圈半径
+                    .attr("r", 40 )//设置圆圈半径
+                    // .attr("r", 40 * that.ratio)//设置圆圈半径
                     .style("fill", function (node) { return getCircleColor(node); })
                     .style('z-index',2)
 
@@ -3270,14 +3275,17 @@
                     .attr("id", "end")
                     .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 30 * that.ratio)//标识的大小
-                    .attr("markerHeight", 30 * that.ratio)
+                    .attr("markerWidth", 30 )//标识的大小
+                    .attr("markerHeight", 30 )
+                    // .attr("markerWidth", 30 * that.ratio)//标识的大小
+                    // .attr("markerHeight", 30 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
                     .attr("refX", 8)//箭头坐标
                     .attr("refY", 0)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
-                    .attr("stroke-width",7 * that.ratio)//箭头宽度
+                    .attr("stroke-width",7 )//箭头宽度
+                    // .attr("stroke-width",7 * that.ratio)//箭头宽度
                     .attr("d", "M0,-5L10,0L0,5")//箭头的路径
                     .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
 
@@ -3285,14 +3293,17 @@
                     .attr("id", "start")
                     .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 30 * that.ratio)//标识的大小
-                    .attr("markerHeight", 30 * that.ratio)
+                    .attr("markerWidth", 30 )//标识的大小
+                    .attr("markerHeight", 30 )
+                    // .attr("markerWidth", 30 * that.ratio)//标识的大小
+                    // .attr("markerHeight", 30 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
                     .attr("refX", 0)//箭头坐标
                     .attr("refY", 0)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
-                    .attr("stroke-width",7 * that.ratio)//箭头宽度
+                    .attr("stroke-width",7 )//箭头宽度
+                    // .attr("stroke-width",7 * that.ratio)//箭头宽度
                     .attr("d", "M0,0L10,-5L10,5")//箭头的路径
                     .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
 
@@ -3397,25 +3408,33 @@
                 function zoomed() {//svg下的g标签移动大小
 
 
-                    // svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    svg.attr("transform", "scale(" +d3.event.scale + ")");
                     that.ratio = d3.event.scale;
-                    circle.attr('r',40 * that.ratio)
-                    circle.attr('transform',function (d){
-
-
-                        d.x = d.x * that.ratio;
-                        d.y = d.y * that.ratio;
-                        return "translate(" + d.x  + "," + d.y  + ")";
-
-                    })
-
-                    edges_line.attr('d', function (d) {
-                        return getNodesLine(d, that.ratio);//路径
-                    });
-
-                    text.selectAll('tspan').attr("font-size", 15 * that.ratio)
-                    // edges_line.distance(700 * that.ratio);
-                    console.log('zoom!!!')
+                    // circle.attr('r',40 * that.ratio)
+                    // circle.attr('transform',function (d){
+                    //
+                    //
+                    //     d.x = d.x * that.ratio;
+                    //     d.y = d.y * that.ratio;
+                    //     return "translate(" + d.x  + "," + d.y  + ")";
+                    //
+                    // })
+                    //
+                    // text.attr('transform',function (d){
+                    //
+                    //
+                    //     d.x = d.x * that.ratio;
+                    //     d.y = d.y * that.ratio;
+                    //     return "translate(" + d.x  + "," + d.y  + ")";
+                    //
+                    // })
+                    //
+                    // edges_line.attr('d', function (d) {
+                    //     return getNodesLine(d, that.ratio);//路径
+                    // });
+                    //
+                    // text.selectAll('tspan').attr("font-size", 15 * that.ratio)
+                    // console.log('zoom!!!')
 
 
 
