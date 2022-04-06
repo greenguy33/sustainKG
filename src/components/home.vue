@@ -1210,7 +1210,7 @@
                 }else {
                     console.log('hahahaha');
                     this.$axios({
-                        url: '/api/checkUserCredentials',
+                        url: '/checkUserCredentials',
                         method: 'post',
                         data: {
                             user: this.change_username,
