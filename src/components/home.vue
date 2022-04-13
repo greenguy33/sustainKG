@@ -2956,6 +2956,11 @@
                 //     .on('drag',null)
                 //     .on('dragend',()=>{console.log('end')})
 
+                let main_graph = d3.select('#graph');
+                main_graph.on("dblclick", (node, i)=>{
+                    console.log('test click main graph')
+                });
+
 
 
                 let svg = d3.select("#graph").append("svg")
