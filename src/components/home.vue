@@ -2173,6 +2173,8 @@
 
             onTapLogin:function () {
                 this.centerDialogVisible=true
+                this.changeUserVisible = true
+
             },
 
             logout:function () {
