@@ -624,54 +624,6 @@
         name: 'App',
         data(){
 
-            let info = {
-                "links": [
-                    {
-                        "id":0,
-                        "source" : 0,
-                        "target" : 1,
-                        "type" : "link",
-                        'label': 'Link TEST',
-                        "properties":{}
-
-                    },
-
-                    // {
-                    //     "source" : 0,
-                    //     "target" : 2,
-                    //     "type" : "link",
-                    //     'label': 'Link TEST',
-                    //     "properties":{}
-                    //
-                    // },
-
-
-                ],
-                "nodes": [
-                    {
-                        "id": 0,
-                        "type" : "node",
-                        "label" : "Device",
-                        "properties":{"name":"hello apple Inc "}
-                    },
-                    {
-                        "id": 1,
-                        "type" : "node",
-                        "label": "Device",
-                        "properties":{"name":"will"}
-                    },
-                    {
-                        "id": 2,
-                        "type" : "node",
-                        "label": "Device",
-                        "properties":{"name":"lala"}
-                    },
-
-                ]
-            };
-
-
-
             return {
                 has_weight:true,
                 input:'',
@@ -730,41 +682,6 @@
                 collective_node_list : [],
                 entire_collective_data:[],
 
-                // node_list: [
-                //     {
-                //         value: 'node1',
-                //         label: 'node1'
-                //     },
-                //
-                //     {
-                //         value: 'node2',
-                //         label: 'node2'
-                //     },
-                //
-                //     {
-                //         value: 'test3',
-                //         label: 'test3'
-                //     },
-                //     {
-                //         value: 'bbb',
-                //         label: 'bbb'
-                //     }
-                // ],
-
-                link_list: [
-                    {
-                        value: 'link1',
-                        label: 'link1'
-                    },
-                    {
-                        value: 'link2',
-                        label: 'link2'
-                    },
-                    {
-                        value: 'test_3',
-                        label: 'test_3'
-                    }
-                ],
 
                 info: {
                     nodes:[],
@@ -884,7 +801,10 @@
                                 // this.renderGraph(new_info);
 
                                 this.renderGraph(new_info);
-                                this.submitData();
+                                let removeNode = `{"method":"removeNode",
+                                "data":{"user":\"${this.username}\","node":\"${select_node.properties.name}\"}}`;
+                                this.websocketsend(removeNode);
+                                // this.submitData();
 
                             })
 
@@ -1015,8 +935,15 @@
                 new_relationship:'',
                 relationship_name :'',
                 // ifTeamWork:true,
+                websocket:'',
+                returnData:''
             }
         },
+
+        created(){
+            this.initWebSocket();
+        },
+
 
         mounted() {
             if(this.config.useShibboleth === true) {
@@ -1045,64 +972,45 @@
             this.centerDialogVisible = false;
             this.initial_links_count = this.info.links.length;
 
-
-
-
-            // window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
-            // window.addEventListener('unload', e => this.unloadHandler(e))
-
-
-
         },
 
         // destroyed() {
-        //
-        //         window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
-        //         window.addEventListener('unload', e => this.unloadHandler(e))
-        //
-        //
+
         // },
 
         methods: {
 
-            // submit2() {
-            //     let url = "http://graphdb.ics.uci.edu:8080/api/postUserGraph";
-            //
-            //     this.upload_nodes = this.info.nodes.map(function (element) {
-            //         return {
-            //             "id": String(element.id), "type": element.type, "label": element.label, "properties": {
-            //                 "name": element.properties.name
-            //             }
-            //         }
-            //
-            //     });
-            //     this.upload_links = this.info.links.map(function (element) {
-            //
-            //         return {
-            //             "type": element.type, "id": String(element.id), "label": element.label,
-            //             "source": String(element.source.index), "target": String(element.target.index),
-            //             "properties": element.properties
-            //         }
-            //     });
-            //
-            //     console.log(this.info);
-            //     console.log(this.current_user);
-            //     console.log('nn', JSON.stringify(this.upload_nodes));
-            //     console.log('nn', JSON.stringify(this.upload_links));
-            //
-            //
-            //     const data =
-            //         {
-            //
-            //             user: this.current_user,
-            //             nodes: this.upload_nodes,
-            //             links: this.upload_links
-            //         }
-            //
-            //
-            //     let a = window.navigator.sendBeacon("http://graphdb.ics.uci.edu:8080/postUserGraph",JSON.stringify(data));
-            //
-            // },
+            initWebSocket(){
+                let protocol = location.protocol === 'https'
+                    ? 'wss://localhost:8080/connectToWebsocket'
+                    : 'ws://localhost:8080/connectToWebsocket';
+                console.log(protocol)
+
+                this.websocket = new WebSocket(protocol,'echo-protocol');
+                this.websocket.onmessage = this.websocketonmessage;
+                this.websocket.onopen = this.websocketonopen;
+                this.websocket.onerror = this.websocketonerror;
+                // this.websocket.onclose = this.websocketclose;
+            },
+            websocketonopen(){ //连接建立之后执行send方法发送数据
+                console.log('Connection Successful');
+            },
+            websocketonerror(){//连接建立失败重连
+                this.initWebSocket();
+            },
+            websocketonmessage(e){ //数据接收
+                // const redata = JSON.parse(e.data);
+                this.returnData = e.data;
+                console.log('backend data',e.data)
+                console.log('return data', this.returnData)
+
+            },
+            websocketsend(Data){//数据发送
+                this.websocket.send(Data);
+            },
+            websocketclose(e){  //关闭
+                console.log('Disconnection!',e);
+            },
 
 
             getMouseXY(e){
@@ -1113,87 +1021,6 @@
 
             },
 
-            beforeunloadHandler(e) {
-
-
-
-                if (this.$route.name === 'home' && this.viewGraph_btn_status===true) {
-                    e = e || window.event;
-
-                    if (e) {
-                        console.log('hahaha',this.info)
-                        e.returnValue = '关闭提示'
-                    }
-
-                    return '关闭提示'
-                } else {
-                    console.log('lalala');
-                    window.onbeforeunload = null
-                }
-            },
-            unloadHandler(e){
-
-                // let flag = true;
-                // let noWeight_node = []
-                // for (let i = 0; i < this.info.nodes.length; i++) {
-                //     if (this.info.nodes[i].weight === 0) {
-                //         flag = false;
-                //         noWeight_node.push(this.info.nodes[i].properties.name)
-                //     }
-                // }
-
-                // let selected_nodes = [] // to find those nodes without links
-                // for(let i =0; i < this.info.length; i++){
-                //     if (this.info.nodes[i].weight === 0) {
-                //
-                //                 selected_nodes.push(this.info.nodes[i])
-                //             }
-                // }
-
-                if (this.$route.name === 'home' && this.viewGraph_btn_status===true ) {
-
-
-
-                    this.upload_nodes = this.info.nodes.map(function (element) {
-                        if(element.weight > 0) {
-                            return {
-                                "id": String(element.id), "type": element.type, "label": element.label, "properties": {
-                                    "name": element.properties.name
-                                }
-                            }
-                        }
-
-                    });
-                    this.upload_links = this.info.links.map(function (element) {
-
-                        return {
-                            "type": element.type, "id": String(element.id), "label": element.label,
-                            "source": String(element.source.index), "target": String(element.target.index),
-                            "properties": element.properties
-                        }
-                    });
-
-                    console.log(this.info);
-                    console.log(this.current_user);
-                    console.log('nn', JSON.stringify(this.upload_nodes));
-                    console.log('nn', JSON.stringify(this.upload_links));
-
-                    const data =
-                        {
-
-                            user: this.current_user,
-                            nodes: this.upload_nodes,
-                            links: this.upload_links
-                        }
-
-
-                        // navigator.sendBeacon("http://172.18.0.3:8080/api/postUserGraph", JSON.stringify(data));
-
-                    navigator.sendBeacon("https://graphdb.ics.uci.edu/api/postUserGraph", JSON.stringify(data));
-                }
-
-
-            },
 
             changeUser(){
                 this.changeUserVisible = true;
@@ -1208,101 +1035,148 @@
                             message: 'The username cannot be empty'
                         });
                 }else {
-                    console.log('hahahaha');
-                    this.$axios({
-                        url: '/checkUserCredentials',
-                        method: 'post',
-                        data: {
-                            user: this.change_username,
-                            password: this.password
+                    let checkUserCredentials = `{"method":"checkUserCredentials","data":{"user": \"${this.change_username}\","password": \"${this.password}\" }}`;
+                    console.log(checkUserCredentials, this.change_username)
+                    this.websocketsend((checkUserCredentials));
 
-
+                    setTimeout(()=>{
+                        console.log((this.returnData));
+                        if(this.returnData === 'Login Successful'){
+                            let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.change_username}\"}}`;
+                            this.websocketsend(getUserGraph);
                         }
+                    },1500)
 
-                    }).then(response =>{
+                    setTimeout(()=>{
+                        console.log(JSON.parse(this.returnData));
+                        let user_graph = JSON.parse(this.returnData);
+                        this.showLogin = false;
+                        this.username = this.change_username;
+                        this.change_username = '';
+                        this.password = '';
+                        this.changeUserVisible = false;
+                        this.disable_dbclick = false;
+                        let user_nodes = user_graph.nodes;
+                        let user_links = user_graph.links;
+                                    // let test = response.data;
 
-                        console.log('check the credential',response);
-                        if(response.status === 204)
-                        {
+                        let change_node_type = user_nodes.map(function (element) {
+                            element.id = Number(element.id);
+                            return element
+                        });
 
-                            this.$message(
-
-                                {
-                                    type: 'warning',
-                                    message: 'Password for '+ this.change_username +' is wrong!'
-                                });
-                            // this.showLogin = true;
-                            this.changeUserVisible = true;
-                            // this.username = '';
-                            this.password = '';
-                            this.change_username = '';
-
-                        }
-                        else{
-
-                            this.$axios({
-                                url: '/getUserGraph',
-                                method: 'post',
-                                data: {
-                                    user: this.change_username,
-
-                                }
-
-                            }).then(response => {
-                                if (response.status === 204) {
-                                    this.$message(
-                                        {
-                                            type: 'warning',
-                                            message: 'User username does not exist !'
-                                        });
-
-                                    this.changeUserVisible = true;
-                                }
-                                this.showLogin = false;
-                                this.username = this.change_username;
-                                this.change_username = '';
-                                this.password = '';
-                                this.changeUserVisible = false;
-                                this.disable_dbclick = false;
-                                let user_nodes = response.data.nodes;
-                                let user_links = response.data.links;
-                                // let test = response.data;
-
-                                let change_node_type = user_nodes.map(function (element) {
-                                    element.id = Number(element.id);
-                                    return element
-                                });
-
-                                let change_link_type = user_links.map(function (element) {
-                                    element.id = Number(element.id);
-                                    element.source = Number(element.source);
-                                    element.target = Number(element.target);
-                                    return element
-                                });
+                        let change_link_type = user_links.map(function (element) {
+                            element.id = Number(element.id);
+                            element.source = Number(element.source);
+                            element.target = Number(element.target);
+                            return element
+                        });
 
 
-                                this.info.nodes = change_node_type;
-                                this.info.links = change_link_type;
-                                this.current_user = response.data.user;
-                                this.$message(
+                        this.info.nodes = change_node_type;
+                        this.info.links = change_link_type;
+                        this.current_user = user_graph.user;
+                        this.renderGraph(this.info);
 
-                                    {
-                                        type: 'success',
-                                        message: 'Welcome Back, ' + this.current_user
-                                    });
-                                this.renderGraph(this.info);
 
-                                // else {
-                                //     this.$router.push({
-                                //         name: 'home',
-                                //         params: {username: this.username}
-                                //     })
-                                // }
-                            })
 
-                        }
+                    },3000)
 
-                    });
+
+                    // this.$axios({
+                    //     url: '/checkUserCredentials',
+                    //     method: 'post',
+                    //     data: {
+                    //         user: this.change_username,
+                    //         password: this.password
+                    //
+                    //
+                    //     }
+                    //
+                    // }).then(response =>{
+                    //
+                    //     console.log('check the credential',response);
+                    //     if(response.status === 204)
+                    //     {
+                    //
+                    //         this.$message(
+                    //
+                    //             {
+                    //                 type: 'warning',
+                    //                 message: 'Password for '+ this.change_username +' is wrong!'
+                    //             });
+                    //         // this.showLogin = true;
+                    //         this.changeUserVisible = true;
+                    //         // this.username = '';
+                    //         this.password = '';
+                    //         this.change_username = '';
+                    //
+                    //     }
+                    //     else{
+                    //
+                    //         this.$axios({
+                    //             url: '/getUserGraph',
+                    //             method: 'post',
+                    //             data: {
+                    //                 user: this.change_username,
+                    //
+                    //             }
+                    //
+                    //         }).then(response => {
+                    //             if (response.status === 204) {
+                    //                 this.$message(
+                    //                     {
+                    //                         type: 'warning',
+                    //                         message: 'User username does not exist !'
+                    //                     });
+                    //
+                    //                 this.changeUserVisible = true;
+                    //             }
+                    //             this.showLogin = false;
+                    //             this.username = this.change_username;
+                    //             this.change_username = '';
+                    //             this.password = '';
+                    //             this.changeUserVisible = false;
+                    //             this.disable_dbclick = false;
+                    //             let user_nodes = response.data.nodes;
+                    //             let user_links = response.data.links;
+                    //             // let test = response.data;
+                    //
+                    //             let change_node_type = user_nodes.map(function (element) {
+                    //                 element.id = Number(element.id);
+                    //                 return element
+                    //             });
+                    //
+                    //             let change_link_type = user_links.map(function (element) {
+                    //                 element.id = Number(element.id);
+                    //                 element.source = Number(element.source);
+                    //                 element.target = Number(element.target);
+                    //                 return element
+                    //             });
+                    //
+                    //
+                    //             this.info.nodes = change_node_type;
+                    //             this.info.links = change_link_type;
+                    //             this.current_user = response.data.user;
+                    //             this.$message(
+                    //
+                    //                 {
+                    //                     type: 'success',
+                    //                     message: 'Welcome Back, ' + this.current_user
+                    //                 });
+                    //             this.renderGraph(this.info);
+                    //
+                    //             // else {
+                    //             //     this.$router.push({
+                    //             //         name: 'home',
+                    //             //         params: {username: this.username}
+                    //             //     })
+                    //             // }
+                    //         })
+                    //
+                    //     }
+                    //
+                    // });
 
 
                 }
@@ -1998,6 +1872,17 @@
 
 
                 console.log('create user function',this.newUsername);
+                let createUser = `{"method":"createNewUser", data:{"user": \"${this.newUsername}\",
+                 "password":\"${this.newPassword}\"}}`;
+                console.log(createUser);
+                this.websocketsend(createUser);
+
+                setTimeout(()=>{
+                    console.log((this.returnData));
+
+                },1500)
+
+
 
                 this.$axios({
                     url : '/createNewUser',
@@ -2380,6 +2265,8 @@
 
             change_node_name(){
 
+                let old_name = this.info.nodes[this.node_id].properties.name;
+
                 this.info.nodes[this.node_id].properties.name = this.new_node_name;
                 this.info.nodes[this.node_id].snippet = this.select_snippet;
                 this.dialogFormVisible_change_node_name = false;
@@ -2417,7 +2304,12 @@
                 new_info.links = link_to_string;
 
                 this.renderGraph(new_info);
-                this.submitData();
+                let changeNode = `{"method":"changeNode",
+                "data":{"user":\"${this.username}\",
+                "oldNode":\"${old_name}\","newNode":\"${this.new_node_name}\"}}`;
+
+                this.websocketsend(changeNode);
+                // this.submitData();
                 // this.renderGraph(this.info);
                 this.selectClear();
 
@@ -2673,10 +2565,23 @@
                         new_info.links = link_to_string;
                         this.info = new_info;
                         this.renderGraph(this.info);
+
+
+                        if (this.config.Citations === false) {
+                            let addLink = `{"method":"addLink","data":{"user": \"${this.username}\","origin":\"${this.start.properties.name}\",
+                        "target": \"${this.end.properties.name}\","label":\"${this.relationship}\" }}`;
+                            console.log('add node request', addLink);
+                            this.websocketsend(addLink);
+                        }else{
+                            let addLink = `{"method":"addLink","data":{"user": \"${this.username}\","origin":\"${this.start.properties.name}\",
+                        "target": \"${this.end.properties.name}\","label":\"${this.relationship}\","citation": \"${this.reference}\" }}`;
+                            console.log('add node request', addLink);
+                            this.websocketsend(addLink);
+                        }
                         this.ifClicked = false;
                         this.selectClear();
                         this.reference = '';
-                        this.submitData();
+                        // this.submitData();
                         }
                         else{
                             this.dialogFormVisible_link = true;
@@ -3519,7 +3424,11 @@
 
                                 force.resume();
                             }
-                            _this.submitData();
+
+                            let moveNode = `{"method":"moveNode","data":{"user":\"${_this.username}\", "node":\"${d.properties.name}\","xpos":\"${d.x}\", "ypos":\"${d.y}\"}}`;
+
+                            _this.websocketsend(moveNode)
+                            // _this.submitData();
 
 
                         });
@@ -3777,7 +3686,12 @@
                     new_info.nodes = node_to_string;
                     new_info.links = link_to_string;
                     this.info = new_info;
+                    let addNode =`{"method":"addNode","data":{"user": \"${this.username}\","node":\"${input}\","xpos": \"${this.mouse_x}\","ypos":\"${this.mouse_y}\" }}`;
+                    console.log('add node request',addNode)
+                    this.websocketsend(addNode);
                     this.renderGraph(this.info);
+
+
 
                     // this.renderGraph(this.info);
                     return true

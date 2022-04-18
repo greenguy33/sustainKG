@@ -22,14 +22,11 @@
         },
 
         mounted(){
-            // this.jump();
+
         },
 
         methods:{
 
-            jump(){
-                this.$router.push({name:'login'})
-            }
         }
     }
 
