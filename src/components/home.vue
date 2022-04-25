@@ -678,6 +678,7 @@
 
                 btnChangeEnable: true,
                 node_list: [],
+                link_list:[],
                 collective_node_value:'',
                 collective_node_list : [],
                 entire_collective_data:[],
@@ -847,6 +848,16 @@
 
                                 this.info.links.splice(link,1);
 
+
+
+
+                                let removeLink = `{"method":"removeLink",
+                                 "data":{"user":\"${this.username}\", "origin":\"${selected_link.source.properties.name}\",
+                                 "target":\"${selected_link.target.properties.name}\",
+                                 "label":\"${selected_link.label}\"}}`;
+                                this.websocketsend(removeLink);
+
+                                // this.submitData();
                                 let node_to_string = this.info.nodes.map(function (element) {
                                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                                         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
@@ -863,10 +874,7 @@
                                         "type": element.type,
                                         "properties": {},
                                         "label": element.label,
-                                        'x_end':element.x_end,
-                                        'x_start':element.x_start,
-                                        'y_end': element.y_end,
-                                        'y_start': element.y_start,
+                                        "citation":element.citation,
                                         'fixed': true
                                     }
 
@@ -878,18 +886,17 @@
                                 let new_info = [];
                                 new_info.nodes = node_to_string;
                                 new_info.links = link_to_string;
+                                this.info = new_info;
+                                this.renderGraph(this.info);
 
-                                this.renderGraph(new_info);
-                                this.submitData();
-                                // this.renderGraph(this.info);
-
-                            }).catch(() => {
-                                this.$message({
-                                    type: 'info',
-                                    message: 'Cancel Delete!'
-                                })
-
-                            });
+                            })
+                            //     .catch(() => {
+                            //     this.$message({
+                            //         type: 'info',
+                            //         message: 'Cancel Delete!'
+                            //     })
+                            //
+                            // });
 
                         },
 
@@ -1003,6 +1010,61 @@
                 this.returnData = e.data;
                 console.log('backend data',e.data)
                 console.log('return data', this.returnData)
+                console.log(this.returnData === 'X')
+                if(this.returnData !== 'X' && this.returnData !== 'Login Successful') {
+                    console.log('Parse data', JSON.parse(this.returnData));
+                    let parseData = JSON.parse(this.returnData);
+                    // For Moving Node
+                    if (parseData.method === 'moveNode') {
+                        console.log('moveNode');
+                        let nodeName = parseData.data.node;
+                        let newX = parseData.data.xpos;
+                        let newY = parseData.data.ypos;
+
+                        for (let i = 0; i < this.info.nodes.length; i++) {
+                            if (this.info.nodes[i].properties.name === nodeName) {
+                                console.log(this.info.nodes[i].x, this.info.nodes[i].y, newX, newY)
+                                this.info.nodes[i].x = newX;
+                                this.info.nodes[i].y = newY;
+                                this.info = this.changeInfoType(this.info.nodes, this.info.links);
+                                this.renderGraph(this.info);
+                            }
+                        }
+                    }
+                    // For Adding Node
+                    else if (parseData.method === 'addNode') {
+                       this.updateGraph();
+                    }
+                    // for Changing Node Name
+                    else if (parseData.method === 'changeNode') {
+                        let oldName = parseData.data.oldNode;
+                        let newName = parseData.data.newNode;
+                        for (let i = 0; i < this.info.nodes.length; i++) {
+                            if (this.info.nodes[i].properties.name === oldName) {
+                                this.info.nodes[i].properties.name = newName;
+                            }
+                        }
+                        this.info = this.changeInfoType(this.info.nodes, this.info.links);
+                        this.renderGraph(this.info);
+                    }
+                    // for Removing Node
+                    else if (parseData.method === 'removeNode') {
+                        this.updateGraph();
+                    }
+                    //for Adding Links
+                    else if (parseData.method === 'addLink') {
+                        this.updateGraph();
+                    }
+                    // for Removing Link
+                    else if(parseData.method === 'removeLink'){
+                        this.updateGraph();
+                    }
+                    // for Changing link name
+                    else if(parseData.method === 'changeLink'){
+                        this.updateGraph();
+                    }
+                }
+
 
             },
             websocketsend(Data){//数据发送
@@ -1010,6 +1072,68 @@
             },
             websocketclose(e){  //关闭
                 console.log('Disconnection!',e);
+            },
+
+            updateGraph(){
+                let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
+                this.websocketsend(getUserGraph);
+
+                setTimeout(()=>{
+                    let user_graph = JSON.parse(this.returnData);
+                    console.log('test add node',user_graph);
+
+                    let user_nodes = user_graph.nodes;
+                    let user_links = user_graph.links;
+                    let change_node_type = user_nodes.map(function (element) {
+                        element.id = Number(element.id);
+                        return element
+                    });
+                    let change_link_type = user_links.map(function (element) {
+                        element.id = Number(element.id);
+                        element.source = Number(element.source);
+                        element.target = Number(element.target);
+                        return element
+                    });
+                    this.info.nodes = change_node_type;
+                    this.info.links = change_link_type;
+                    this.renderGraph(this.info);
+                },100)
+            },
+
+            changeInfoType(nodes,links){
+                let node_to_string = nodes.map(function (element) {
+                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                        'x': element.x, 'y':element.y, 'fixed':true
+                    };
+                });
+
+
+                let link_to_string = links.map(function (element) {
+                    return {
+                        "source": element.source.id,
+                        "target": element.target.id,
+                        "id": element.id,
+                        "type": element.type,
+                        "citation": element.citation,
+                        "label": element.label
+                        // 'x_end':element.x_end,
+                        // 'x_start':element.x_start,
+                        // 'y_end':element.y_end,
+                        // 'y_start':element.y_start,
+
+                    }
+
+                });
+
+                console.log('stringfy node', node_to_string);
+                console.log('stringfy links', link_to_string);
+
+                let new_info = [];
+                new_info.nodes = node_to_string;
+                new_info.links = link_to_string;
+                // this.info = new_info;
+                return new_info;
             },
 
 
@@ -1045,7 +1169,7 @@
                             let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.change_username}\"}}`;
                             this.websocketsend(getUserGraph);
                         }
-                    },1500)
+                    },500)
 
                     setTimeout(()=>{
                         console.log(JSON.parse(this.returnData));
@@ -1080,7 +1204,7 @@
 
 
 
-                    },3000)
+                    },1000)
 
 
                     // this.$axios({
@@ -1872,66 +1996,47 @@
 
 
                 console.log('create user function',this.newUsername);
-                let createUser = `{"method":"createNewUser", data:{"user": \"${this.newUsername}\",
+                let createUser = `{"method":"createNewUser", "data":{"user": \"${this.newUsername}\",
                  "password":\"${this.newPassword}\"}}`;
                 console.log(createUser);
                 this.websocketsend(createUser);
 
                 setTimeout(()=>{
                     console.log((this.returnData));
-
-                },1500)
-
-
-
-                this.$axios({
-                    url : '/createNewUser',
-                    method : 'post',
-                    data :
-                        {
-                            "user" : this.newUsername,
-                            "password" : this.newPassword
-                        }
-                }).then(response=>{
-
-                    if(response.status === 204)
-                    {
-
+                    if(this.returnData === 'User exists'){
                         this.$message(
-
                             {
                                 type: 'warning',
                                 message: 'The username already exists!'
                             });
-                        // this.showLogin = true;
-
-                        // this.username = '';
-                        // this.password = '';
                         this.newUsername = '';
                         this.newPassword = '';
                     }
-                    else {
-                        this.dialog_createUser  = false;
+                    else if(this.returnData === 'User created'){
+
                         this.username = this.newUsername;
                         this.password = this.newPassword;
-                        this.newPassword = '';
                         this.newUsername = '';
-                        console.log(response);
+                        this.newPassword = '';
 
-                        this.$axios({
-                            url: '/getUserGraph',
-                            method: 'post',
-                            data:
-                                {
-                                    user: this.username,
-                                    // password: this.password
+                        let checkUserCredentials = `{"method":"checkUserCredentials","data":{"user": \"${this.username}\","password": \"${this.password}\" }}`;
+                        this.websocketsend((checkUserCredentials));
 
-                                }
-                        }).then(response => {
+                        setTimeout(()=>{
+                            if(this.returnData === 'Login Successful'){
+                                let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
+                                this.websocketsend(getUserGraph);
+                                this.dialog_createUser  = false;
+                                this.changeUserVisible = false;
+                            }
+                        },500);
+
+                        setTimeout(()=>{
 
                             this.showLogin = false; // control the login status
-                            let user_nodes = response.data.nodes;
-                            let user_links = response.data.links;
+                            let userGraph = JSON.parse(this.returnData);
+                            let user_nodes = userGraph.nodes;
+                            let user_links = userGraph.links;
                             let change_node_type = user_nodes.map(function (element) {
                                 element.id = Number(element.id);
                                 return element
@@ -1945,14 +2050,15 @@
 
                             this.info.nodes = change_node_type;
                             this.info.links = change_link_type;
-                            this.current_user = response.data.user;
-                            this.changeUserVisible = false;
+                            this.current_user = this.username;
+
                             this.renderGraph(this.info)
+                        });
 
-
-                        })
                     }
-                })
+
+                },500)
+
 
             },
 
@@ -2316,9 +2422,10 @@
             },
 
             change_relationship_name(){
+                let oldLabel = this.info.links[this.link_id].label;
                 this.info.links[this.link_id].label = this.new_relationship;
                 this.dialogFormVisible_new_relationship = false;
-                this.new_relationship = '';
+
 
                 let node_to_string = this.info.nodes.map(function (element) {
                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
@@ -2350,7 +2457,24 @@
 
                 this.renderGraph(new_info);
 
-                // this.renderGraph(this.info);
+                if (this.config.Citations === false) {
+                    let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\"}}`;
+                    console.log('request from change link')
+                    this.websocketsend(changeLink);
+
+                }else{
+                    let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\",
+                    "citation":\"${this.new_reference}\"}}`;
+                    this.websocketsend(changeLink);
+
+                }
+                this.new_relationship = '';
                 this.selectClear();
 
 
@@ -2369,13 +2493,15 @@
 
                 if(pattern.test(this.new_reference)) {
 
+                    let oldLabel =  this.info.links[this.link_id].label;
+                    let oldCitation = this.info.links[this.link_id].citation
+
                     this.info.links[this.link_id].label = this.new_relationship;
                     this.info.links[this.link_id].citation = this.new_reference;
                     this.dialogFormVisible_change_link_name = false;
 
                     this.btnChangeEnable = true;
-                    this.new_reference = '';
-                    this.new_relationship = '';
+
 
 
 
@@ -2410,7 +2536,30 @@
                     this.renderGraph(new_info);
 
                     // this.renderGraph(this.info);
-                    this.submitData();
+                    // let changeLink = ``;
+                    if (this.config.Citations === false) {
+                        let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\"}}`;
+                        console.log('request from change link')
+                        this.websocketsend(changeLink);
+
+                    }else{
+                        let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\",
+                    "citation":\"${this.new_reference}\"}}`;
+                        this.websocketsend(changeLink);
+
+                    }
+
+                    this.new_reference = '';
+                    this.new_relationship = '';
+
+
+                    // this.submitData();
                     this.selectClear();
 
                 }else{
@@ -2660,7 +2809,10 @@
 
                         response.data = response.data.slice(5);
                         response.data = response.data.slice(0, response.data.length - 1);
-                        let wiki = JSON.parse(response.data).query.pages;
+                        let wiki = []
+                        if(nodes.length !== 0) {
+                           wiki = JSON.parse(response.data).query.pages;
+                        }
                         console.log('wiki', wiki);
                         let extract = [];
                         for(let i =0; i<Object.keys(wiki).length;i++){
@@ -2703,7 +2855,7 @@
 
 
 
-                console.log('store_nodes',localStorage.getItem('graph_nodes'));
+                // console.log('store_nodes',localStorage.getItem('graph_nodes'));
 
                 for(let i =0; i<nodes.length;i++){
                     nodes[i].x = parseInt(nodes[i].x);
@@ -2982,7 +3134,7 @@
 
 
                     circle_g.attr('node', function(n) {
-
+                        console.log('debug',n.index, node.index)
                         if(n.index === node.index && _this.ifClicked===false ) {
                             d3.select('.g_circle_'+ n.index).select('circle').style('fill','red');
                             console.log('haha',d3.select('.g_circle_'+ n.index).select('circle'));
@@ -3153,7 +3305,7 @@
 
                     .text(function (d ) {
                         let circleText = '';
-                        console.log('text relationship', d, that);
+                        // console.log('text relationship', d, that);
                         if(d.label && d.label.length > 50){
                             if(that.config.Citations === false) {
                                 circleText =  d.label.substring(0, 50) + '...)';
