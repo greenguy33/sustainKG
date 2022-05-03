@@ -948,13 +948,13 @@
             }
         },
 
-        // created(){
-        //
-        // },
+        created(){
+            this.initWebSocket();
+        },
 
 
         mounted() {
-            this.initWebSocket();
+
             if(this.config.useShibboleth === true) {
                 this.$axios({
                     url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
@@ -993,7 +993,7 @@
                 try {
                 let protocol = location.protocol === 'https'
                     ? 'wss://172.18.0.3:8080/connectToWebsocket'
-                    : 'ws://graphdb.ics.uci.edu/connectToWebsocket';
+                    : 'ws://172.18.0.3:8080/connectToWebsocket';
                 console.log(protocol)
                 // let protocol = 'wss://172.18.0.3:8080/connectToWebsocket'
 
