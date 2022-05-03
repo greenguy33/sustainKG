@@ -943,7 +943,8 @@
                 relationship_name :'',
                 // ifTeamWork:true,
                 websocket:'',
-                returnData:''
+                returnData:'',
+                zoom_scale:1,
             }
         },
 
@@ -1072,6 +1073,7 @@
             },
             websocketclose(e){  //关闭
                 console.log('Disconnection!',e);
+
             },
 
             updateGraph(){
@@ -2072,69 +2074,97 @@
                 console.log('cccc');
                 console.log('handleshow username', this.username);
                 console.log(this.$route.params);
-                // let data = [];
-                // if(this.ifTeamWork === false){
-                //
-                //     data = {user: this.username}
-                // }else{
-                //     data = { user : this.username
-                //              }
-                // }
 
-                this.$axios({
-                    url:'/getUserGraph',
-                    method:'post',
-                    data:{user:this.username},
-                    // data:{
-                    //     // user : "some_user",
-                    //     // password: "my_password"
-                    //     user : this.username,
-                    //     password: this.password
-                    //     // user : String(this.$route.params.username),
-                    //     // password: String(this.$route.params.password)
-                    // }
+                let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
+                this.websocketsend(getUserGraph);
 
-                }).then(response=>{
-                    if (response.status === 204){
-                        alert('Wrong username or password !')
-                        this.centerDialogVisible=true;
+                setTimeout(()=>{
+                    console.log(JSON.parse(this.returnData));
+                    let user_graph = JSON.parse(this.returnData);
+                    if(this.config.admin_users.indexOf(this.username)!== -1){
+                        this.dashboard_show = true;
                     }
-                    else {
-                        if(this.config.admin_users.indexOf(this.username)!== -1){
-                            this.dashboard_show = true;
-                        }
+                    this.centerDialogVisible=false;
+                    this.disable_dbclick = false;
+                    this.showLogin = false;
+                    let user_nodes = user_graph.nodes;
+                    let user_links = user_graph.links;
+                    let change_node_type = user_nodes.map(function (element) {
+                        element.id = Number(element.id);
+                        return element
+                    });
 
-                        this.centerDialogVisible=false;
-                        this.disable_dbclick = false;
-                        console.log(response);
-                        this.showLogin = false;
-                        let user_nodes = response.data.nodes;
-                        let user_links = response.data.links;
-                        // let test = response.data;
+                    let change_link_type = user_links.map(function (element) {
+                        element.id = Number(element.id);
+                        element.source = Number(element.source);
+                        element.target = Number(element.target);
+                        return element
+                    });
+                    this.current_user = this.username;
+                    this.$message(
 
-                        let change_node_type = user_nodes.map(function (element) {
-                            element.id = Number(element.id);
-
-                            return element
+                        {
+                            type: 'success',
+                            message: 'Welcome Back, ' + this.current_user
                         });
 
-                        let change_link_type = user_links.map(function (element) {
-                            element.id = Number(element.id);
-                            element.source = Number(element.source);
-                            element.target = Number(element.target);
-                            return element
-                        });
+
+                    this.info.nodes = change_node_type;
+                    this.info.links = change_link_type;
+                    this.current_user = user_graph.user;
+                    this.renderGraph(this.info);
 
 
-                        this.info.nodes = change_node_type;
-                        this.info.links = change_link_type;
-                        this.current_user = response.data.user;
-                        this.$message(
 
-                            {
-                                type: 'success',
-                                message: 'Welcome Back, ' + this.current_user
-                            });
+                },1000)
+
+                // this.$axios({
+                //     url:'/getUserGraph',
+                //     method:'post',
+                //     data:{user:this.username},
+                //
+                //
+                // }).then(response=>{
+                //     if (response.status === 204){
+                //         alert('Wrong username or password !')
+                //         this.centerDialogVisible=true;
+                //     }
+                //     else {
+                //         if(this.config.admin_users.indexOf(this.username)!== -1){
+                //             this.dashboard_show = true;
+                //         }
+                //
+                //         this.centerDialogVisible=false;
+                //         this.disable_dbclick = false;
+                //         console.log(response);
+                //         this.showLogin = false;
+                //         let user_nodes = response.data.nodes;
+                //         let user_links = response.data.links;
+                //         // let test = response.data;
+                //
+                //         let change_node_type = user_nodes.map(function (element) {
+                //             element.id = Number(element.id);
+                //
+                //             return element
+                //         });
+                //
+                //         let change_link_type = user_links.map(function (element) {
+                //             element.id = Number(element.id);
+                //             element.source = Number(element.source);
+                //             element.target = Number(element.target);
+                //             return element
+                //         });
+                //
+                //
+                //         this.info.nodes = change_node_type;
+                //         this.info.links = change_link_type;
+                //         this.current_user = response.data.user;
+                //         this.$message(
+                //
+                //             {
+                //                 type: 'success',
+                //                 message: 'Welcome Back, ' + this.current_user
+                //             });
 
 
                         // let test_info = {
@@ -2166,14 +2196,14 @@
 
 
 
-                        this.renderGraph(this.info);
-                    }
+                        // this.renderGraph(this.info);
+                    // }
 
-                }).catch(error=>{
-                    this.showLogin = true;
-                    this.username = '';
-                    // this.password = '';
-                })
+                // }).catch(error=>{
+                //     this.showLogin = true;
+                //     this.username = '';
+                //     // this.password = '';
+                // })
 
 
             },
@@ -2763,6 +2793,7 @@
             },
 
 
+
             renderGraph(info) {
 
                 let that = this;
@@ -2924,11 +2955,18 @@
                     .on("zoom", zoomed)
                 ;
 
+                console.log('zoom',zoom);
+
+
+
 
                 // let svg_drag = d3.behavior.drag()
                 //     .on('dragstart',null)
                 //     .on('drag',null)
                 //     .on('dragend',()=>{console.log('end')})
+
+
+                let whole_graph = d3.select("#graph");
 
 
 
@@ -2939,25 +2977,18 @@
                     // .attr('width', 921)
                     // .attr('height', 899)
                     .attr("viewBox", "-500 -200 2000 2000")
-                    // .attr("viewBox", "0 0 1000 1000")
+                    // .attr("viewBox", "0 0 3000 3000")
                     .call(zoom)
-
-
                     // .call(svg_drag)
                     .on('touchmove',null)
-
                     // .on('mousemove',function(evt){
                     //     let loc = cursorPoint(evt);
                     //     console.log('svm mouse',loc.x, loc.y);
                     //
                     // })
-
-
                     .on("dblclick", (node, i)=>{
                         console.log('svg node',node,i,d3.select(d3.event.target).datum());
                         console.log('d3 event', d3.event);
-
-
                         console.log('svm mouse',that.mouse_x, that.mouse_y);
 
                         if (d3.event.defaultPrevented) return;
@@ -2973,14 +3004,18 @@
                                 this.dialogFormVisible = true;
                         }
 
-
-
-
                     });
+
+
+
+
+
+
 
 
                 // find the mouse positions of the svg
                 let svg_select = document.querySelector('svg');
+
                 let pt = svg_select.createSVGPoint();
 
                 function cursorPoint(evt){
@@ -3192,7 +3227,7 @@
                     }
                 });
                 //设置连接线
-                let defs = svg.append("defs");
+                let defs = svg.append("g").append("defs");
 
                 defs.append("marker")
                     .attr("id", "end")
@@ -3289,6 +3324,8 @@
 
 
 
+
+
                 function edge_text_Position(){
 
                     return 'rotate(180,40,5)'
@@ -3363,12 +3400,35 @@
                     });
 
 
+
+
                 function zoomed() {//svg下的g标签移动大小
-                    // svg.selectAll("g").attr("transform", "scale(" +d3.event.scale + ")");
-                    svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    // let _this = this
+                    // _this.zoom_scale = d3.event.scale;
+                    // console.log('scale',this.zoom_scale,_this.zoom_scale)
+
+                    that.zoom_scale = d3.event.scale;
+
+                    svg.selectAll("g").attr("transform", "scale(" +  that.zoom_scale + ")");
+
+
+
+                    localStorage.setItem('zoom', that.zoom_scale);
+
+
+                // console.log('local storage',localStorage.valueOf())
+                    // svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    // console.log(d3.event)
+                    // svg.attr("transform", "translate(" +
+                    //     d3.event.transform.x +
+                    //     "," +
+                    //     d3.event.transform.y +
+                    //     ") "
+                    // );
 
                 }
-                console.log('edge line',edges_line);
+
+                // console.log('edge line',edges_line);
 
                 function getMarkerArrow(i) {
                     svg.append("defs").append("marker")   //箭头
@@ -3411,13 +3471,17 @@
                     return distance / 2
                 }
 
+
+
                 function drag(_this){//拖拽函数
-                    const mouse_line = svg.append("path")
+
+                    const mouse_line = svg.append("g").append("path")
                         .attr('id','mouse_link')
                         .style("stroke", 'black')
                         .style("stroke-width", 2)//线条粗细
                         .style("fill-opacity",0)
                         .attr('marker-end', 'url(#end)');
+
 
                     return force.drag().on("dragstart",function(d){
 
@@ -3470,9 +3534,16 @@
                                                 return getCircleColor(node);
                                             });
 
+
+
+                                        let end_x = d3.mouse(d3.event.sourceEvent.srcElement)[0] /  localStorage.getItem('zoom');
+                                        let end_y = d3.mouse(d3.event.sourceEvent.srcElement)[1]/  localStorage.getItem('zoom');
+
+                                        // console.log(d3.mouse(d3.event.sourceEvent.srcElement)[0],d3.mouse(d3.event.sourceEvent.srcElement)[1], localStorage.getItem('zoom'))
+
                                         return ('M' + d.x + ' '
-                                            + d.y + "L" + +d3.mouse(d3.event.sourceEvent.srcElement)[0]
-                                            + ' ' + d3.mouse(d3.event.sourceEvent.srcElement)[1]);//绘制直线
+                                            + d.y + "L" + + end_x
+                                            + ' ' + end_y);//绘制直线
                                     }
                                     else {
 
@@ -3532,6 +3603,12 @@
                                         // d3.select('.g_circle_'+ d.index).select('circle')
                                         //     .style('fill', function (node) { return getCircleColor(node);});
                                         mouse_line.style('opacity', '0');
+                                        mouse_line.attr('d', function () {
+                                            return ('M' + -2000 + ' '
+                                                + -2000 );//绘制直线
+                                        })
+
+
                                         // _this.ifClicked = false;
                                     }
                                     else {
@@ -3554,6 +3631,10 @@
 
 
                                         mouse_line.style('opacity', '0');
+                                        mouse_line.attr('d', function () {
+                                            return ('M' + -2000 + ' '
+                                                + -2000 );//绘制直线
+                                        })
 
                                         d3.select('.g_circle_' + d.index).select('circle')
                                             .style('fill', function (node) {
@@ -3571,6 +3652,11 @@
 
                                     _this.ifClicked = false;
                                     mouse_line.style('opacity', '0');
+                                    mouse_line.attr('d', function () {
+                                        return ('M' + -2000 + ' '
+                                            + -2000 );//绘制直线
+                                    })
+
                                 }
 
 
@@ -3674,24 +3760,24 @@
                         d.x = 360;
                         d.y = 266;
                     }
-                    if (d.x <=-430)
-                    {
-                        d.x = -430
-                    }
-                    else if (d.x >=1150){
-                        d.x = 1150
-                    }
+                    // if (d.x <=-430)
+                    // {
+                    //     d.x = -430
+                    // }
+                    // else if (d.x >=1150){
+                    //     d.x = 1150
+                    // }
+                    //
+                    // if(d.y <= -168){
+                    //     d.y = -168
+                    // }
+                    // else if (d.y >=700){
+                    //     d.y = 700
+                    // }
 
-                    if(d.y <= -168){
-                        d.y = -168
-                    }
-                    else if (d.y >=700){
-                        d.y = 700
-                    }
 
 
-
-                    return "translate(" + d.x  + "," + d.y  + ")";
+                    return "translate(" + d.x   + "," + d.y  + ")";
                 }
 
                 function transform2(d) {
@@ -3700,20 +3786,20 @@
                         d.x = 360;
                         d.y = 266;
                     }
-                    if (d.x <=-430)
-                    {
-                        d.x = -430
-                    }
-                    else if (d.x >=1150){
-                        d.x = 1150
-                    }
-
-                    if(d.y <= -168){
-                        d.y = -168
-                    }
-                    else if (d.y >=700){
-                        d.y = 700
-                    }
+                    // if (d.x <=-430)
+                    // {
+                    //     d.x = -430
+                    // }
+                    // else if (d.x >=1150){
+                    //     d.x = 1150
+                    // }
+                    //
+                    // if(d.y <= -168){
+                    //     d.y = -168
+                    // }
+                    // else if (d.y >=700){
+                    //     d.y = 700
+                    // }
 
 
 
@@ -3773,6 +3859,12 @@
                     }
 
                 }
+                console.log('scale!!',that.zoom_scale)
+                let o = localStorage.getItem('zoom')
+                console.log('scale o', o);
+                svg.selectAll("g").attr("transform", "scale(" + o + ")");
+
+
 
 
             },
@@ -3799,8 +3891,8 @@
                         'label': 'Concept',
                         'snippet':snippet,
                         'if_expanded':false,
-                        "x":this.mouse_x,
-                        "y":this.mouse_y,
+                        "x":this.mouse_x / localStorage.getItem('zoom'),
+                        "y":this.mouse_y / localStorage.getItem('zoom'),
                         'fixed':true
                     };
 
@@ -3838,9 +3930,10 @@
                     new_info.nodes = node_to_string;
                     new_info.links = link_to_string;
                     this.info = new_info;
-                    let addNode =`{"method":"addNode","data":{"user": \"${this.username}\","node":\"${input}\","xpos": \"${this.mouse_x}\","ypos":\"${this.mouse_y}\" }}`;
+                    let addNode =`{"method":"addNode","data":{"user": \"${this.username}\","node":\"${input}\","xpos": \"${this.mouse_x/ localStorage.getItem('zoom')}\","ypos":\"${this.mouse_y/ localStorage.getItem('zoom')}\" }}`;
                     console.log('add node request',addNode)
                     this.websocketsend(addNode);
+                    console.log('dbzoom',this.zoom_scale)
                     this.renderGraph(this.info);
 
 
