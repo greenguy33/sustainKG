@@ -997,7 +997,8 @@
                 console.log(protocol)
                 // let protocol = 'wss://172.18.0.3:8080/connectToWebsocket'
 
-                this.websocket = new WebSocket(protocol,'echo-protocol');
+                // this.websocket = new WebSocket(protocol,'echo-protocol');
+                this.websocket = new WebSocket(protocol);
                 this.websocket.onmessage = this.websocketonmessage;
                 this.websocket.onopen = this.websocketonopen;
                 this.websocket.onerror = this.websocketonerror;
