@@ -990,8 +990,8 @@
 
             initWebSocket(){
                 let protocol = location.protocol === 'https'
-                    ? 'wss://localhost:8080/connectToWebsocket'
-                    : 'ws://localhost:8080/connectToWebsocket';
+                    ? 'wss://172.18.0.3:8080/connectToWebsocket'
+                    : 'ws://172.18.0.3:8080/connectToWebsocket';
                 console.log(protocol)
 
                 this.websocket = new WebSocket(protocol,'echo-protocol');
