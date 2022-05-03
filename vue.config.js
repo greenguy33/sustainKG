@@ -10,6 +10,7 @@ module.exports = {
                 // target: 'http://172.18.0.3:8080/', //这里填写项目真实的后台接口地址
                 target: 'http://172.18.0.3:8080/', //这里填写项目真实的后台接口地址
                 changOrigin: true, //设置允许跨域
+                ws: true,
                 pathRewrite: {//这个重写不可省略！因为我们真正请求的地址并不含 /api
                     '^/api': ''
                     /* 当我们在浏览器中看到请求的地址为：http://localhost:8080/api/data/getdata 时
