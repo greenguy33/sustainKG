@@ -990,6 +990,7 @@
         methods: {
 
             initWebSocket(){
+                try {
                 let protocol = location.protocol === 'https'
                     ? 'wss://172.18.0.3:8080/connectToWebsocket'
                     : 'ws://172.18.0.3:8080/connectToWebsocket';
@@ -1001,6 +1002,11 @@
                 this.websocket.onopen = this.websocketonopen;
                 this.websocket.onerror = this.websocketonerror;
                 // this.websocket.onclose = this.websocketclose;
+                } catch(e) {
+                    if (e.name !== "SecurityError") {
+                        throw e;
+                    }
+                }
             },
             websocketonopen(){ //连接建立之后执行send方法发送数据
                 console.log('Connection Successful');
