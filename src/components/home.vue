@@ -942,7 +942,7 @@
                 new_relationship:'',
                 relationship_name :'',
                 // ifTeamWork:true,
-                websocket:'',
+                websocket:null,
                 returnData:'',
                 zoom_scale:1,
             }
@@ -994,7 +994,7 @@
 
                 let protocol = location.protocol === 'https'
                     ? 'wss://172.18.0.3:8080/connectToWebsocket'
-                    : 'ws://172.18.0.3:8080/api/connectToWebsocket';
+                    : 'ws://172.18.0.3:8080/connectToWebsocket';
                 console.log(protocol)
                 // let protocol = 'wss://172.18.0.3:8080/connectToWebsocket'
 
