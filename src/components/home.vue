@@ -945,6 +945,8 @@
                 websocket:null,
                 returnData:'',
                 zoom_scale:1,
+                if_drag:false,
+                select_circle:''
             }
         },
 
@@ -992,17 +994,17 @@
             initWebSocket(){
                 try {
 
-                // let protocol = location.protocol === 'https'
-                //     ? 'wss://172.18.0.3:8080/connectToWebsocket'
-                //     : 'ws://172.18.0.3:8080/connectToWebsocket';
-                // console.log(protocol)
-                let protocol = 'wss://172.18.0.3:8080/connectToWebsocket'
+                let protocol = location.protocol === 'https'
+                    ? 'wss://localhost:8080/connectToWebsocket'
+                    : 'ws://localhost:8080/connectToWebsocket';
+                console.log(protocol)
+                // let protocol = 'wss://172.18.0.3:8080/connectToWebsocket'
 
 
 
 
-                // this.websocket = new WebSocket(protocol,'echo-protocol');
-                this.websocket = new WebSocket(protocol);
+                this.websocket = new WebSocket(protocol,'echo-protocol');
+                // this.websocket = new WebSocket(protocol);
                 this.websocket.onmessage = this.websocketonmessage;
                 this.websocket.onopen = this.websocketonopen;
                 this.websocket.onerror = this.websocketonerror;
@@ -2903,7 +2905,7 @@
 
                 for(let i =0; i<nodes.length;i++){
                     nodes[i].x = parseInt(nodes[i].x);
-                    nodes[i].y = parseInt(nodes[i].y);
+                    nodes[i].y = parseInt(nodes[i].y) ;
                     nodes[i].fixed = 1;
                 }
 
@@ -2966,6 +2968,11 @@
                 let zoom = d3.behavior.zoom()
                     .scaleExtent([.4, 2])
                     .on("zoom", zoomed)
+                    .scale(localStorage.getItem('zoom'))
+
+
+
+
                 ;
 
                 console.log('zoom',zoom);
@@ -3018,6 +3025,9 @@
                         }
 
                     });
+
+
+
 
 
 
@@ -3419,14 +3429,18 @@
                     // let _this = this
                     // _this.zoom_scale = d3.event.scale;
                     // console.log('scale',this.zoom_scale,_this.zoom_scale)
+                    // console.log(d3.event.scale)
 
-                    that.zoom_scale = d3.event.scale;
+                    localStorage.setItem('zoom', d3.event.scale);
+                    svg.selectAll("g")
+                        .attr("transform","translate("+d3.event.translate+")scale(" +  d3.event.scale + ")");
 
-                    svg.selectAll("g").attr("transform", "scale(" +  that.zoom_scale + ")");
 
-
-
-                    localStorage.setItem('zoom', that.zoom_scale);
+                    // that.zoom_scale = localStorage.getItem('zoom');
+                    // that.zoom_scale =  d3.event.scale;
+                    // svg.selectAll("g").attr("transform", "scale(" +  that.zoom_scale + ")");
+                    //
+                    // localStorage.setItem('zoom', that.zoom_scale);
 
 
                 // console.log('local storage',localStorage.valueOf())
@@ -3496,9 +3510,13 @@
                         .attr('marker-end', 'url(#end)');
 
 
-                    return force.drag().on("dragstart",function(d){
+                    return force.drag().on("dragstart",function(d,i){
+
+                        _this.select_circle = 'g_circle_' + String(i);
 
                         // console.log('start node',d);
+                        _this.if_drag = true;
+                        console.log(_this.if_drag)
 
 
                         if(_this.ifClicked===true ) {
@@ -3518,7 +3536,19 @@
 
                     })
 
-                        .on('drag', (d) =>{
+                        .on('drag', (d,i) =>{
+
+
+                            // .attr('x',d.x = d3.event.x)
+                            // .attr('y',d.y = d3.event.y)
+                            // _this.select_circle = 'g_circle_' + String(i);
+                            console.log(_this.select_circle)
+                            d3.select('.'+_this.select_circle).select('circle')
+                                .attr('transform',function(d){
+                                return "translate(" + _this.mouse_x  + "," + _this.mouse_y + ")";
+                            })
+
+                            // console.log(_this.mouse_x)
 
 
 
@@ -3589,6 +3619,8 @@
 
 
                         .on('dragend',(d)=>{
+                            _this.if_drag = false;
+                            console.log(_this.if_drag)
                             // console.log('mouse',((d3.event.sourceEvent.target)))
                             if(_this.ifClicked===true) {
                                 // console.log('drag end', _this.original_dx, _this.original_dy)
@@ -3676,7 +3708,9 @@
                                 force.resume();
                             }
 
-                            let moveNode = `{"method":"moveNode","data":{"user":\"${_this.username}\", "node":\"${d.properties.name}\","xpos":\"${d.x}\", "ypos":\"${d.y}\"}}`;
+                            let moveNode = `{"method":"moveNode","data":{"user":\"${_this.username}\",
+                             "node":\"${d.properties.name}\","xpos":\"${d.x}\",
+                              "ypos":\"${d.y}\"}}`;
 
                             _this.websocketsend(moveNode)
                             // _this.submitData();
@@ -3740,7 +3774,7 @@
 
                     edges_line.attr('d', function (d) {
 
-                                return getNodesLine(d);//路径
+                                return getNodesLine(d,localStorage.getItem('zoom'),that.if_drag);//路径
                     });
 
 
@@ -3763,7 +3797,7 @@
                 }
 
                 //设置圆圈和文字的坐标
-                function transform1(d) {
+                function transform1(d,i) {
 
 
 
@@ -3788,12 +3822,27 @@
                     //     d.y = 700
                     // }
 
+                    let zoom_x  = d.x / localStorage.getItem('zoom');
+                    let zoom_y = d.y / localStorage.getItem('zoom');
+
+                    // console.log('kk',that.select_circle)
+                    if(that.if_drag === true){
 
 
-                    return "translate(" + d.x   + "," + d.y  + ")";
+                        d3.select('.'+that.select_circle).select('circle')
+                            .attr('transform',function(d){
+                                return "translate(" + d.x  + "," + d.y + ")";
+                            })
+
+                        return "translate(" + d.x + "," + d.y + ")";
+                    }else {
+
+                        return "translate(" + d.x + "," + d.y + ")";
+                    }
                 }
 
-                function transform2(d) {
+                function transform2(d,i) {
+
                     if(isNaN(d.x) && isNaN(d.y))
                     {
                         d.x = 360;
@@ -3813,10 +3862,22 @@
                     // else if (d.y >=700){
                     //     d.y = 700
                     // }
+                    let zoom_x  = d.x / localStorage.getItem('zoom');
+                    let zoom_y = d.y / localStorage.getItem('zoom');
 
 
+                    if(that.if_drag === true){
 
-                    return "translate(" + d.x + "," + d.y + ")";
+                        d3.select('.'+that.select_circle).select('text')
+                            .attr('transform',function(d){
+                                return "translate(" + d.x  + "," + d.y + ")";
+                            })
+
+                        return "translate(" + d.x + "," + d.y + ")";
+                    }else {
+
+                        return "translate(" + d.x + "," + d.y + ")";
+                    }
                 }
 
 

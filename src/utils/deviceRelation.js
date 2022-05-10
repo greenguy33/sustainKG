@@ -19,7 +19,7 @@ export const getNodeSelfPath = d => {
   }
 };
 
-export const getNodesLine = (d)=> {
+export const getNodesLine = (d,scale,drag)=> {
   d.sourceRadius = 40;
   d.targetRadius = 40;
   let tan = Math.abs((d.target.y - d.source.y) / (d.target.x - d.source.x)); //圆心连线tan值
@@ -96,7 +96,16 @@ export const getNodesLine = (d)=> {
   //           }
   //           return ''})
 
+  // if(drag === true) {
+  //   xs = xs/scale;
+  //   ys = ys/scale;
+  //   xt = xt/scale;
+  //   yt = yt/scale;
+  // }
+  // console.log('ff scale',scale)
+
   if(xs<xt) {
+
 
       return 'M' + xs + ' ' + ys + "L" + +xt + ' ' + yt;//绘制直线
   }
