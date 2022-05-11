@@ -1047,7 +1047,9 @@
                     }
                     // For Adding Node
                     else if (parseData.method === 'addNode') {
-                       this.updateGraph();
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                     }
                     // for Changing Node Name
                     else if (parseData.method === 'changeNode') {
@@ -1090,10 +1092,10 @@
             },
 
             updateGraph(){
-                setTimeout(()=> {
-                    let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
-                    this.websocketsend(getUserGraph);
-                },100);
+
+                let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
+                this.websocketsend(getUserGraph);
+
 
                 setTimeout(()=>{
                     let user_graph = JSON.parse(this.returnData);
