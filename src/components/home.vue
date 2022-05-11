@@ -996,7 +996,7 @@
                 //     ? 'wss://172.18.0.3:8080/connectToWebsocket'
                 //     : 'ws://172.18.0.3:8080/connectToWebsocket';
                 // console.log(protocol)
-                let protocol = 'wss://172.18.0.3:8080/connectToWebsocket'
+                let protocol = 'wss://graphdb.ics.uci.edu:8080/connectToWebsocket'
 
 
 
