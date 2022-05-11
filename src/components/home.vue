@@ -1090,8 +1090,10 @@
             },
 
             updateGraph(){
-                let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
-                this.websocketsend(getUserGraph);
+                setTimeout(()=> {
+                    let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
+                    this.websocketsend(getUserGraph);
+                },100);
 
                 setTimeout(()=>{
                     let user_graph = JSON.parse(this.returnData);
@@ -1112,7 +1114,7 @@
                     this.info.nodes = change_node_type;
                     this.info.links = change_link_type;
                     this.renderGraph(this.info);
-                },100)
+                },200)
             },
 
             changeInfoType(nodes,links){
