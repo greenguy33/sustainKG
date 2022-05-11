@@ -2088,8 +2088,11 @@
                 console.log('handleshow username', this.username);
                 console.log(this.$route.params);
 
-                let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
-                this.websocketsend(getUserGraph);
+                setTimeout(()=>{
+                    let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
+                    this.websocketsend(getUserGraph);
+                },500)
+
 
                 setTimeout(()=>{
                     console.log(JSON.parse(this.returnData));
