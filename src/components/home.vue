@@ -1065,19 +1065,27 @@
                     }
                     // for Removing Node
                     else if (parseData.method === 'removeNode') {
-                        this.updateGraph();
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                     }
                     //for Adding Links
                     else if (parseData.method === 'addLink') {
-                        this.updateGraph();
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                     }
                     // for Removing Link
                     else if(parseData.method === 'removeLink'){
-                        this.updateGraph();
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                     }
                     // for Changing link name
                     else if(parseData.method === 'changeLink'){
-                        this.updateGraph();
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                     }
                 }
 
