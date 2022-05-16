@@ -916,7 +916,8 @@
 
                         }
 
-                    }
+                    },
+
                 ],
 
 
@@ -956,6 +957,8 @@
 
 
         mounted() {
+
+
 
             if(this.config.useShibboleth === true) {
                 this.$axios({
@@ -2818,6 +2821,10 @@
                     this.disable_searchConcept = false;
                 }
                 console.log('render data', info);
+                //make all links has if vote localstorage
+
+
+
                 if(this.showLogin === false && this.viewGraph_btn_status === true)
                 {
                     this.disable_submit = false;
@@ -3026,15 +3033,16 @@
 
                     });
 
+                for(let i = 0; i<info.links.length;i++){
 
+                    let key = JSON.stringify({"source":info.links[i].source.properties.name,
+                        "target":info.links[i].target.properties.name,"label":info.links[i].label})
 
-
-
-
-
-
-
-
+                    if(localStorage.getItem(key)=== null){
+                        localStorage.setItem(key, '00');
+                    }
+                    console.log(localStorage)
+                }
 
                 // find the mouse positions of the svg
                 let svg_select = document.querySelector('svg');
@@ -3542,11 +3550,11 @@
                             // .attr('x',d.x = d3.event.x)
                             // .attr('y',d.y = d3.event.y)
                             // _this.select_circle = 'g_circle_' + String(i);
-                            console.log(_this.select_circle)
-                            d3.select('.'+_this.select_circle).select('circle')
-                                .attr('transform',function(d){
-                                return "translate(" + _this.mouse_x  + "," + _this.mouse_y + ")";
-                            })
+                            // console.log(_this.select_circle)
+                            // d3.select('.'+_this.select_circle).select('circle')
+                            //     .attr('transform',function(d){
+                            //     return "translate(" + _this.mouse_x  + "," + _this.mouse_y + ")";
+                            // })
 
                             // console.log(_this.mouse_x)
 
@@ -3886,6 +3894,7 @@
 
                     d3.event.preventDefault();
 
+
                     d3.selectAll('.d3-context-menu').data([1])
                         .enter()
                         .append('div')
@@ -3918,6 +3927,61 @@
                                 d3.select('.d3-context-menu').style('display', 'none')
                             });
 
+                        if(select.type ==='link') {
+
+                            let vote_pos = parseInt(select.posVote);
+                            let vote_neg = parseInt(select.negVote);
+                            let key = JSON.stringify({'source':select.source.properties.name,
+                                'target':select.target.properties.name,'label':select.label});
+
+                            console.log('menu',select)
+                            console.log(localStorage.getItem(JSON.stringify({'source':select.source.properties.name,
+                                'target':select.target.properties.name,'label':select.label})))
+                            // 00 means no neg and no pos
+                            // 10 means 1 neg and no pos
+                            // 01 means no neg and 1 pos
+                            list.append('span').append('button').attr('class', 'Disagree').html('Disagree' + ' '+  String(vote_neg))
+                            .on('click', function (){
+                                if(localStorage.getItem(key) === '00') {
+                                    vote_neg += 1;
+                                    select.negVote = String(vote_neg);
+                                    localStorage.setItem(key, '10');
+                                    addVote(select);
+                                }else if(localStorage.getItem(key) === '10'){
+                                    vote_neg -= 1;
+                                    select.negVote = String(vote_neg);
+                                    localStorage.setItem(key, '00');
+                                    addVote(select);
+                                }
+                                console.log('Disagree')
+                                d3.select('.Disagree').html('Disagree' + ' '+  String(vote_neg))
+                            })
+                            list.select('.Disagree').style('color','red')
+
+                            list.select('span').append('button').attr('class', 'Agree').html('Agree' + ' ' + String(vote_pos))
+                            .on('click', function (){
+                                if(localStorage.getItem(key) === '00') {
+                                    vote_pos += 1;
+                                    select.posVote = String(vote_pos);
+                                    localStorage.setItem(key, '01');
+                                    addVote(select);
+
+                                }
+                                else if(localStorage.getItem(key) === '01') {
+                                    vote_pos -= 1;
+                                    select.posVote = String(vote_pos);
+                                    localStorage.setItem(key, '00');
+                                    addVote(select);
+
+                                }
+                                console.log('Agree')
+                                d3.select('.Agree').html('Agree' + ' '+  String(vote_pos))
+                                })
+                            list.select('.Agree').style('color','green')
+
+                            list.selectAll('button').style('font-weight','bold')
+                        };
+
                         // the openCallback allows an action to fire before the menu is displayed
                         // an example usage would be closing a tooltip
                         if (openCallback) openCallback(data);
@@ -3932,6 +3996,16 @@
                         // return false
                     }
 
+                }
+
+                function addVote(link){
+                    console.log('add vote link', link);
+                    let addVote = `{"method":"addVote","data":{"user": \"${that.username}\","origin":\"${link.source.properties.name}\",
+                        "target": \"${link.target.properties.name}\",
+                        "label":\"${link.label}\", "posVote":\"${link.posVote}\","negVote":\"${link.negVote}\"}}`;
+                    console.log(addVote)
+
+                    that.websocketsend(addVote);
                 }
                 console.log('scale!!',that.zoom_scale)
                 let o = localStorage.getItem('zoom')
@@ -4230,6 +4304,29 @@
     .d3-context-menu ul li {
         padding: 4px 16px;
     }
+
+    .d3-context-menu span button {
+        /*background-color: #4677f8;*/
+        margin-left: 16px;
+        margin-top: 8px;
+        background: linear-gradient(to bottom, #4eb5e5 0%,#389ed5 100%); /* W3C */
+        border: none;
+        border-radius: 5px;
+        position: relative;
+        border-bottom: 4px solid #2b8bc6;
+        color: #fbfbfb;
+        text-shadow: 1px 1px 1px rgba(0,0,0,.4);
+        text-align: left;
+        text-indent: 5px;
+        box-shadow: 0px 3px 0px 0px rgba(0,0,0,.2);
+        cursor: pointer;
+
+    }
+    .d3-context-menu span button:active{
+        box-shadow: 0px 2px 0px 0px rgba(0,0,0,.2);
+        top: 1px;
+    }
+
 
     .d3-context-menu ul li:hover {
         background-color: #4677f8;
