@@ -1052,7 +1052,27 @@
                     }
                     // For Adding Node
                     else if (parseData.method === 'addNode') {
-                       this.updateGraph();
+                        console.log('who',parseData)
+                        console.log('debug', this.info)
+                        let new_node = {
+                            'id': this.info.nodes.length,
+                            "type": "node",
+                            'properties': {'name': parseData.data.node},
+                            'label': 'Concept',
+                            'snippet':this.select_snippet,
+                            'if_expanded':false,
+                            "x":parseData.data.xpos,
+                            "y":parseData.data.ypos,
+                            'fixed':true
+                        };
+                        this.info.nodes.push(new_node);
+
+                        this.info = this.changeInfoType(this.info.nodes, this.info.links);
+                            // this.updateGraph();
+                        this.renderGraph(this.info);
+
+
+
                     }
                     // for Changing Node Name
                     else if (parseData.method === 'changeNode') {
@@ -1068,19 +1088,107 @@
                     }
                     // for Removing Node
                     else if (parseData.method === 'removeNode') {
-                        this.updateGraph();
+                        let node_id = '';
+                        for(let i = 0; i<this.info.nodes.length;i++){
+                            if(this.info.nodes[i].properties.name === parseData.data.node){
+                                node_id = this.info.nodes[i].id;
+                                this.info.nodes.splice(this.info.nodes[i].id,1)
+                            }
+                        }
+
+                        for(let i =this.info.links.length-1; i>=0; i-- )
+                        {
+                            // console.log('link index',i,node_id);
+                            if(this.info.links[i].source.id === node_id
+                                || this.info.links[i].target.id === node_id)
+                            {
+                                this.info.links.splice(i,1);
+                            }
+
+                        }
+
+                        for(let i = 0; i < this.info.nodes.length;i++)
+                        {
+                            // console.log(i);
+                            // console.log(this.info.nodes[i].id,this.info.nodes[i].index);
+                            this.info.nodes[i].id = i;
+                            for(let j =0; j<this.info.links.length; j++){
+                                if(this.info.links[j].source.properties.name === this.info.nodes[i].properties.name){
+                                    this.info.links[j].source.id = this.info.nodes[i].id
+                                }
+                                if(this.info.links[j].target.properties.name === this.info.nodes[i].properties.name){
+                                    this.info.links[j].target.id = this.info.nodes[i].id
+                                }
+                            }
+                        }
+
+                        this.info = this.changeInfoType(this.info.nodes,this.info.links)
+                        this.renderGraph(this.info)
+
+
+                        // this.updateGraph();
+
+
+
                     }
                     //for Adding Links
                     else if (parseData.method === 'addLink') {
-                        this.updateGraph();
+                        let origin = '';
+                        let target = '';
+                        for (let i = 0; i < this.info.nodes.length; i++) {
+                            if (this.info.nodes[i].properties.name === parseData.data.origin) {
+                               origin = this.info.nodes[i];
+                            }else if(this.info.nodes[i].properties.name === parseData.data.target){
+                                target = this.info.nodes[i];
+                            }
+                        }
+
+                        let new_link = {
+                            "source": origin,
+                            "target": target,
+                            "id": this.info.links.length,
+                            "type": 'link',
+                            "citation": {},
+                            "label": parseData.data.label,
+                            'posVote':'0',
+                            'negVote':'0'
+
+                        };
+                        this.info.links.push(new_link);
+                        this.info = this.changeInfoType(this.info.nodes,this.info.links)
+                        this.renderGraph(this.info)
+                        // this.updateGraph();
                     }
                     // for Removing Link
                     else if(parseData.method === 'removeLink'){
-                        this.updateGraph();
+
+
+
+                        for(let i =0 ; i< this.info.links.length;i++){
+                            if(this.info.links[i].label === parseData.data.label
+                                && this.info.links[i].source.properties.name === parseData.data.origin &&
+                                this.info.links[i].target.properties.name === parseData.data.target){
+
+                                this.info.links.splice(i,1);
+
+                            }
+                        }
+                        this.info = this.changeInfoType(this.info.nodes,this.info.links)
+                        this.renderGraph(this.info);
+                        // this.updateGraph();
                     }
                     // for Changing link name
                     else if(parseData.method === 'changeLink'){
-                        this.updateGraph();
+                        for(let i =0 ; i< this.info.links.length;i++){
+                            if(this.info.links[i].label === parseData.data.oldLabel
+                                && this.info.links[i].source.properties.name === parseData.data.origin &&
+                                this.info.links[i].target.properties.name === parseData.data.target){
+                                this.info.links[i].label = parseData.data.newLabel;
+                            }
+                        }
+                        this.info = this.changeInfoType(this.info.nodes,this.info.links);
+                        this.renderGraph(this.info);
+                        // this.updateGraph();
                     }
                 }
 
@@ -1098,11 +1206,14 @@
                 let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
                 this.websocketsend(getUserGraph);
 
+                let newNode = {};
+
                 setTimeout(()=>{
                     let user_graph = JSON.parse(this.returnData);
                     console.log('test add node',user_graph);
 
                     let user_nodes = user_graph.nodes;
+
                     let user_links = user_graph.links;
                     let change_node_type = user_nodes.map(function (element) {
                         element.id = Number(element.id);
@@ -2672,7 +2783,9 @@
                                     "id": this.info.links.length,
                                     "type": 'link',
                                     "citation": {},
-                                    "label": this.relationship
+                                    "label": this.relationship,
+                                    'posVote':'0',
+                                    'negVote':'0'
 
                                 };
                             }
@@ -2683,7 +2796,9 @@
                                     "id": this.info.links.length,
                                     "type": 'link',
                                     "citation": this.reference,
-                                    "label": this.relationship
+                                    "label": this.relationship,
+                                    'posVote':'0',
+                                    'negVote':'0'
 
                                 };
                             }
@@ -2733,6 +2848,8 @@
                                     "type": element.type,
                                     "citation": {},
                                     "label": element.label,
+                                    'posVote':element.posVote,
+                                    'negVote':element.negVote
 
 
                                 }
@@ -2747,6 +2864,8 @@
                                     "type": element.type,
                                     "citation": element.citation,
                                     "label": element.label,
+                                    'posVote':element.posVote,
+                                    'negVote':element.negVote
 
 
                                 }
@@ -3941,30 +4060,39 @@
                             // 10 means 1 neg and no pos
                             // 01 means no neg and 1 pos
                             list.append('span').append('button').attr('class', 'Disagree').html('Disagree' + ' '+  String(vote_neg))
-                            .on('click', function (){
+                            list.select('.Disagree').style('color','red')
+                            list.select('.Disagree').on('click', function (){
                                 if(localStorage.getItem(key) === '00') {
                                     vote_neg += 1;
                                     select.negVote = String(vote_neg);
                                     localStorage.setItem(key, '10');
                                     addVote(select);
+                                    d3.select('.Agree').disable = true;
+                                    list.select('.Agree').style('color','grey')
                                 }else if(localStorage.getItem(key) === '10'){
                                     vote_neg -= 1;
                                     select.negVote = String(vote_neg);
                                     localStorage.setItem(key, '00');
                                     addVote(select);
+                                    d3.select('.Agree').disable = false;
+                                    list.select('.Agree').style('color','green')
                                 }
                                 console.log('Disagree')
                                 d3.select('.Disagree').html('Disagree' + ' '+  String(vote_neg))
                             })
-                            list.select('.Disagree').style('color','red')
+
 
                             list.select('span').append('button').attr('class', 'Agree').html('Agree' + ' ' + String(vote_pos))
-                            .on('click', function (){
+                            list.select('.Agree').style('color','green')
+                            list.select('.Agree').on('click', function (){
                                 if(localStorage.getItem(key) === '00') {
                                     vote_pos += 1;
                                     select.posVote = String(vote_pos);
                                     localStorage.setItem(key, '01');
                                     addVote(select);
+                                    d3.select('.Disagree').disable = true;
+                                    list.select('.Disagree').style('color','grey')
+
 
                                 }
                                 else if(localStorage.getItem(key) === '01') {
@@ -3972,14 +4100,16 @@
                                     select.posVote = String(vote_pos);
                                     localStorage.setItem(key, '00');
                                     addVote(select);
+                                    d3.select('.Disagree').disable = false;
+                                    list.select('.Disagree').style('color','red')
 
                                 }
                                 console.log('Agree')
                                 d3.select('.Agree').html('Agree' + ' '+  String(vote_pos))
                                 })
-                            list.select('.Agree').style('color','green')
 
-                            list.selectAll('button').style('font-weight','bold')
+
+                            // list.selectAll('button').style('font-weight','bold')
                         };
 
                         // the openCallback allows an action to fire before the menu is displayed
