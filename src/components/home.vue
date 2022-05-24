@@ -1048,27 +1048,27 @@
                     // For Adding Node
                     else if (parseData.method === 'addNode') {
                         // the old collaborative way
-                        // setTimeout(()=> {
-                        //     this.updateGraph();
-                        // },100)
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                         //
 
-                        console.log('who',parseData)
-                        console.log('debug', this.info)
-                        let new_node = {
-                            'id': this.info.nodes.length,
-                            "type": "node",
-                            'properties': {'name': parseData.data.node},
-                            'label': 'Concept',
-                            'snippet':this.select_snippet,
-                            'if_expanded':false,
-                            "x":parseData.data.xpos,
-                            "y":parseData.data.ypos,
-                            'fixed':true
-                        };
-                        this.info.nodes.push(new_node);
-                        this.info = this.changeInfoType(this.info.nodes, this.info.links);
-                        this.renderGraph(this.info);
+                        // console.log('who',parseData)
+                        // console.log('debug', this.info)
+                        // let new_node = {
+                        //     'id': this.info.nodes.length,
+                        //     "type": "node",
+                        //     'properties': {'name': parseData.data.node},
+                        //     'label': 'Concept',
+                        //     'snippet':this.select_snippet,
+                        //     'if_expanded':false,
+                        //     "x":parseData.data.xpos,
+                        //     "y":parseData.data.ypos,
+                        //     'fixed':true
+                        // };
+                        // this.info.nodes.push(new_node);
+                        // this.info = this.changeInfoType(this.info.nodes, this.info.links);
+                        // this.renderGraph(this.info);
                     }
                     // for Changing Node Name
                     else if (parseData.method === 'changeNode') {
@@ -1085,106 +1085,106 @@
                     // for Removing Node
                     else if (parseData.method === 'removeNode') {
                         // the old collaborative way
-                        // setTimeout(()=> {
-                        //     this.updateGraph();
-                        // },100)
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                         //
-                        let node_id = '';
-                        for(let i = 0; i<this.info.nodes.length;i++){
-                            if(this.info.nodes[i].properties.name === parseData.data.node){
-                                node_id = this.info.nodes[i].id;
-                                this.info.nodes.splice(this.info.nodes[i].id,1)
-                            }
-                        }
-
-                        for(let i =this.info.links.length-1; i>=0; i-- )
-                        {
-                            if(this.info.links[i].source.id === node_id
-                                || this.info.links[i].target.id === node_id)
-                            {
-                                this.info.links.splice(i,1);
-                            }
-                        }
-                        for(let i = 0; i < this.info.nodes.length;i++)
-                        {
-                            this.info.nodes[i].id = i;
-                            for(let j =0; j<this.info.links.length; j++){
-                                if(this.info.links[j].source.properties.name === this.info.nodes[i].properties.name){
-                                    this.info.links[j].source.id = this.info.nodes[i].id
-                                }
-                                if(this.info.links[j].target.properties.name === this.info.nodes[i].properties.name){
-                                    this.info.links[j].target.id = this.info.nodes[i].id
-                                }
-                            }
-                        }
-                        this.info = this.changeInfoType(this.info.nodes,this.info.links)
-                        this.renderGraph(this.info)
+                        // let node_id = '';
+                        // for(let i = 0; i<this.info.nodes.length;i++){
+                        //     if(this.info.nodes[i].properties.name === parseData.data.node){
+                        //         node_id = this.info.nodes[i].id;
+                        //         this.info.nodes.splice(this.info.nodes[i].id,1)
+                        //     }
+                        // }
+                        //
+                        // for(let i =this.info.links.length-1; i>=0; i-- )
+                        // {
+                        //     if(this.info.links[i].source.id === node_id
+                        //         || this.info.links[i].target.id === node_id)
+                        //     {
+                        //         this.info.links.splice(i,1);
+                        //     }
+                        // }
+                        // for(let i = 0; i < this.info.nodes.length;i++)
+                        // {
+                        //     this.info.nodes[i].id = i;
+                        //     for(let j =0; j<this.info.links.length; j++){
+                        //         if(this.info.links[j].source.properties.name === this.info.nodes[i].properties.name){
+                        //             this.info.links[j].source.id = this.info.nodes[i].id
+                        //         }
+                        //         if(this.info.links[j].target.properties.name === this.info.nodes[i].properties.name){
+                        //             this.info.links[j].target.id = this.info.nodes[i].id
+                        //         }
+                        //     }
+                        // }
+                        // this.info = this.changeInfoType(this.info.nodes,this.info.links)
+                        // this.renderGraph(this.info)
                     }
                     //for Adding Links
                     else if (parseData.method === 'addLink') {
                         // the old collaborative way
-                        // setTimeout(()=> {
-                        //     this.updateGraph();
-                        // },100)
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                         //
-                        let origin = '';
-                        let target = '';
-                        for (let i = 0; i < this.info.nodes.length; i++) {
-                            if (this.info.nodes[i].properties.name === parseData.data.origin) {
-                                origin = this.info.nodes[i];
-                            }else if(this.info.nodes[i].properties.name === parseData.data.target){
-                                target = this.info.nodes[i];
-                            }
-                        }
-                        let new_link = {
-                            "source": origin,
-                            "target": target,
-                            "id": this.info.links.length,
-                            "type": 'link',
-                            "citation": {},
-                            "label": parseData.data.label,
-                            'posVote':'0',
-                            'negVote':'0'
-                        };
-                        this.info.links.push(new_link);
-                        this.info = this.changeInfoType(this.info.nodes,this.info.links)
-                        this.renderGraph(this.info)
+                        // let origin = '';
+                        // let target = '';
+                        // for (let i = 0; i < this.info.nodes.length; i++) {
+                        //     if (this.info.nodes[i].properties.name === parseData.data.origin) {
+                        //         origin = this.info.nodes[i];
+                        //     }else if(this.info.nodes[i].properties.name === parseData.data.target){
+                        //         target = this.info.nodes[i];
+                        //     }
+                        // }
+                        // let new_link = {
+                        //     "source": origin,
+                        //     "target": target,
+                        //     "id": this.info.links.length,
+                        //     "type": 'link',
+                        //     "citation": {},
+                        //     "label": parseData.data.label,
+                        //     'posVote':'0',
+                        //     'negVote':'0'
+                        // };
+                        // this.info.links.push(new_link);
+                        // this.info = this.changeInfoType(this.info.nodes,this.info.links)
+                        // this.renderGraph(this.info)
 
                     }
                     // for Removing Link
                     else if(parseData.method === 'removeLink'){
                         // the old collaborative way
-                        // setTimeout(()=> {
-                        //     this.updateGraph();
-                        // },100)
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
                         //
-                        for(let i =0 ; i< this.info.links.length;i++){
-                            if(this.info.links[i].label === parseData.data.label
-                                && this.info.links[i].source.properties.name === parseData.data.origin &&
-                                this.info.links[i].target.properties.name === parseData.data.target){
-                                this.info.links.splice(i,1);
-                            }
-                        }
-                        this.info = this.changeInfoType(this.info.nodes,this.info.links)
-                        this.renderGraph(this.info);
+                        // for(let i =0 ; i< this.info.links.length;i++){
+                        //     if(this.info.links[i].label === parseData.data.label
+                        //         && this.info.links[i].source.properties.name === parseData.data.origin &&
+                        //         this.info.links[i].target.properties.name === parseData.data.target){
+                        //         this.info.links.splice(i,1);
+                        //     }
+                        // }
+                        // this.info = this.changeInfoType(this.info.nodes,this.info.links)
+                        // this.renderGraph(this.info);
 
                     }
                     // for Changing link name
                     else if(parseData.method === 'changeLink'){
                         // the old collaborative way
-                        // setTimeout(()=> {
-                        //     this.updateGraph();
-                        // },100)
-                        //
-                        for(let i =0 ; i< this.info.links.length;i++){
-                            if(this.info.links[i].label === parseData.data.oldLabel
-                                && this.info.links[i].source.properties.name === parseData.data.origin &&
-                                this.info.links[i].target.properties.name === parseData.data.target){
-                                this.info.links[i].label = parseData.data.newLabel;
-                            }
-                        }
-                        this.info = this.changeInfoType(this.info.nodes,this.info.links);
-                        this.renderGraph(this.info);
+                        setTimeout(()=> {
+                            this.updateGraph();
+                        },100)
+
+                        // for(let i =0 ; i< this.info.links.length;i++){
+                        //     if(this.info.links[i].label === parseData.data.oldLabel
+                        //         && this.info.links[i].source.properties.name === parseData.data.origin &&
+                        //         this.info.links[i].target.properties.name === parseData.data.target){
+                        //         this.info.links[i].label = parseData.data.newLabel;
+                        //     }
+                        // }
+                        // this.info = this.changeInfoType(this.info.nodes,this.info.links);
+                        // this.renderGraph(this.info);
                     }
                 }
 
@@ -1243,10 +1243,6 @@
                         "type": element.type,
                         "citation": element.citation,
                         "label": element.label
-                        // 'x_end':element.x_end,
-                        // 'x_start':element.x_start,
-                        // 'y_end':element.y_end,
-                        // 'y_start':element.y_start,
 
                     }
 
@@ -1333,101 +1329,6 @@
                     },1000)
 
 
-                    // this.$axios({
-                    //     url: '/checkUserCredentials',
-                    //     method: 'post',
-                    //     data: {
-                    //         user: this.change_username,
-                    //         password: this.password
-                    //
-                    //
-                    //     }
-                    //
-                    // }).then(response =>{
-                    //
-                    //     console.log('check the credential',response);
-                    //     if(response.status === 204)
-                    //     {
-                    //
-                    //         this.$message(
-                    //
-                    //             {
-                    //                 type: 'warning',
-                    //                 message: 'Password for '+ this.change_username +' is wrong!'
-                    //             });
-                    //         // this.showLogin = true;
-                    //         this.changeUserVisible = true;
-                    //         // this.username = '';
-                    //         this.password = '';
-                    //         this.change_username = '';
-                    //
-                    //     }
-                    //     else{
-                    //
-                    //         this.$axios({
-                    //             url: '/getUserGraph',
-                    //             method: 'post',
-                    //             data: {
-                    //                 user: this.change_username,
-                    //
-                    //             }
-                    //
-                    //         }).then(response => {
-                    //             if (response.status === 204) {
-                    //                 this.$message(
-                    //                     {
-                    //                         type: 'warning',
-                    //                         message: 'User username does not exist !'
-                    //                     });
-                    //
-                    //                 this.changeUserVisible = true;
-                    //             }
-                    //             this.showLogin = false;
-                    //             this.username = this.change_username;
-                    //             this.change_username = '';
-                    //             this.password = '';
-                    //             this.changeUserVisible = false;
-                    //             this.disable_dbclick = false;
-                    //             let user_nodes = response.data.nodes;
-                    //             let user_links = response.data.links;
-                    //             // let test = response.data;
-                    //
-                    //             let change_node_type = user_nodes.map(function (element) {
-                    //                 element.id = Number(element.id);
-                    //                 return element
-                    //             });
-                    //
-                    //             let change_link_type = user_links.map(function (element) {
-                    //                 element.id = Number(element.id);
-                    //                 element.source = Number(element.source);
-                    //                 element.target = Number(element.target);
-                    //                 return element
-                    //             });
-                    //
-                    //
-                    //             this.info.nodes = change_node_type;
-                    //             this.info.links = change_link_type;
-                    //             this.current_user = response.data.user;
-                    //             this.$message(
-                    //
-                    //                 {
-                    //                     type: 'success',
-                    //                     message: 'Welcome Back, ' + this.current_user
-                    //                 });
-                    //             this.renderGraph(this.info);
-                    //
-                    //             // else {
-                    //             //     this.$router.push({
-                    //             //         name: 'home',
-                    //             //         params: {username: this.username}
-                    //             //     })
-                    //             // }
-                    //         })
-                    //
-                    //     }
-                    //
-                    // });
-
 
                 }
 
@@ -1447,17 +1348,6 @@
                     }
                 });
 
-                // let routeUrl =  this.$router.resolve({
-                //     name: 'dashboard',
-                //     query:{
-                //         username: this.username,
-                //         password: this.password
-                //     }
-                //
-                // });
-                // console.log(routeUrl.href);
-                //
-                // window.open(routeUrl.href, '_blank');
             },
 
             instruction(){
