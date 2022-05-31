@@ -2756,8 +2756,7 @@
 
                 console.log('selected relationship: ',this.relationship);
                 this.relationship_name = this.relationship;
-
-
+                
                 console.log('add drag links',this.start.index, this.end.index);
 
                 console.log('add reference', this.reference);
@@ -2922,12 +2921,7 @@
                             });
                         this.reference = '';
 
-
-
                 }
-
-
-
 
             },
 
@@ -3096,12 +3090,7 @@
                 let zoom = d3.behavior.zoom()
                     .scaleExtent([.4, 2])
                     .on("zoom", zoomed)
-                    .scale(localStorage.getItem('zoom'))
-
-
-
-
-                ;
+                    .scale(localStorage.getItem('zoom'));
 
                 console.log('zoom',zoom);
 
@@ -3255,8 +3244,6 @@
                         d3.select('.g_circle_'+ node.index).select('tspan')
                             .attr('font-size',15)
 
-
-
                     })
                     // .on('dblclick',()=>{
                     //     if (d3.event.defaultPrevented) return;
@@ -3375,7 +3362,6 @@
                 text.append("svg:title").text(function(node) {
                     switch (node.type) {
                         case 'node': return node.properties.name;
-
                     }
                 });
                 //设置连接线
@@ -3471,13 +3457,6 @@
                 // .attr('text-anchor',"middle")
 
 
-
-
-
-
-
-
-
                 function edge_text_Position(){
 
                     return 'rotate(180,40,5)'
@@ -3561,13 +3540,13 @@
                     // console.log(d3.event.scale)
 
                     localStorage.setItem('zoom', d3.event.scale);
-                    svg.selectAll("g")
-                        .attr("transform","translate("+d3.event.translate+")scale(" +  d3.event.scale + ")");
+                    // svg.selectAll("g")
+                    //     .attr("transform","translate("+d3.event.translate+")scale(" +  d3.event.scale + ")");
 
 
                     // that.zoom_scale = localStorage.getItem('zoom');
                     // that.zoom_scale =  d3.event.scale;
-                    // svg.selectAll("g").attr("transform", "scale(" +  that.zoom_scale + ")");
+                    svg.selectAll("g").attr("transform", "scale(" +  d3.event.scale + ")");
                     //
                     // localStorage.setItem('zoom', that.zoom_scale);
 
@@ -3667,7 +3646,6 @@
 
                         .on('drag', (d,i) =>{
 
-
                             // .attr('x',d.x = d3.event.x)
                             // .attr('y',d.y = d3.event.y)
                             // _this.select_circle = 'g_circle_' + String(i);
@@ -3693,10 +3671,8 @@
 
                             if (_this.ifClicked === true && _this.dragNode === d) {
                                 force.stop();
-
                                 mouse_line.style('opacity', '1');
                                 mouse_line.attr('d', function () {
-
 
 
                                     if (d3.select(d3.event.sourceEvent.srcElement).datum() === undefined) {
@@ -3715,7 +3691,7 @@
 
                                         return ('M' + d.x + ' '
                                             + d.y + "L" + + end_x
-                                            + ' ' + end_y);//绘制直线
+                                            + ' ' + end_y );//绘制直线
                                     }
                                     else {
 
@@ -3723,13 +3699,11 @@
                                         //     .select('circle').style('fill','red');
 
 
-
                                         return ('M' + _this.mouseLinkLineStartLoc[0] + ' ' + _this.mouseLinkLineStartLoc[1] +
                                             "L" + +d3.select(d3.event.sourceEvent.srcElement).datum().x
-                                            + ' ' + d3.select(d3.event.sourceEvent.srcElement).datum().y)
+                                            + ' ' + d3.select(d3.event.sourceEvent.srcElement).datum().y )
 
                                     }
-
 
 
                                 });
@@ -3740,9 +3714,7 @@
                                     _this.target_node_index = d3.select(d3.event.sourceEvent.srcElement).datum().index;
                                 }
 
-
                             }
-
 
                         })
 
@@ -3761,8 +3733,6 @@
                                 let data = d3.select(d3.event.sourceEvent.srcElement).datum()
                                 // console.log('data',d3.event.sourceEvent.srcElement)
                                 // console.log('datum',data);
-
-
 
 
                                 _this.end  = data;
@@ -3790,11 +3760,6 @@
                                         // console.log('end', _this.end.properties.name, _this.end.type);
 
 
-
-
-
-
-
                                         if(_this.config.Citations === true){
 
                                             _this.dialogFormVisible_link = true;
@@ -3802,7 +3767,6 @@
                                         }else{
                                             _this.dialogFormVisible_relationship = true;
                                         }
-
 
                                         mouse_line.style('opacity', '0');
                                         mouse_line.attr('d', function () {
@@ -3817,7 +3781,6 @@
 
                                         _this.ifClicked = false;
                                     }
-
 
                                 }
                                 else{
@@ -3889,11 +3852,6 @@
                 }
 
 
-
-
-
-
-
                 function tick() {
 
 
@@ -3902,7 +3860,6 @@
                     text.attr("transform", transform2);//顶点文字
 
                     edges_line.attr('d', function (d) {
-
                                 return getNodesLine(d,localStorage.getItem('zoom'),that.if_drag);//路径
                     });
 
@@ -3955,19 +3912,19 @@
                     let zoom_y = d.y / localStorage.getItem('zoom');
 
                     // console.log('kk',that.select_circle)
-                    if(that.if_drag === true){
-
-
-                        d3.select('.'+that.select_circle).select('circle')
-                            .attr('transform',function(d){
-                                return "translate(" + d.x  + "," + d.y + ")";
-                            })
+                    // if(that.if_drag === true){
+                    //
+                    //
+                    //     d3.select('.'+that.select_circle).select('circle')
+                    //         .attr('transform',function(d){
+                    //             return "translate(" + d.x  + "," + d.y + ")";
+                    //         })
+                    //
+                    //     return "translate(" + d.x + "," + d.y + ")";
+                    // }else {
 
                         return "translate(" + d.x + "," + d.y + ")";
-                    }else {
-
-                        return "translate(" + d.x + "," + d.y + ")";
-                    }
+                    // }
                 }
 
                 function transform2(d,i) {
@@ -3995,18 +3952,18 @@
                     let zoom_y = d.y / localStorage.getItem('zoom');
 
 
-                    if(that.if_drag === true){
-
-                        d3.select('.'+that.select_circle).select('text')
-                            .attr('transform',function(d){
-                                return "translate(" + d.x  + "," + d.y + ")";
-                            })
+                    // if(that.if_drag === true){
+                    //
+                    //     d3.select('.'+that.select_circle).select('text')
+                    //         .attr('transform',function(d){
+                    //             return "translate(" + d.x  + "," + d.y + ")";
+                    //         })
+                    //
+                    //     return "translate(" + d.x + "," + d.y + ")";
+                    // }else {
 
                         return "translate(" + d.x + "," + d.y + ")";
-                    }else {
-
-                        return "translate(" + d.x + "," + d.y + ")";
-                    }
+                    // }
                 }
 
 
