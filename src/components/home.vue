@@ -8,19 +8,20 @@
 
 
 
-
-
             <div class="grid-content " >
                 <template >
                     <!--<el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>-->
                     <el-button style="margin-right: 10px;"  @click="onTapLogin" v-show="showLogin" size="small" round
                                :disabled="true" type="primary" >Login</el-button>
 
-                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round @click="changeUser">{{username}}</el-button>
+            <!--                    the changeUser function is disabled for now     -->
+<!--                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round @click="changeUser">{{username}}</el-button>-->
+                    <el-button style="margin-right: 5px;" size="small" type="success" v-show="!showLogin" round >{{username}}</el-button>
                     <el-button  @click="logout" size="small" v-show="!showLogin" round>Logout</el-button>
 
                 </template>
             </div>
+
 
         </el-header>
 
@@ -31,10 +32,11 @@
         <el-container >
 
             <!--<el-row class="tac">-->
-            <el-aside width="200px">
-                <h1 style="margin-left: 25px">Sustainability</h1>
-                <h1 style="margin-left: 25px">Knowledge</h1>
-                <h1 style="margin-left: 25px">Mapper</h1>
+            <el-aside width="300px">
+                <h5 style="margin-left: 25px">Sustainability Knowledge Mapper</h5>
+<!--                <h3 style="margin-left: 25px">Sustainability</h3>-->
+<!--                <h3 style="margin-left: 25px">Knowledge</h3>-->
+<!--                <h3 style="margin-left: 25px">Mapper</h3>-->
                 <el-menu
 
                         default-active="2"
@@ -92,8 +94,8 @@
 <!--                    <i class="el-icon-info"></i>-->
 <!--                    Save</el-button>-->
 
-                <el-button style="margin-top: 80px; margin-left: 15px;"
-                            @click="instruction" size="small" round
+                <el-button style="margin-top: 35px; margin-left: 15px;"
+                            @click="instruction" size="mini" round
                            type="primary">
                     <i class="el-icon-info"></i>
                     Instructions</el-button>
@@ -109,9 +111,29 @@
                             <!--@click="submit2" size="small" round-->
                            <!--type="primary">test</el-button>-->
 
-                <el-button style="margin-top: 80px; margin-left: 15px;"
-                v-show="dashboard_show"   @click="getGraphStatistics" size="small" round
+                <el-button style="margin-top: 35px; margin-left: 15px;"
+                v-show="dashboard_show"   @click="getGraphStatistics" size="mini" round
                 type="primary">Dashboard</el-button>
+
+
+<!--                <div id="node_info"  >-->
+                    <el-card
+                            v-show="showdetail_node"
+                            style=" background-color: rgb(253, 216, 186) ; z-index:1; margin-top: 35px"
+                            class="node-card"
+
+                            :height="card_height"
+                    >
+                        <h3 :style="{ color: '#ca635f' }">{{ detailname }}</h3>
+                        <div id="node_content">
+                            <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
+                            <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
+                            <a :href="pass_Wiki_link(detailname)" target="_blank">{{detailValue.wiki_link}}</a></div>
+                        <div>
+                            <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
+                        </div>
+                    </el-card>
+<!--                </div>-->
 
 
 
@@ -352,12 +374,13 @@
                 :visible.sync="dialogFormVisible_link"
                    :show-close="false"
                    title="Add Reference URL" center>
-
+            {{start_name}}
             <el-select
 
                     v-model="relationship"
-                       style='width: 300px;'
-                       placeholder="Please select the relationship">
+                       style='width: 300px; font-weight: bold;'
+                       placeholder="Please select the relationship"
+            >
                 <el-option
                         v-for="item in link_list"
                         :key="item.value"
@@ -365,7 +388,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-
+            {{end_name}}
             <span><el-input v-model="reference" placeholder="Add Reference URL" @keyup.native.enter="drag_addLinks" ></el-input></span>
 
             <div slot="footer" class="dialog-footer">
@@ -422,8 +445,10 @@
                 :visible.sync="dialogFormVisible_relationship"
                 :show-close="false"
                 title="Select Relationships" center>
+
             <el-select v-model="relationship"
-                       style='width: 300px; margin-left:150px;'
+                       style='width: 300px; margin-left:150px; font-weight: bold;'
+                       @change="change_bold_rel"
                        placeholder="Please select the relationship">
                 <el-option
                         v-for="item in link_list"
@@ -432,6 +457,15 @@
                         :value="item.value">
                 </el-option>
             </el-select>
+<!--            <div>{{start_name}} {{relationship}} {{end_name}} </div>-->
+            <el-row>
+                <el-col :span="24" style="margin-left:150px;">
+                    <el-tag >{{start_name}}</el-tag>
+                    <el-tag  style="font-weight: bold">{{bold_relationship}} </el-tag>
+                    <el-tag >{{end_name}}</el-tag>
+                </el-col>
+            </el-row>
+
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">
                     Cancel
@@ -533,22 +567,22 @@
 
 
 
-        <div id="node_info" v-show="showdetail_node"  style="z-index: -1">
-            <el-card
-                    :style="{ backgroundColor: 'rgb(253, 216, 186)' }"
-                    class="node-card"
-                    style="height: 250px"
-            >
-                <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>
-                <div>
+<!--        <div id="node_info" v-show="showdetail_node"  style="z-index: -1">-->
+<!--            <el-card-->
+<!--                    :style="{ backgroundColor: 'rgb(253, 216, 186)' }"-->
+<!--                    class="node-card"-->
+<!--                    style="height: 250px"-->
+<!--            >-->
+<!--                <h2 :style="{ color: '#ca635f' }">{{ detailname }}</h2>-->
+<!--                <div>-->
 
-                    <!--<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>-->
-                    <!--<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>-->
-                    <el-link type="primary">{{detailValue.wiki_link}}</el-link>
-                    <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>
-                </div>
-            </el-card>
-        </div>
+<!--                    &lt;!&ndash;<h4 :style="{ color: '#aaaaff' }">ID: {{ detailValue.id }}</h4>&ndash;&gt;-->
+<!--                    &lt;!&ndash;<h4 :style="{ color: '#aaaaff' }">Index: {{ detailValue.index }}</h4>&ndash;&gt;-->
+<!--                    <el-link type="primary">{{detailValue.wiki_link}}</el-link>-->
+<!--                    <h5 :style="{ color: '#aaaaff' }">{{ detailValue.snippet }}</h5>-->
+<!--                </div>-->
+<!--            </el-card>-->
+<!--        </div>-->
 
 
         <div id="link_info" v-show="showdetail_link" >
@@ -606,21 +640,10 @@
 <script>
     import * as d3 from "d3";
 
-
-    import { list } from 'node-7z'
-    import linkfile from 'raw-loader!./../assets/temp_link.txt'
-
     import {config} from './../assets/config'
     // Vue.prototype.appConfig = config;
-
     //test branch
-    import Vue from 'vue'
-    import $ from 'jquery'
-    import {
-        getNodeSelfPath,
-        setLinkGroup,
-        getNodesLine,} from './../utils/deviceRelation'
-
+    import {getNodesLine, setLinkGroup,} from './../utils/deviceRelation'
 
 
     export default {
@@ -677,6 +700,7 @@
 
 
             return {
+                card_height : window.innerHeight/4,
                 has_weight:true,
                 input:'',
                 concept_name : '',
@@ -921,7 +945,16 @@
 
                 ],
 
+                right_select_link:{source: {properties:{name:'1'}}, label:null, target:{properties:{name:'1'}}}, // for showing the source concept, label and target source in the context menu
+
+
                 menu_edge:[
+                    // {
+                    //
+                    //     title: this.right_select_link.source.properties.name
+                    //         +' '+ this.right_select_link.label + ' ' + this.right_select_link.target.properties.name
+                    //
+                    // },
                     {
                         title: 'Delete Relationship',
                         action: (link,selected_link) => {
@@ -1014,6 +1047,8 @@
                 dragNode:null,
                 start:null,
                 end:null,
+                start_name:'',
+                end_name:'',
                 target_node_index : '',
                 initial_links_count :0,
                 temp_linklist:[],
@@ -1025,9 +1060,11 @@
                 // config file
                 config,
                 relationship: '',
+                bold_relationship:'?',
                 new_relationship:'',
                 relationship_name :'',
                 // ifTeamWork:true,
+                ratio:1.0 // the ratio of zooming or reducing the size of the elements
             }
         },
 
@@ -1084,6 +1121,10 @@
 
         methods: {
 
+            pass_Wiki_link(val){
+                return  'https://en.wikipedia.org/wiki/' + String(val);
+                    // String(nodes[i].properties.name.replace(/\s+/g,'_'));
+            },
 
 
             getMouseXY(e){
@@ -1329,6 +1370,7 @@
                 if(this.link_list.length === 1){
 
                     this.relationship = this.link_list[0].value;
+                    this.bold_relationship =this.link_list[0].value;
                     this.new_relationship = this.link_list[0].value;
 
                 }
@@ -1373,6 +1415,9 @@
                                 node_info[i].title.search('list of') !== -1 )
                                 continue;
                             node_info[i].snippet = node_info[i].snippet.replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'')
+                            if(node_info[i].snippet === 'undefined'){
+                                node_info[i].snippet = '';
+                            }
                             term.push(node_info[i]);
                             // console.log(node_info[i].snippet.replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,''));
                             this.snippet[node_info[i].title] = node_info[i].snippet;
@@ -1612,16 +1657,6 @@
                 console.log('Nodes 最后的结果', this.info.nodes);
                 console.log('Links 最后的结果', this.info.links);
 
-
-                // let new_node = {
-                //     'id': nodes.length,
-                //     "type": "node",
-                //     'properties': {'name': input},
-                //     'label': 'Concept',
-                //     'snippet':snippet,
-                //     'if_expanded':false
-                // };
-
                 let node_to_string = this.info.nodes.map(function (element) {
                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
                     'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded};
@@ -1748,16 +1783,6 @@
                 //
                 // this.renderGraph(this.info);
 
-
-
-
-
-
-
-
-
-
-
             },
 
 
@@ -1883,7 +1908,7 @@
                     old_node_id = arr2[i].id;
                     if(arr1_name.indexOf(arr2[i].properties.name) > -1){ // 去重
                         node_map[old_node_id] = arr1_name.indexOf(arr2[i].properties.name);
-                        continue
+                        continue;
                     }
                     else{
                         arr2[i].id = arr1.length;
@@ -2037,10 +2062,6 @@
 
             handleShow:function(){
 
-
-
-
-
                 console.log('cccc');
                 console.log('handleshow username', this.username);
                 console.log(this.$route.params);
@@ -2152,6 +2173,8 @@
 
             onTapLogin:function () {
                 this.centerDialogVisible=true
+                // this.changeUserVisible = true
+
             },
 
             logout:function () {
@@ -2201,13 +2224,6 @@
             },
 
 
-
-
-
-
-
-
-
             selectClear() {
                 this.node_value = '';
                 this.link_value = '';
@@ -2228,9 +2244,15 @@
                 this.input = '';
                 this.node_list  =[];
                 this.relationship = '';
+                this.bold_relationship = '?'
+
 
 
                 this.$forceUpdate()
+            },
+
+            change_bold_rel(val){
+                this.bold_relationship = val;
             },
 
             selectChange(val) {
@@ -2284,8 +2306,7 @@
                 this.dialogFormVisible_initGraph = false;
                 this.dialogFormVisible_conceptName = false;
                 this.dialogFormVisible_change_concept_name = false;
-
-
+                this.bold_relationship = '?';
                 // this.ifClicked = false;
                 this.selectClear();
 
@@ -2315,20 +2336,13 @@
                 };
 
                 this.dialogFormVisible_initGraph  = false;
-
-
                 this.info.nodes.push(init_node);
-
-
                 this.renderGraph(this.info);
                 this.selectClear();
             },
 
 
             addNodes(){
-
-
-
                         let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
                         this.btnChangeEnable = true;
                         console.log('flag', flag)
@@ -2339,25 +2353,16 @@
                             } else {
                                 this.dialogFormVisible = true;
                                 this.selectClear();
-
                             }
                         }else{
-
                             if (flag === true) {
                                 this.dialogFormVisible_conceptName = false;
                                 this.selectClear();
                             } else {
                                 this.dialogFormVisible_conceptName = true;
                                 this.selectClear();
-
                             }
-
                         }
-
-
-
-
-
             },
 
             change_node_name(){
@@ -2509,9 +2514,7 @@
                         "type": element.type,
                         "citation": element.citation,
                         "label": element.label,
-
                     }
-
                 });
 
                 console.log('stringfy node', node_to_string);
@@ -2607,6 +2610,7 @@
             select_relationship(){
                 console.log('selected relationship: ',this.relationship);
                 this.relationship_name = this.relationship;
+                this.bold_relationship = this.relationship;
                 this.dialogFormVisible_relationship = false;
                 this.selectClear();
 
@@ -2822,30 +2826,41 @@
                         response.data = response.data.slice(5);
                         response.data = response.data.slice(0, response.data.length - 1);
                         let wiki = JSON.parse(response.data).query.pages;
+                        // let wiki = JSON.parse(response.data).query;
+
                         console.log('wiki', wiki);
                         let extract = [];
                         for(let i =0; i<Object.keys(wiki).length;i++){
                             let snippet = String(wiki[Object.keys(wiki)[i]].extract).replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'');
                             snippet = snippet.replaceAll('\n','');
+
                             let title = String(wiki[Object.keys(wiki)[i]].title)
-                            extract[title] = snippet
+                            // console.log(snippet, typeof snippet);
+                            if(snippet === "undefined"){
+                                // console.log('nonononon');
+                                extract[title] = '';
+                            }else {
+                                extract[title] = snippet
+                            }
                         }
                         // console.log('extract',extract)
                         // for(let i  = 0; i<nodes.length;i++){
                         //     nodes[i].snippet = extract[nodes[i].properties.name]
                         // }
+                        console.log(extract);
 
                         for(let i =0; i< Object.keys(extract).length; i++){
-                            if(localStorage.hasOwnProperty(Object.keys(extract)[i])){
-                                continue
-                            }
+                            // if(localStorage.hasOwnProperty(Object.keys(extract)[i])){
+                            //     continue
+                            // }
                             localStorage.setItem(Object.keys(extract)[i], extract[Object.keys(extract)[i]])
 
                         }
                         // console.log('local storage',localStorage.valueOf())
                         for(let i  = 0; i<nodes.length;i++){
                             nodes[i].snippet = localStorage.getItem(nodes[i].properties.name);
-                            nodes[i].wiki_link =  'https://en.m.wikipedia.org/wiki/' +
+
+                            nodes[i].wiki_link =  'https://en.wikipedia.org/wiki/' +
                                 String(nodes[i].properties.name.replace(/\s+/g,'_'));
                         }
 
@@ -2935,11 +2950,16 @@
                     .on("zoom", zoomed)
                 ;
 
-
+                // that.ratio = d3.event.scale;
                 // let svg_drag = d3.behavior.drag()
                 //     .on('dragstart',null)
                 //     .on('drag',null)
                 //     .on('dragend',()=>{console.log('end')})
+
+                let main_graph = d3.select('#graph');
+                main_graph.on("dblclick", (node, i)=>{
+                    console.log('test click main graph')
+                });
 
 
 
@@ -3011,6 +3031,55 @@
                     // Use loc.x and loc.y here
                 },false);
 
+                // draw lines first to avoid overlapping the circles
+
+                const edges_line = svg.append("g").selectAll(".edgepath")
+                    .data(force.links())
+                    .enter()
+                    .append("path")
+
+                    .style("stroke", 'black')
+                    .style("stroke-width", 2)//线条粗细
+                    .style("fill-opacity",0)
+                    .style("cursor","pointer")
+                    .style('z-index',0)
+                    .attr("id", function (d, i) { return 'edgepath' + i; })
+                    .attr('sourceRadius',function (d){
+                        return d.sourceRadius;
+                    })
+                    .attr('targetRadius', function(d){
+                        return d.targetRadius;
+                    })
+                    .on("mouseover", function(d,i){
+                        return getStrokeWidth(d,i);
+                    })
+                    .on("mouseout", function() {
+                        edges_line.style("stroke-width", 3);
+                        edges_text.selectAll('textPath').attr("font-size", 20);
+                    })
+                    // .on('click', (link) => { this.deleteLine(this.info,link); })
+                    .on('contextmenu',(d,link)=>{
+                        let _this = this;
+                        if (d3.event.defaultPrevented) return;
+                        if(this.readOnly === true){
+                            // this.$message(
+                            //     {
+                            //         type: 'Warning',
+                            //         message: 'Read Only Mode'
+                            //     });
+                            console.log('read only mode')
+                        }else {
+                            if(this.ifClicked === false) {
+                                _this.right_select_link = d;
+                                console.log('wula',this.right_select_link)
+                                Menu(this.menu_edge)(d, d3.event, link)
+                            }else{
+                                d3.event.preventDefault();
+                            }
+                        }
+
+                    });
+
 
 
                 // d3.selectAll('rect').on('mousedown.drag',null);
@@ -3062,14 +3131,15 @@
                     .on('mouseover', (node) => {
                         if (d3.event.defaultPrevented) return;
                         this.showdetail_node = true;
-                        // console.log(node);
                         this.detailValue = node;
                         this.detailname = node.properties.name;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',50)
+                            .attr('r',50 )
+                            // .attr('r',50 * that.ratio)
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
-                            .attr('font-size',25)
+                            .attr('font-size',25 )
+                            // .attr('font-size',25 * that.ratio)
 
                         // showNodeInfo(node, this);
                         // showCircleBorderOuterArc(node, i);
@@ -3077,19 +3147,16 @@
                     .on('mouseout',(node)=>{
                         // this.showdetail_node = false;
                         d3.select('.g_circle_'+ node.index).select('circle')
-                            .attr('r',40);
+                            .attr('r',40 )
+                            // .attr('r',40 * that.ratio);
 
                         d3.select('.g_circle_'+ node.index).select('tspan')
-                            .attr('font-size',15)
+                            .attr('font-size',15 )
+                            // .attr('font-size',15 * that.ratio)
 
 
 
                     })
-                    // .on('dblclick',()=>{
-                    //     if (d3.event.defaultPrevented) return;
-                    //     console.log('dblclick')
-                    //
-                    // })
                     .on("dblclick", (node )=>{
 
 
@@ -3181,8 +3248,10 @@
                 //圆圈
                 let circle = circle_g.append("circle")
                     .style("stroke-width", "2px")
-                    .attr("r", 40)//设置圆圈半径
+                    .attr("r", 40 )//设置圆圈半径
+                    // .attr("r", 40 * that.ratio)//设置圆圈半径
                     .style("fill", function (node) { return getCircleColor(node); })
+                    .style('z-index',2)
 
                 ;
                 console.log('circle',circle)
@@ -3213,14 +3282,17 @@
                     .attr("id", "end")
                     .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 20)//标识的大小
-                    .attr("markerHeight", 20)
+                    .attr("markerWidth", 30 )//标识的大小
+                    .attr("markerHeight", 30 )
+                    // .attr("markerWidth", 30 * that.ratio)//标识的大小
+                    // .attr("markerHeight", 30 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
-                    .attr("refX", 0)//箭头坐标
+                    .attr("refX", 8)//箭头坐标
                     .attr("refY", 0)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
-                    .attr("stroke-width",7)//箭头宽度
+                    .attr("stroke-width",7 )//箭头宽度
+                    // .attr("stroke-width",7 * that.ratio)//箭头宽度
                     .attr("d", "M0,-5L10,0L0,5")//箭头的路径
                     .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
 
@@ -3228,56 +3300,24 @@
                     .attr("id", "start")
                     .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 20)//标识的大小
-                    .attr("markerHeight", 20)
+                    .attr("markerWidth", 30 )//标识的大小
+                    .attr("markerHeight", 30 )
+                    // .attr("markerWidth", 30 * that.ratio)//标识的大小
+                    // .attr("markerHeight", 30 * that.ratio)
                     .attr("viewBox", "0 -4 12 15")//坐标系的区域
                     .attr("refX", 0)//箭头坐标
                     .attr("refY", 0)
                     .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
                     .append("svg:path")
-                    .attr("stroke-width",7)//箭头宽度
+                    .attr("stroke-width",7 )//箭头宽度
+                    // .attr("stroke-width",7 * that.ratio)//箭头宽度
                     .attr("d", "M0,0L10,-5L10,5")//箭头的路径
                     .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
 
 
 
 
-                const edges_line = svg.append("g").selectAll(".edgepath")
-                    .data(force.links())
-                    .enter()
-                    .append("path")
 
-                    .style("stroke", 'black')
-                    .style("stroke-width", 2)//线条粗细
-                    .style("fill-opacity",0)
-                    .style("cursor","pointer")
-                    .attr("id", function (d, i) { return 'edgepath' + i; })
-                    .on("mouseover", function(d,i){
-                        return getStrokeWidth(d,i);
-                    })
-                    .on("mouseout", function() {
-                        edges_line.style("stroke-width", 3);
-                        edges_text.selectAll('textPath').attr("font-size", 20);
-                    })
-                    // .on('click', (link) => { this.deleteLine(this.info,link); })
-                    .on('contextmenu',(d,link)=>{
-                        if (d3.event.defaultPrevented) return;
-                        if(this.readOnly === true){
-                            // this.$message(
-                            //     {
-                            //         type: 'Warning',
-                            //         message: 'Read Only Mode'
-                            //     });
-                            console.log('read only mode')
-                        }else {
-                            if(this.ifClicked === false) {
-                                Menu(this.menu_edge)(d, d3.event, link)
-                            }else{
-                                d3.event.preventDefault();
-                            }
-                        }
-
-                    });
 
                 const edges_text = svg.append("g").selectAll(".edgetext")
                     .data(links)
@@ -3288,6 +3328,7 @@
                     .attr('text-anchor', "middle")
                     .attr("fill-opacity", 0.8)
                     .style("cursor","pointer")
+                    .style('z-index',1)
 
                     .attr({'class': 'edgelabel',
                         'id': function (d, i) { return 'edgepath' + i; },
@@ -3297,24 +3338,6 @@
 
 
                     })
-
-                // .attr("x",250)
-                // .attr('y',25)
-                // .attr('text-anchor',"middle")
-
-
-
-
-
-
-
-                function edge_text_Position(){
-
-                    return 'rotate(180,40,5)'
-                }
-
-
-
 
                 //设置线条上的文字
                 edges_text.append('textPath')
@@ -3363,6 +3386,7 @@
                         edges_line.style("stroke-width", 3);
                     })
                     .on('contextmenu',(d,link)=>{
+                        let _this = this;
                         console.log('huahua',d,link);
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
@@ -3377,6 +3401,8 @@
                         }
                         else {
                             if(this.ifClicked === false) {
+                                _this.right_select_link = d;
+                                console.log('wula',this.right_select_link)
                                 Menu(this.menu_edge)(d, d3.event, link)
                             }else{
                                 d3.event.preventDefault();
@@ -3387,8 +3413,41 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
-                    // svg.selectAll("g").attr("transform", "scale(" +d3.event.scale + ")");
+
+
                     svg.attr("transform", "scale(" +d3.event.scale + ")");
+                    that.ratio = d3.event.scale;
+                    // circle.attr('r',40 * that.ratio)
+                    // circle.attr('transform',function (d){
+                    //
+                    //
+                    //     d.x = d.x * that.ratio;
+                    //     d.y = d.y * that.ratio;
+                    //     return "translate(" + d.x  + "," + d.y  + ")";
+                    //
+                    // })
+                    //
+                    // text.attr('transform',function (d){
+                    //
+                    //
+                    //     d.x = d.x * that.ratio;
+                    //     d.y = d.y * that.ratio;
+                    //     return "translate(" + d.x  + "," + d.y  + ")";
+                    //
+                    // })
+                    //
+                    // edges_line.attr('d', function (d) {
+                    //     return getNodesLine(d, that.ratio);//路径
+                    // });
+                    //
+                    // text.selectAll('tspan').attr("font-size", 15 * that.ratio)
+                    // console.log('zoom!!!')
+
+
+
+
+                    // d3.select('.g_circle_'+ '1').select('circle')
+                    //     .attr("transform", "scale(" +d3.event.scale + ")")
 
                 }
                 console.log('edge line',edges_line);
@@ -3547,7 +3606,6 @@
                                 _this.start = d;
 
 
-
                                 if(data!==undefined && _this.end.type!=='link') {
                                     // console.log('clicked',_this.ifClicked);
                                     if(_this.start.index === _this.end.index)
@@ -3561,17 +3619,17 @@
                                         // console.log('start', _this.start.properties.name, _this.start.type);
                                         // console.log('end', _this.end.properties.name, _this.end.type);
 
-
-
-
-
-
+                                        _this.start_name = d.properties.name;
+                                        _this.end_name = data.properties.name;
+                                        console.log('start',_this.start_name, 'end',_this.end_name);
 
                                         if(_this.config.Citations === true){
+
 
                                             _this.dialogFormVisible_link = true;
 
                                         }else{
+
                                             _this.dialogFormVisible_relationship = true;
                                         }
 
@@ -3594,6 +3652,8 @@
 
                                     _this.ifClicked = false;
                                     mouse_line.style('opacity', '0');
+
+
                                 }
 
 
@@ -3641,7 +3701,7 @@
 
                         d3.select(_this).text(function(){return '';});
                     }
-                    d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15)
+                    d3.select(_this).append('tspan').attr('x',0).attr('y',0).attr("font-size", 15 )
                         .text(function(){ return circleText; });
                 }
 
@@ -3660,7 +3720,7 @@
 
                     edges_line.attr('d', function (d) {
 
-                                return getNodesLine(d);//路径
+                                return getNodesLine(d, that.ratio);//路径
                     });
 
 
@@ -3763,6 +3823,12 @@
 
                         d3.selectAll('.d3-context-menu').html('');
                         let list = d3.selectAll('.d3-context-menu').append('ul');
+                        console.log('right-select',data,select)
+                        if(select.type ==='link') {
+                            list.append('span').append('h3').html(select.source.properties.name + ' ' +
+                                select.label + ' ' + select.target.properties.name)
+                            list.selectAll('h3').style('font-weight','bold')
+                        }
 
                         list.selectAll('li').data(menu).enter()
                             .append('li')
@@ -4126,20 +4192,31 @@
     #node_info {
         position: absolute;
         bottom: 40px;
-        right: 30px;
-        width: 270px;
+        left: 20px;
+        right:10px;
+        width: 190px;
+        height: auto;
+    }
+    #node_content
+    {
+        word-wrap: break-word;
     }
     #link_info {
         position: absolute;
         bottom: 40px;
         right: 30px;
-        width: 270px;
+        width: 240px;
     }
     .node-card {
         border: 1px solid #9faecf;
         background-color: #00aeff6b;
         color: #fff;
         text-align: left;
+        bottom: 40px;
+        left: 20px;
+        right:10px;
+        width: 190px;
+        /*height:auto;*/
 
     }
     .link-card {
@@ -4152,6 +4229,8 @@
     .el-card__header {
         border-bottom: 1px solid #50596d;
     }
+
+
 
 
 
