@@ -617,7 +617,7 @@
                 <h4>4. You do not need to save your work manually; it will be automatically saved to the database.
                     However, every concept must be connected to at least one other concept in order to be able to save that concept;
                     the system will not save any concepts that are not connected to at least one other concept.</h4>
-                <h4>If you have any questions, please email the teaching staff.
+                <h4>If you have any questions, please email to hfreedma@uci.edu.
                     We welcome any comments to help us improve this site. :)</h4>
 
                 <!--<el-image-->
