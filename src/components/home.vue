@@ -615,7 +615,15 @@
     import {
         getNodeSelfPath,
         setLinkGroup,
-        getNodesLine,} from './../utils/deviceRelation'
+        getNodesLine,
+         } from './../utils/deviceRelation'
+    import {
+        addNodes_by_dbclick,
+        deleteNode,
+        changeConceptName
+    } from './../utils/node'
+
+    import {addLinks, changeLinkName,changeRelationName,deleteLink} from './../utils/link'
 
 
 
@@ -732,84 +740,84 @@
                                         type: 'success',
                                         message: 'The concept is deleted!'
                                     });
-                                console.log('test !!!',select_node,node);
-                                this.info.nodes.splice(node,1);
-
-
-
-                                for(let i =this.info.links.length-1; i>=0; i-- )
-                                {
-                                    console.log('link index',i,node);
-                                    if(this.info.links[i].source.id === node
-                                        || this.info.links[i].target.id === node)
-                                    {
-                                        this.info.links.splice(i,1);
-                                    }
-
-                                }
-
-                                console.log('after delete', this.info);
-                                for(let i = 0; i < this.info.nodes.length;i++)
-                                {
-                                    console.log(i);
-                                    console.log(this.info.nodes[i].id,this.info.nodes[i].index);
-                                    this.info.nodes[i].id = i;
-                                    for(let j =0; j<this.info.links.length; j++){
-                                        if(this.info.links[j].source.properties.name === this.info.nodes[i].properties.name){
-                                            this.info.links[j].source.id = this.info.nodes[i].id
-                                        }
-                                        if(this.info.links[j].target.properties.name === this.info.nodes[i].properties.name){
-                                            this.info.links[j].target.id = this.info.nodes[i].id
-                                        }
-                                    }
-                                }
-
-
-
-
-                                let node_to_string = this.info.nodes.map(function (element) {
-                                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                                        'x':element.x, 'y':element.y,  'fixed': true
-                                    };
-                                });
-
-
-                                let link_to_string = this.info.links.map(function (element) {
-                                    return {
-                                        "source": element.source.id,
-                                        "target": element.target.id,
-                                        "id": element.id,
-                                        "type": element.type,
-                                        "citation": {},
-                                        "label": element.label,
-                                        'x_end':element.x_end,
-                                        'x_start':element.x_start,
-                                        'y_end': element.y_end,
-                                        'y_start': element.y_start,
-                                        'fixed': true,
-                                    }
-
-                                });
-
-                                console.log('stringfy node', node_to_string);
-                                console.log('stringfy links', link_to_string);
-
-                                let new_info = [];
-                                new_info.nodes = node_to_string;
-                                new_info.links = link_to_string;
-
+                                ////
+                                deleteNode(this, node,select_node)
+                                // console.log('test !!!',select_node,node);
+                                // this.info.nodes.splice(node,1);
+                                // for(let i =this.info.links.length-1; i>=0; i-- )
+                                // {
+                                //     console.log('link index',i,node);
+                                //     if(this.info.links[i].source.id === node
+                                //         || this.info.links[i].target.id === node)
+                                //     {
+                                //         this.info.links.splice(i,1);
+                                //     }
+                                //
+                                // }
+                                //
+                                // console.log('after delete', this.info);
+                                // for(let i = 0; i < this.info.nodes.length;i++)
+                                // {
+                                //     console.log(i);
+                                //     console.log(this.info.nodes[i].id,this.info.nodes[i].index);
+                                //     this.info.nodes[i].id = i;
+                                //     for(let j =0; j<this.info.links.length; j++){
+                                //         if(this.info.links[j].source.properties.name === this.info.nodes[i].properties.name){
+                                //             this.info.links[j].source.id = this.info.nodes[i].id
+                                //         }
+                                //         if(this.info.links[j].target.properties.name === this.info.nodes[i].properties.name){
+                                //             this.info.links[j].target.id = this.info.nodes[i].id
+                                //         }
+                                //     }
+                                // }
+                                //
+                                //
+                                //
+                                //
+                                // let node_to_string = this.info.nodes.map(function (element) {
+                                //     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                                //         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                                //         'x':element.x, 'y':element.y,  'fixed': true
+                                //     };
+                                // });
+                                //
+                                //
+                                // let link_to_string = this.info.links.map(function (element) {
+                                //     return {
+                                //         "source": element.source.id,
+                                //         "target": element.target.id,
+                                //         "id": element.id,
+                                //         "type": element.type,
+                                //         "citation": {},
+                                //         "label": element.label,
+                                //         'x_end':element.x_end,
+                                //         'x_start':element.x_start,
+                                //         'y_end': element.y_end,
+                                //         'y_start': element.y_start,
+                                //         'fixed': true,
+                                //     }
+                                //
+                                // });
+                                //
+                                // console.log('stringfy node', node_to_string);
+                                // console.log('stringfy links', link_to_string);
+                                //
+                                // let new_info = [];
+                                // new_info.nodes = node_to_string;
+                                // new_info.links = link_to_string;
+                                //
+                                // // this.renderGraph(new_info);
+                                //
                                 // this.renderGraph(new_info);
-
-                                this.renderGraph(new_info);
-                                let removeNode = `{"method":"removeNode",
-                                "data":{"user":\"${this.username}\","node":\"${select_node.properties.name}\"}}`;
-                                this.websocketsend(removeNode);
+                                // let removeNode = `{"method":"removeNode",
+                                // "data":{"user":\"${this.username}\","node":\"${select_node.properties.name}\"}}`;
+                                // this.websocketsend(removeNode);
                                 // this.submitData();
 
                             })
 
                         },
+                        /////
 
 
                     },
@@ -846,58 +854,48 @@
                                         message: 'The Relationship is deleted!'
                                     });
 
-                                this.info.links.splice(link,1);
+                                deleteLink(this,link,selected_link);
 
-
-
-
-                                let removeLink = `{"method":"removeLink",
-                                 "data":{"user":\"${this.username}\", "origin":\"${selected_link.source.properties.name}\",
-                                 "target":\"${selected_link.target.properties.name}\",
-                                 "label":\"${selected_link.label}\"}}`;
-                                this.websocketsend(removeLink);
-
-                                // this.submitData();
-                                let node_to_string = this.info.nodes.map(function (element) {
-                                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                                        'x':element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
-                                    };
-                                });
-
-
-                                let link_to_string = this.info.links.map(function (element) {
-                                    return {
-                                        "source": element.source.id,
-                                        "target": element.target.id,
-                                        "id": element.id,
-                                        "type": element.type,
-                                        "properties": {},
-                                        "label": element.label,
-                                        "citation":element.citation,
-                                        'fixed': true
-                                    }
-
-                                });
-
-                                console.log('stringfy node', node_to_string);
-                                console.log('stringfy links', link_to_string);
-
-                                let new_info = [];
-                                new_info.nodes = node_to_string;
-                                new_info.links = link_to_string;
-                                this.info = new_info;
-                                this.renderGraph(this.info);
+                                // this.info.links.splice(link,1);
+                                // let removeLink = `{"method":"removeLink",
+                                //  "data":{"user":\"${this.username}\", "origin":\"${selected_link.source.properties.name}\",
+                                //  "target":\"${selected_link.target.properties.name}\",
+                                //  "label":\"${selected_link.label}\"}}`;
+                                // this.websocketsend(removeLink);
+                                //
+                                // // this.submitData();
+                                // let node_to_string = this.info.nodes.map(function (element) {
+                                //     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                                //         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                                //         'x':element.x, 'y':element.y,'fx':element.x, 'fy':element.y, 'fixed': true
+                                //     };
+                                // });
+                                //
+                                //
+                                // let link_to_string = this.info.links.map(function (element) {
+                                //     return {
+                                //         "source": element.source.id,
+                                //         "target": element.target.id,
+                                //         "id": element.id,
+                                //         "type": element.type,
+                                //         "properties": {},
+                                //         "label": element.label,
+                                //         "citation":element.citation,
+                                //         'fixed': true
+                                //     }
+                                //
+                                // });
+                                //
+                                // console.log('stringfy node', node_to_string);
+                                // console.log('stringfy links', link_to_string);
+                                //
+                                // let new_info = [];
+                                // new_info.nodes = node_to_string;
+                                // new_info.links = link_to_string;
+                                // this.info = new_info;
+                                // this.renderGraph(this.info);
 
                             })
-                            //     .catch(() => {
-                            //     this.$message({
-                            //         type: 'info',
-                            //         message: 'Cancel Delete!'
-                            //     })
-                            //
-                            // });
-
                         },
 
                     },
@@ -996,17 +994,17 @@
 
             initWebSocket(){
                 try {
-
+                let protocol = this.config.protocol
                 // let protocol = location.protocol === 'https'
                 //     ? 'wss://localhost:8080/connectToWebsocket'
                 //     : 'ws://localhost:8080/connectToWebsocket';
                 // console.log(protocol)
-                let protocol = 'wss://graphdb.ics.uci.edu:8080/connectToWebsocket'
+                // let protocol = 'wss://graphdb.ics.uci.edu:8080/connectToWebsocket'
 
 
 
 
-                this.websocket = new WebSocket(protocol,'echo-protocol');
+                this.websocket = new WebSocket(protocol);
                 // this.websocket = new WebSocket(protocol);
                 this.websocket.onmessage = this.websocketonmessage;
                 this.websocket.onopen = this.websocketonopen;
@@ -1042,9 +1040,8 @@
 
                         for (let i = 0; i < this.info.nodes.length; i++) {
                             if (this.info.nodes[i].properties.name === nodeName) {
-                                console.log(this.info.nodes[i].x, this.info.nodes[i].y, newX, newY)
-                                this.info.nodes[i].x = newX;
-                                this.info.nodes[i].y = newY;
+                                this.info.nodes[i].x = newX  ;
+                                this.info.nodes[i].y = newY  ;
                                 this.info = this.changeInfoType(this.info.nodes, this.info.links);
                                 this.renderGraph(this.info);
                             }
@@ -1257,8 +1254,8 @@
 
                 });
 
-                console.log('stringfy node', node_to_string);
-                console.log('stringfy links', link_to_string);
+                // console.log('stringfy node', node_to_string);
+                // console.log('stringfy links', link_to_string);
 
                 let new_info = [];
                 new_info.nodes = node_to_string;
@@ -2511,7 +2508,9 @@
 
 
 
-                        let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
+                        // let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
+                        let flag = addNodes_by_dbclick(this.username,this.info,this.info.nodes,
+                            this.node_value, this.select_snippet,localStorage.getItem('zoom'),this.mouse_x,this.mouse_y,this)
                         this.btnChangeEnable = true;
                         console.log('flag', flag)
                         if (flag === true) {
@@ -2532,111 +2531,114 @@
 
             change_node_name(){
 
-                let old_name = this.info.nodes[this.node_id].properties.name;
+                changeConceptName(this);
 
-                this.info.nodes[this.node_id].properties.name = this.new_node_name;
-                this.info.nodes[this.node_id].snippet = this.select_snippet;
-                this.dialogFormVisible_change_node_name = false;
-
-                // this.optionVisible = false;
-                // this.optionVisible_link = false;
-                this.btnChangeEnable = true;
-
-                let node_to_string = this.info.nodes.map(function (element) {
-                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                        'x': element.x, 'y':element.y,'fixed': true
-                    };
-                });
-
-
-                let link_to_string = this.info.links.map(function (element) {
-                    return {
-                        "source": element.source.id,
-                        "target": element.target.id,
-                        "id": element.id,
-                        "type": element.type,
-                        "citation": element.citation,
-                        "label": element.label,
-
-                    }
-
-                });
-
-                console.log('stringfy node', node_to_string);
-                console.log('stringfy links', link_to_string);
-
-                let new_info = [];
-                new_info.nodes = node_to_string;
-                new_info.links = link_to_string;
-
-                this.renderGraph(new_info);
-                let changeNode = `{"method":"changeNode",
-                "data":{"user":\"${this.username}\",
-                "oldNode":\"${old_name}\","newNode":\"${this.new_node_name}\"}}`;
-
-                this.websocketsend(changeNode);
-                // this.submitData();
-                // this.renderGraph(this.info);
-                this.selectClear();
+                // let old_name = this.info.nodes[this.node_id].properties.name;
+                //
+                // this.info.nodes[this.node_id].properties.name = this.new_node_name;
+                // this.info.nodes[this.node_id].snippet = this.select_snippet;
+                // this.dialogFormVisible_change_node_name = false;
+                //
+                // // this.optionVisible = false;
+                // // this.optionVisible_link = false;
+                // this.btnChangeEnable = true;
+                //
+                // let node_to_string = this.info.nodes.map(function (element) {
+                //     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                //         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                //         'x': element.x, 'y':element.y,'fixed': true
+                //     };
+                // });
+                //
+                //
+                // let link_to_string = this.info.links.map(function (element) {
+                //     return {
+                //         "source": element.source.id,
+                //         "target": element.target.id,
+                //         "id": element.id,
+                //         "type": element.type,
+                //         "citation": element.citation,
+                //         "label": element.label,
+                //
+                //     }
+                //
+                // });
+                //
+                // console.log('stringfy node', node_to_string);
+                // console.log('stringfy links', link_to_string);
+                //
+                // let new_info = [];
+                // new_info.nodes = node_to_string;
+                // new_info.links = link_to_string;
+                //
+                // this.renderGraph(new_info);
+                // let changeNode = `{"method":"changeNode",
+                // "data":{"user":\"${this.username}\",
+                // "oldNode":\"${old_name}\","newNode":\"${this.new_node_name}\"}}`;
+                //
+                // this.websocketsend(changeNode);
+                // // this.submitData();
+                // // this.renderGraph(this.info);
+                // this.selectClear();
 
             },
 
             change_relationship_name(){
-                let oldLabel = this.info.links[this.link_id].label;
-                this.info.links[this.link_id].label = this.new_relationship;
-                this.dialogFormVisible_new_relationship = false;
-
-
-                let node_to_string = this.info.nodes.map(function (element) {
-                    return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                        'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                        'x': element.x, 'y':element.y, 'fixed': true
-                    };
-                });
-
-
-                let link_to_string = this.info.links.map(function (element) {
-                    return {
-                        "source": element.source.id,
-                        "target": element.target.id,
-                        "id": element.id,
-                        "type": element.type,
-                        "citation": element.citation,
-                        "label": element.label,
-
-                    }
-
-                });
-
-                console.log('stringfy node', node_to_string);
-                console.log('stringfy links', link_to_string);
-
-                let new_info = [];
-                new_info.nodes = node_to_string;
-                new_info.links = link_to_string;
-
-                this.renderGraph(new_info);
-
-                if (this.config.Citations === false) {
-                    let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
-                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
-                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
-                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\"}}`;
-                    console.log('request from change link')
-                    this.websocketsend(changeLink);
-
-                }else{
-                    let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
-                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
-                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
-                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\",
-                    "citation":\"${this.new_reference}\"}}`;
-                    this.websocketsend(changeLink);
-
-                }
-                this.new_relationship = '';
-                this.selectClear();
+                changeRelationName(this);
+                // let oldLabel = this.info.links[this.link_id].label;
+                // this.info.links[this.link_id].label = this.new_relationship;
+                // this.dialogFormVisible_new_relationship = false;
+                //
+                //
+                // let node_to_string = this.info.nodes.map(function (element) {
+                //     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                //         'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                //         'x': element.x, 'y':element.y, 'fixed': true
+                //     };
+                // });
+                //
+                //
+                // let link_to_string = this.info.links.map(function (element) {
+                //     return {
+                //         "source": element.source.id,
+                //         "target": element.target.id,
+                //         "id": element.id,
+                //         "type": element.type,
+                //         "citation": element.citation,
+                //         "label": element.label,
+                //
+                //     }
+                //
+                // });
+                //
+                // console.log('stringfy node', node_to_string);
+                // console.log('stringfy links', link_to_string);
+                //
+                // let new_info = [];
+                // new_info.nodes = node_to_string;
+                // new_info.links = link_to_string;
+                //
+                // this.renderGraph(new_info);
+                //
+                // if (this.config.Citations === false) {
+                //     let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                //     "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                //      "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                //     "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\"}}`;
+                //     console.log('request from change link')
+                //     this.websocketsend(changeLink);
+                //
+                // }else{
+                //     let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                //     "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                //      "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                //     "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\",
+                //     "citation":\"${this.new_reference}\"}}`;
+                //     this.websocketsend(changeLink);
+                //
+                // }
+                // this.new_relationship = '';
+                // this.selectClear();
 
 
             },
@@ -2644,108 +2646,98 @@
 
             change_link_name()
             {
-
-                let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-                    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-                    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-                    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-
-                if(pattern.test(this.new_reference)) {
-
-                    let oldLabel =  this.info.links[this.link_id].label;
-                    let oldCitation = this.info.links[this.link_id].citation
-
-                    this.info.links[this.link_id].label = this.new_relationship;
-                    this.info.links[this.link_id].citation = this.new_reference;
-                    this.dialogFormVisible_change_link_name = false;
-
-                    this.btnChangeEnable = true;
-
-
-
-
-                    let node_to_string = this.info.nodes.map(function (element) {
-                        return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
-                            'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
-                            'x': element.x, 'y':element.y, 'fixed': true
-                        };
-                    });
-
-
-                    let link_to_string = this.info.links.map(function (element) {
-                        return {
-                            "source": element.source.id,
-                            "target": element.target.id,
-                            "id": element.id,
-                            "type": element.type,
-                            "citation": {},
-                            "label": element.label,
-
-                        }
-
-                    });
-
-                    console.log('stringfy node', node_to_string);
-                    console.log('stringfy links', link_to_string);
-
-                    let new_info = [];
-                    new_info.nodes = node_to_string;
-                    new_info.links = link_to_string;
-
-                    this.renderGraph(new_info);
-
-                    // this.renderGraph(this.info);
-                    // let changeLink = ``;
-                    if (this.config.Citations === false) {
-                        let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
-                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
-                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
-                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\"}}`;
-                        console.log('request from change link')
-                        this.websocketsend(changeLink);
-
-                    }else{
-                        let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
-                    "origin":\"${this.info.links[this.link_id].source.properties.name}\",
-                     "target":\"${this.info.links[this.link_id].target.properties.name}\",
-                    "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\",
-                    "citation":\"${this.new_reference}\"}}`;
-                        this.websocketsend(changeLink);
-
-                    }
-
-                    this.new_reference = '';
-                    this.new_relationship = '';
-
-
-                    // this.submitData();
-                    this.selectClear();
-
-                }else{
-
-                    this.dialogFormVisible_change_link_name = true;
-                    this.$message(
-
-                        {
-                            type: 'warning',
-                            message: 'Invalid URL!'
-                        });
-                    this.new_reference = '';
-
-
-                }
-            },
-
-
-
-            select_relationship(){
-                console.log('selected relationship: ',this.relationship);
-                this.relationship_name = this.relationship;
-                this.dialogFormVisible_relationship = false;
-                this.selectClear();
-
+                changeLinkName(this);
+                // let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                //     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                //     '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                //     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                //     '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                //     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+                //
+                // if(pattern.test(this.new_reference)) {
+                //
+                //     let oldLabel =  this.info.links[this.link_id].label;
+                //     let oldCitation = this.info.links[this.link_id].citation
+                //
+                //     this.info.links[this.link_id].label = this.new_relationship;
+                //     this.info.links[this.link_id].citation = this.new_reference;
+                //     this.dialogFormVisible_change_link_name = false;
+                //
+                //     this.btnChangeEnable = true;
+                //
+                //
+                //
+                //
+                //     let node_to_string = this.info.nodes.map(function (element) {
+                //         return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
+                //             'label':element.label, 'snippet':element.snippet, 'if_expanded':element.if_expanded,
+                //             'x': element.x, 'y':element.y, 'fixed': true
+                //         };
+                //     });
+                //
+                //
+                //     let link_to_string = this.info.links.map(function (element) {
+                //         return {
+                //             "source": element.source.id,
+                //             "target": element.target.id,
+                //             "id": element.id,
+                //             "type": element.type,
+                //             "citation": {},
+                //             "label": element.label,
+                //
+                //         }
+                //
+                //     });
+                //
+                //     console.log('stringfy node', node_to_string);
+                //     console.log('stringfy links', link_to_string);
+                //
+                //     let new_info = [];
+                //     new_info.nodes = node_to_string;
+                //     new_info.links = link_to_string;
+                //
+                //     this.renderGraph(new_info);
+                //
+                //     // this.renderGraph(this.info);
+                //     // let changeLink = ``;
+                //     if (this.config.Citations === false) {
+                //         let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                //     "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                //      "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                //     "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\"}}`;
+                //         console.log('request from change link')
+                //         this.websocketsend(changeLink);
+                //
+                //     }else{
+                //         let changeLink = `{"method":"changeLink", "data":{"user":\"${this.username}\",
+                //     "origin":\"${this.info.links[this.link_id].source.properties.name}\",
+                //      "target":\"${this.info.links[this.link_id].target.properties.name}\",
+                //     "oldLabel":\"${oldLabel}\", "newLabel":\"${this.new_relationship}\",
+                //     "citation":\"${this.new_reference}\"}}`;
+                //         this.websocketsend(changeLink);
+                //
+                //     }
+                //
+                //     this.new_reference = '';
+                //     this.new_relationship = '';
+                //
+                //
+                //     // this.submitData();
+                //     this.selectClear();
+                //
+                // }else{
+                //
+                //     this.dialogFormVisible_change_link_name = true;
+                //     this.$message(
+                //
+                //         {
+                //             type: 'warning',
+                //             message: 'Invalid URL!'
+                //         });
+                //     this.new_reference = '';
+                //
+                //
+                // }
             },
 
 
@@ -2753,175 +2745,175 @@
             drag_addLinks()
             {
 
-
-                console.log('selected relationship: ',this.relationship);
-                this.relationship_name = this.relationship;
-                
-                console.log('add drag links',this.start.index, this.end.index);
-
-                console.log('add reference', this.reference);
-                let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-                    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-                    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-                    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-
-
-
-                    if ((pattern.test(this.reference) && this.config.Citations === true) || (this.config.Citations === false )) {
-
-                        this.dialogFormVisible_link = false;
-                        this.dialogFormVisible_relationship = false;
-                        console.log('valid');
-                        let new_link = {};
-
-                        if (this.relationship !== ''){
-                            if (this.config.Citations === false) {
-                                new_link = {
-                                    "source": this.start,
-                                    "target": this.end,
-                                    "id": this.info.links.length,
-                                    "type": 'link',
-                                    "citation": {},
-                                    "label": this.relationship,
-                                    'posVote':'0',
-                                    'negVote':'0'
-
-                                };
-                            }
-                            else {
-                                new_link = {
-                                    "source": this.start,
-                                    "target": this.end,
-                                    "id": this.info.links.length,
-                                    "type": 'link',
-                                    "citation": this.reference,
-                                    "label": this.relationship,
-                                    'posVote':'0',
-                                    'negVote':'0'
-
-                                };
-                            }
-
-
-                        let link_name_set = [];
-                        console.log('temp node', this.temp[0]);
-                        for (let i = 0; i < this.info.links.length; i++) {
-                            if (this.info.links[i].source.properties.name === this.start.properties.name
-                                && this.info.links[i].target.properties.name === this.end.properties.name) {
-
-                                link_name_set.push(this.info.links[i].label);
-                            }
-                        }
-
-                        console.log('link name set', link_name_set);
-                        if (link_name_set.indexOf(new_link.label) > -1) {
-                            console.log('This label is already used ');
-                            this.$message({
-                                'type': 'warning',
-                                'message': 'There is already a relationship with that URL!'
-                            })
-                        }
-                        else {
-
-                            this.info.links.push(new_link);
-                            console.log('new link added', this.info, typeof(this.info));
-                            // this.initial_links_count ++;
-
-
-                        }
-
-                        let node_to_string = this.info.nodes.map(function (element) {
-                            return {
-                                'id': element.id, 'type': element.type, 'properties': {'name': element.properties.name},
-                                'label': element.label, 'snippet': element.snippet, 'if_expanded': element.if_expanded,
-                                'x':element.x, 'y':element.y,'fixed':true
-                            };
-                        });
-                        let link_to_string;
-                        if (this.config.Citations === false) {
-                            link_to_string = this.info.links.map(function (element) {
-                                return {
-                                    "source": element.source.id,
-                                    "target": element.target.id,
-                                    "id": element.id,
-                                    "type": element.type,
-                                    "citation": {},
-                                    "label": element.label,
-                                    'posVote':element.posVote,
-                                    'negVote':element.negVote
-
-
-                                }
-
-                            });
-                        } else {
-                            link_to_string = this.info.links.map(function (element) {
-                                return {
-                                    "source": element.source.id,
-                                    "target": element.target.id,
-                                    "id": element.id,
-                                    "type": element.type,
-                                    "citation": element.citation,
-                                    "label": element.label,
-                                    'posVote':element.posVote,
-                                    'negVote':element.negVote
-
-
-                                }
-
-                            });
-                        }
-
-                        console.log('stringfy node', node_to_string);
-                        console.log('stringfy links', link_to_string);
-
-                        let new_info = [];
-                        new_info.nodes = node_to_string;
-                        new_info.links = link_to_string;
-                        this.info = new_info;
-                        this.renderGraph(this.info);
-
-
-                        if (this.config.Citations === false) {
-                            let addLink = `{"method":"addLink","data":{"user": \"${this.username}\","origin":\"${this.start.properties.name}\",
-                        "target": \"${this.end.properties.name}\","label":\"${this.relationship}\" }}`;
-                            console.log('add node request', addLink);
-                            this.websocketsend(addLink);
-                        }else{
-                            let addLink = `{"method":"addLink","data":{"user": \"${this.username}\","origin":\"${this.start.properties.name}\",
-                        "target": \"${this.end.properties.name}\","label":\"${this.relationship}\","citation": \"${this.reference}\" }}`;
-                            console.log('add node request', addLink);
-                            this.websocketsend(addLink);
-                        }
-                        this.ifClicked = false;
-                        this.selectClear();
-                        this.reference = '';
-                        // this.submitData();
-                        }
-                        else{
-                            this.dialogFormVisible_link = true;
-                            this.$message(
-                                {
-                                    type: 'warning',
-                                    message: 'Labels can not be empty!'
-                                });
-                            this.reference = '';
-
-                        }
-
-
-                    } else {
-                        this.dialogFormVisible_link = true;
-                        this.$message(
-                            {
-                                type: 'warning',
-                                message: 'Invalid URL!'
-                            });
-                        this.reference = '';
-
-                }
+                addLinks(this);
+                // console.log('selected relationship: ',this.relationship);
+                // this.relationship_name = this.relationship;
+                //
+                // console.log('add drag links',this.start.index, this.end.index);
+                //
+                // console.log('add reference', this.reference);
+                // let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                //     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                //     '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                //     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                //     '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                //     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+                //
+                //
+                //
+                //     if ((pattern.test(this.reference) && this.config.Citations === true) || (this.config.Citations === false )) {
+                //
+                //         this.dialogFormVisible_link = false;
+                //         this.dialogFormVisible_relationship = false;
+                //         console.log('valid');
+                //         let new_link = {};
+                //
+                //         if (this.relationship !== ''){
+                //             if (this.config.Citations === false) {
+                //                 new_link = {
+                //                     "source": this.start,
+                //                     "target": this.end,
+                //                     "id": this.info.links.length,
+                //                     "type": 'link',
+                //                     "citation": {},
+                //                     "label": this.relationship,
+                //                     'posVote':'0',
+                //                     'negVote':'0'
+                //
+                //                 };
+                //             }
+                //             else {
+                //                 new_link = {
+                //                     "source": this.start,
+                //                     "target": this.end,
+                //                     "id": this.info.links.length,
+                //                     "type": 'link',
+                //                     "citation": this.reference,
+                //                     "label": this.relationship,
+                //                     'posVote':'0',
+                //                     'negVote':'0'
+                //
+                //                 };
+                //             }
+                //
+                //
+                //         let link_name_set = [];
+                //         console.log('temp node', this.temp[0]);
+                //         for (let i = 0; i < this.info.links.length; i++) {
+                //             if (this.info.links[i].source.properties.name === this.start.properties.name
+                //                 && this.info.links[i].target.properties.name === this.end.properties.name) {
+                //
+                //                 link_name_set.push(this.info.links[i].label);
+                //             }
+                //         }
+                //
+                //         console.log('link name set', link_name_set);
+                //         if (link_name_set.indexOf(new_link.label) > -1) {
+                //             console.log('This label is already used ');
+                //             this.$message({
+                //                 'type': 'warning',
+                //                 'message': 'There is already a relationship with that URL!'
+                //             })
+                //         }
+                //         else {
+                //
+                //             this.info.links.push(new_link);
+                //             console.log('new link added', this.info, typeof(this.info));
+                //             // this.initial_links_count ++;
+                //
+                //
+                //         }
+                //
+                //         let node_to_string = this.info.nodes.map(function (element) {
+                //             return {
+                //                 'id': element.id, 'type': element.type, 'properties': {'name': element.properties.name},
+                //                 'label': element.label, 'snippet': element.snippet, 'if_expanded': element.if_expanded,
+                //                 'x':element.x, 'y':element.y,'fixed':true
+                //             };
+                //         });
+                //         let link_to_string;
+                //         if (this.config.Citations === false) {
+                //             link_to_string = this.info.links.map(function (element) {
+                //                 return {
+                //                     "source": element.source.id,
+                //                     "target": element.target.id,
+                //                     "id": element.id,
+                //                     "type": element.type,
+                //                     "citation": {},
+                //                     "label": element.label,
+                //                     'posVote':element.posVote,
+                //                     'negVote':element.negVote
+                //
+                //
+                //                 }
+                //
+                //             });
+                //         } else {
+                //             link_to_string = this.info.links.map(function (element) {
+                //                 return {
+                //                     "source": element.source.id,
+                //                     "target": element.target.id,
+                //                     "id": element.id,
+                //                     "type": element.type,
+                //                     "citation": element.citation,
+                //                     "label": element.label,
+                //                     'posVote':element.posVote,
+                //                     'negVote':element.negVote
+                //
+                //
+                //                 }
+                //
+                //             });
+                //         }
+                //
+                //         console.log('stringfy node', node_to_string);
+                //         console.log('stringfy links', link_to_string);
+                //
+                //         let new_info = [];
+                //         new_info.nodes = node_to_string;
+                //         new_info.links = link_to_string;
+                //         this.info = new_info;
+                //         this.renderGraph(this.info);
+                //
+                //
+                //         if (this.config.Citations === false) {
+                //             let addLink = `{"method":"addLink","data":{"user": \"${this.username}\","origin":\"${this.start.properties.name}\",
+                //         "target": \"${this.end.properties.name}\","label":\"${this.relationship}\" }}`;
+                //             console.log('add node request', addLink);
+                //             this.websocketsend(addLink);
+                //         }else{
+                //             let addLink = `{"method":"addLink","data":{"user": \"${this.username}\","origin":\"${this.start.properties.name}\",
+                //         "target": \"${this.end.properties.name}\","label":\"${this.relationship}\","citation": \"${this.reference}\" }}`;
+                //             console.log('add node request', addLink);
+                //             this.websocketsend(addLink);
+                //         }
+                //         this.ifClicked = false;
+                //         this.selectClear();
+                //         this.reference = '';
+                //         // this.submitData();
+                //         }
+                //         else{
+                //             this.dialogFormVisible_link = true;
+                //             this.$message(
+                //                 {
+                //                     type: 'warning',
+                //                     message: 'Labels can not be empty!'
+                //                 });
+                //             this.reference = '';
+                //
+                //         }
+                //
+                //
+                //     } else {
+                //         this.dialogFormVisible_link = true;
+                //         this.$message(
+                //             {
+                //                 type: 'warning',
+                //                 message: 'Invalid URL!'
+                //             });
+                //         this.reference = '';
+                //
+                // }
 
             },
 
@@ -3046,8 +3038,8 @@
                     .nodes(nodes)//设定节点数组
                     .links(links)//设定连线数组
 
-                    .linkDistance(700)//连接线长度
-                    .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
+                    // .linkDistance(700)//连接线长度
+                    // .charge(-1500)//顶点的电荷数。该参数决定是排斥还是吸引，数值越小越互相排斥
                     .on("tick", function (){
                             tick()
                         }
@@ -3534,6 +3526,7 @@
 
 
                 function zoomed() {//svg下的g标签移动大小
+
                     // let _this = this
                     // _this.zoom_scale = d3.event.scale;
                     // console.log('scale',this.zoom_scale,_this.zoom_scale)
@@ -3619,7 +3612,7 @@
 
 
                     return force.drag().on("dragstart",function(d,i){
-
+                        d3.event.sourceEvent.stopPropagation();
                         _this.select_circle = 'g_circle_' + String(i);
 
                         // console.log('start node',d);
@@ -3720,6 +3713,7 @@
 
 
                         .on('dragend',(d)=>{
+                            console.log(d)
                             _this.if_drag = false;
                             console.log(_this.if_drag)
                             // console.log('mouse',((d3.event.sourceEvent.target)))
@@ -3800,6 +3794,7 @@
                                 force.resume();
                             }
 
+
                             let moveNode = `{"method":"moveNode","data":{"user":\"${_this.username}\",
                              "node":\"${d.properties.name}\","xpos":\"${d.x}\",
                               "ypos":\"${d.y}\"}}`;
@@ -3854,13 +3849,27 @@
 
                 function tick() {
 
-
                     circle.attr("transform", transform1);//圆圈
+
 
                     text.attr("transform", transform2);//顶点文字
 
                     edges_line.attr('d', function (d) {
-                                return getNodesLine(d,localStorage.getItem('zoom'),that.if_drag);//路径
+                        if(that.if_drag === true){
+                            if(d.source.properties.name === d3.select('.'+that.select_circle).select('circle').data()[0].properties.name){
+                                // console.log('source move',d)
+                                return getNodesLine(d,localStorage.getItem('zoom'),that.if_drag,'source',that.mouse_x,that.mouse_y);//路径
+                            }
+                             else  if( d.target.properties.name === d3.select('.'+that.select_circle).select('circle').data()[0].properties.name ){
+                                // console.log('target move',d)
+                                   return getNodesLine(d,localStorage.getItem('zoom'),that.if_drag,'target',that.mouse_x,that.mouse_y);//路径
+                            }
+                        }
+
+
+                            return getNodesLine(d, localStorage.getItem('zoom'), that.if_drag, 'null', that.mouse_x, that.mouse_y);
+
+                        //路径
                     });
 
 
@@ -3887,83 +3896,120 @@
 
 
 
-                    // console.log(d)
-                    if(isNaN(d.x) && isNaN(d.y))
-                    {
-                        d.x = 360;
-                        d.y = 266;
-                    }
-                    // if (d.x <=-430)
-                    // {
-                    //     d.x = -430
-                    // }
-                    // else if (d.x >=1150){
-                    //     d.x = 1150
-                    // }
+                        // let nodeName = 'g_circle_' + String(i);
+                        // if (nodeName === that.select_circle) {
+                        //     localStorage.setItem('lastMove', String(i));
+                        //
+                        //     if (that.if_drag === true && that.ifClicked === false) {
+                        //         d.x = that.mouse_x / localStorage.getItem('zoom');
+                        //         d.y = that.mouse_y / localStorage.getItem('zoom')
+                        //         localStorage.setItem('newX', String(d.x));
+                        //         localStorage.setItem('newY', String(d.y));
+                        //         console.log('lalala', d.x, d.y)
+                        //         return "translate(" + d.x + "," + d.y + ")";
+                        //     }
+                        //     else if(that.if_drag === true && that.ifClicked === true){
+                        //         return "translate(" + d.x  + "," + d.y + ")";
+                        //     }
+                        //     else {
+                        //         d.x = parseFloat(localStorage.getItem('newX'))
+                        //         d.y = parseFloat(localStorage.getItem('newY'))
+                        //         console.log('not drag', d.x, d.y)
+                        //         return "translate(" + d.x
+                        //             + "," + d.y + ")";
+                        //     }
+                        // } else {
+
+                            return "translate(" + d.x + "," + d.y + ")";
+                        // }
+
+
+                    // if(that.if_drag === true && nodeName === that.select_circle){
+                    //     console.log('scale',localStorage.getItem('zoom'))
+                    //     d.x  = that.mouse_x/localStorage.getItem('zoom');
+                    //     d.y = that.mouse_y/localStorage.getItem('zoom')
+                    //     localStorage.setItem('lastMove', String(i));
+                    //     localStorage.setItem('newX',String(d.x));
+                    //     localStorage.setItem('newY',String(d.y));
                     //
-                    // if(d.y <= -168){
-                    //     d.y = -168
+                    //
+                    //
+                    //     console.log('start',i,d.x,d.y)
+                    //
+                    //
+                    //     return "translate(" + d.x  + "," + d.y + ")";
                     // }
-                    // else if (d.y >=700){
-                    //     d.y = 700
+                    // else if(that.if_drag === true && nodeName !== that.select_circle){
+                    //
+                    //     console.log('not select',i,d.x,d.y)
+                    //     return "translate(" + d.x  + "," + d.y + ")";
+                    // }
+                    // else{
+                    //
+                    //     if(String(i) === localStorage.getItem('lastMove')){
+                    //         d.x = localStorage.getItem('newX')
+                    //         d.y = localStorage.getItem('newY')
+                    //         return "translate(" + d.x  + "," + d.y + ")";
+                    //     }
+                    //     else {
+                    //
+                    //         return "translate(" + d.x + "," + d.y + ")";
+                    //     }
+                    //
                     // }
 
-                    let zoom_x  = d.x / localStorage.getItem('zoom');
-                    let zoom_y = d.y / localStorage.getItem('zoom');
-
-                    // console.log('kk',that.select_circle)
-                    // if(that.if_drag === true){
-                    //
-                    //
-                    //     d3.select('.'+that.select_circle).select('circle')
-                    //         .attr('transform',function(d){
-                    //             return "translate(" + d.x  + "," + d.y + ")";
-                    //         })
-                    //
-                    //     return "translate(" + d.x + "," + d.y + ")";
-                    // }else {
-
-                        return "translate(" + d.x + "," + d.y + ")";
-                    // }
                 }
 
                 function transform2(d,i) {
 
-                    if(isNaN(d.x) && isNaN(d.y))
-                    {
-                        d.x = 360;
-                        d.y = 266;
-                    }
-                    // if (d.x <=-430)
-                    // {
-                    //     d.x = -430
-                    // }
-                    // else if (d.x >=1150){
-                    //     d.x = 1150
-                    // }
-                    //
-                    // if(d.y <= -168){
-                    //     d.y = -168
-                    // }
-                    // else if (d.y >=700){
-                    //     d.y = 700
-                    // }
-                    let zoom_x  = d.x / localStorage.getItem('zoom');
-                    let zoom_y = d.y / localStorage.getItem('zoom');
 
 
-                    // if(that.if_drag === true){
-                    //
-                    //     d3.select('.'+that.select_circle).select('text')
-                    //         .attr('transform',function(d){
-                    //             return "translate(" + d.x  + "," + d.y + ")";
-                    //         })
-                    //
-                    //     return "translate(" + d.x + "," + d.y + ")";
-                    // }else {
+                        // let nodeName = 'g_circle_' + String(i);
+                        // if (nodeName === that.select_circle) {
+                        //
+                        //     if (that.if_drag === true && that.ifClicked === false) {
+                        //         d.x = that.mouse_x / localStorage.getItem('zoom');
+                        //         d.y = that.mouse_y / localStorage.getItem('zoom')
+                        //         return "translate(" + d.x + "," + d.y + ")";
+                        //     }
+                        //     else if(that.if_drag === true && that.ifClicked === true){
+                        //         return "translate(" + d.x  + "," + d.y + ")";
+                        //     }
+                        //
+                        //     else {
+                        //         d.x = parseFloat(localStorage.getItem('newX'))
+                        //         d.y = parseFloat(localStorage.getItem('newY'))
+                        //         return "translate(" + d.x
+                        //             + "," + d.y + ")";
+                        //     }
+                        // } else {
+                            return "translate(" + d.x + "," + d.y + ")";
+                        // }
 
-                        return "translate(" + d.x + "," + d.y + ")";
+
+
+
+                    // let nodeName = 'g_circle_' + String(i);
+                    // if(that.if_drag === true && nodeName === that.select_circle){
+                    //     d.x  = that.mouse_x/localStorage.getItem('zoom');
+                    //     d.y = that.mouse_y/localStorage.getItem('zoom')
+                    //     return "translate(" + d.x  + "," + d.y + ")";
                     // }
+                    // else if(that.if_drag === true && nodeName !== that.select_circle){
+                    //
+                    //     return "translate(" + d.x  + "," + d.y + ")";
+                    // }else{
+                    //     if(String(i) === localStorage.getItem('lastMove')){
+                    //         d.x = localStorage.getItem('newX')
+                    //         d.y = localStorage.getItem('newY')
+                    //         return "translate(" + d.x  + "," + d.y + ")";
+                    //     }
+                    //     else {
+                    //         return "translate(" + d.x + "," + d.y + ")";
+                    //     }
+                    //
+                    // }
+
                 }
 
 
@@ -4160,8 +4206,8 @@
 
                     });
 
-                    console.log('stringfy node', node_to_string);
-                    console.log('stringfy links', link_to_string);
+                    // console.log('stringfy node', node_to_string);
+                    // console.log('stringfy links', link_to_string);
 
                     let new_info = [];
                     new_info.nodes = node_to_string;

@@ -13,7 +13,8 @@ let config = {
     Voting : true,
     Citations : false,
     Collaborative : true,
-    useShibboleth : true
+    useShibboleth : false,
+    protocol: 'ws://localhost:8089/connectToWebsocket'
 
 };
 

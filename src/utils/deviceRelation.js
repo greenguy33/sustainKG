@@ -19,9 +19,23 @@ export const getNodeSelfPath = d => {
   }
 };
 
-export const getNodesLine = (d,scale,drag)=> {
+export const getNodesLine = (d,scale,drag,node_type,m_x,m_y)=> {
+  if(node_type === 'source'){
+    // console.log('source',d)
+    d.source.x = m_x/scale
+    d.source.y = m_y/scale
+  }else if(node_type === 'target'){
+    // console.log('target',d)
+    d.target.x = m_x/scale
+    d.target.y = m_y/scale
+  }
   d.sourceRadius = 40;
   d.targetRadius = 40;
+
+  // d.target.x = d.target.x / scale;
+  // d.target.y = d.target.y / scale;
+  // d.source.x = d.source.x / scale;
+  // d.source.y = d.source.y / scale;
   let tan = Math.abs((d.target.y - d.source.y) / (d.target.x - d.source.x)); //圆心连线tan值
   let x1 = d.target.x - d.source.x > 0 ? Math.sqrt(d.sourceRadius * d.sourceRadius / (tan * tan + 1)) + d.source.x :
     d.source.x - Math.sqrt(d.sourceRadius * d.sourceRadius / (tan * tan + 1)); //起点x坐标
@@ -107,9 +121,12 @@ export const getNodesLine = (d,scale,drag)=> {
   if(xs<xt) {
 
 
+
+
       return 'M' + xs + ' ' + ys + "L" + +xt + ' ' + yt;//绘制直线
   }
 else if(xs>=xt) {
+
 
       return 'M' + xt + ' ' + yt + "L" + +xs + ' ' + ys;//绘制直线
 
