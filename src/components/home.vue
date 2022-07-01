@@ -7,7 +7,7 @@
         <el-header style="text-align: right;height:40px;">
 
 
-
+<!--            the login button and logout button in the right above corner -->
 
 
             <div class="grid-content " >
@@ -26,11 +26,10 @@
 
 
 
-        <!--<el-divider direction="horizontal" content-position="center"/>-->
+        <!--the left menu in the system-->
 
         <el-container >
 
-            <!--<el-row class="tac">-->
             <el-aside width="200px">
                 <h1 style="margin-left: 25px">Sustainability</h1>
                 <h1 style="margin-left: 25px">Knowledge</h1>
@@ -41,34 +40,10 @@
                         class="el-menu-vertical-demo"
 
                 >
-                    <!--<el-menu-item index="1"  :disabled="disable_submit" @click="submitData()">-->
-                        <!--<i class="el-icon-upload2"></i>-->
-                        <!--<span slot="title">Save</span>-->
-                        <!--<template slot="title">-->
-                            <!--<i class="el-icon-menu"></i>-->
-                            <!--<span>Operation</span>-->
-                        <!--</template>-->
-                        <!--<el-menu-item-group>-->
-                            <!--&lt;!&ndash;<template slot="title">分组一</template>&ndash;&gt;-->
-                            <!--<el-menu-item class="el-icon-upload2" index="1-1" :disabled="disable_submit" @click="submitData()"> Submit Data</el-menu-item>-->
-                            <!--<el-menu-item class="el-icon-search" index="1-2" :disabled="disable_searchConcept"  @click="searchConcept_dialog" > Search Another Concept</el-menu-item>-->
-
-                            <!--<el-menu-item index="1-3" @click="reload()">Reload Data</el-menu-item>-->
-                            <!--<el-menu-item index="1-4" :disabled='disable_initGraph' @click="showInitGraph()">Init Graph</el-menu-item>-->
-
-                        <!--</el-menu-item-group>-->
-
-
-                    <!--</el-menu-item>-->
                     <el-menu-item v-show=false index="2"   :disabled="disable_searchConcept"  @click="searchConcept_dialog" >
                         <i class="el-icon-search"></i>
                         <span slot="title"> Search Another Concept</span>
                     </el-menu-item>
-                    <!--<el-menu-item   @click="instruction">-->
-                        <!--<i class="el-icon-info"></i>-->
-                        <!--<span slot="title">Help</span>-->
-                    <!--</el-menu-item>-->
-
                     <el-menu-item >
                         <i class="el-icon-star-off"></i>
                         <span slot="title">Concepts：{{ info.nodes.length }}</span>
@@ -86,28 +61,12 @@
                            :disabled='disable_viewGraph'  @click="getAllConcepts" size="small" round
                            type="primary">{{viewGraph_btn_status?'View Collective Graph':'View Personal Graph'}} </el-button>
 
-<!--                <el-button style="margin-top: 80px; margin-left: 15px;"-->
-<!--                           @click="submitData()" size="small" round-->
-<!--                           type="primary">-->
-<!--                    <i class="el-icon-info"></i>-->
-<!--                    Save</el-button>-->
-
                 <el-button style="margin-top: 80px; margin-left: 15px;"
                             @click="instruction" size="small" round
                            type="primary">
                     <i class="el-icon-info"></i>
                     Instructions</el-button>
 
-
-                <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
-                           <!--@click="TeamLogin" size="small" round-->
-                           <!--type="primary">-->
-                    <!--<i class="el-icon-info"></i>-->
-                    <!--Team Work</el-button>-->
-
-                <!--<el-button style="margin-top: 80px; margin-left: 15px;"-->
-                            <!--@click="submit2" size="small" round-->
-                           <!--type="primary">test</el-button>-->
 
                 <el-button style="margin-top: 80px; margin-left: 15px;"
                 v-show="dashboard_show"   @click="getGraphStatistics" size="small" round
@@ -120,22 +79,19 @@
             </el-aside>
 
 
-            <!--</el-row>-->
 
 
+<!--this is to catch the coordinates of the mouse-->
 
             <el-main ref="graph_main" @click="getMouseXY($event)" id="graph"  >
-                <!--<el-row id="graph"></el-row>-->
-                <!--<div id="graph"></div>-->
+
             </el-main>
-
-
-
 
 
 
         </el-container>
 
+<!--        this is for changing user -->
 
         <el-dialog
                 :close-on-click-modal="false"
@@ -145,9 +101,7 @@
                 center>
             <span>Username<el-input v-model="change_username" placeholder="Please Input Username" ></el-input></span>
             <span>Password<el-input v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>
-
             <br><br>
-            <!--<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='login'></el-input></span>-->
             <el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>
             <span slot="footer" class="dialog-footer">
             <el-button @click.native="changeUserVisible=false">No</el-button>
@@ -155,7 +109,7 @@
           </span>
         </el-dialog>
 
-
+<!-- this is for creating a new user -->
         <el-dialog
                 :close-on-click-modal="false"
                 title="Create New Account"
@@ -165,7 +119,6 @@
             <span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>
             <span>Password<el-input v-model="newPassword" placeholder="Please Input Password"></el-input></span>
             <br><br>
-            <!--<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>-->
             <span slot="footer" class="dialog-footer">
             <el-button @click.native="dialog_createUser=false; centerDialogVisible=true">No</el-button>
             <el-button type="primary" @click="createUser" >Yes</el-button>
@@ -173,43 +126,7 @@
         </el-dialog>
 
 
-
-        <!--下面是对话框集合 与界面无关-->
-        <!--<el-dialog-->
-                <!--:close-on-click-modal="false"-->
-                <!--title="Login"-->
-                <!--:visible.sync="centerDialogVisible"-->
-
-                <!--width="30%"-->
-                <!--center>-->
-            <!--<span>Username<el-input v-model="username" placeholder="Please Input Username" @keyup.native.enter='handleShow'></el-input></span>-->
-
-            <!--<br><br>-->
-            <!--&lt;!&ndash;<span>Password<el-input type="password" v-model="password" placeholder="Please Input Password" @keyup.native.enter='handleShow'></el-input></span>&ndash;&gt;-->
-            <!--<el-button type="text" style="margin-top: 15px;" @click.native="dialog_createUser=true; centerDialogVisible=false">No account?</el-button>-->
-            <!--<span slot="footer" class="dialog-footer">-->
-            <!--<el-button @click.native="centerDialogVisible=false">No</el-button>-->
-            <!--<el-button type="primary" @click.native="handleShow" >Yes</el-button>-->
-          <!--</span>-->
-        <!--</el-dialog>-->
-
-        <!--<el-dialog-->
-                <!--:close-on-click-modal="false"-->
-                <!--title="Create New Account"-->
-                <!--:visible.sync="dialog_createUser"-->
-                <!--width="30%"-->
-                <!--center>-->
-            <!--<span>Username<el-input v-model="newUsername" placeholder="Please Input Username"></el-input></span>-->
-            <!--<br><br>-->
-            <!--&lt;!&ndash;<span>Password<el-input type="password" v-model="newPassword" onkeyup="value=value.replace(/[^A-Za-z0-9_]/g,'');" placeholder="Please Input Password"></el-input></span>&ndash;&gt;-->
-            <!--<span slot="footer" class="dialog-footer">-->
-            <!--<el-button @click.native="dialog_createUser=false">Cancel</el-button>-->
-            <!--<el-button type="primary" @click="createUser" >Submit</el-button>-->
-          <!--</span>-->
-        <!--</el-dialog>-->
-
-
-
+<!--create concept UI-->
         <el-dialog
                 :close-on-click-modal="false"
                 :visible.sync="dialogFormVisible"
@@ -272,7 +189,7 @@
             </div>
         </el-dialog>
 
-
+<!-- change concept name UI-->
         <el-dialog
                 :close-on-click-modal="false"
 
@@ -333,7 +250,7 @@
 
         </el-dialog>
 
-
+<!-- add reference URL UI-->
 
         <el-dialog
                 :close-on-click-modal="false"
@@ -370,7 +287,7 @@
 
 
 
-
+<!--change relationship citation UI-->
 
         <el-dialog
                 :close-on-click-modal="false"
@@ -404,6 +321,8 @@
                 </el-button>
             </div>
         </el-dialog>
+
+<!--        select relationship UI   -->
 
         <el-dialog
                 :close-on-click-modal="false"
@@ -602,16 +521,7 @@
 <script>
     import * as d3 from "d3";
 
-
-    import { list } from 'node-7z'
-    import linkfile from 'raw-loader!./../assets/temp_link.txt'
-
     import {config} from './../assets/config'
-    // Vue.prototype.appConfig = config;
-
-    //test branch
-    import Vue from 'vue'
-    import $ from 'jquery'
     import {
         getNodeSelfPath,
         setLinkGroup,
@@ -740,7 +650,7 @@
                                         type: 'success',
                                         message: 'The concept is deleted!'
                                     });
-                                ////
+
                                 deleteNode(this, node,select_node)
                                 // console.log('test !!!',select_node,node);
                                 // this.info.nodes.splice(node,1);
@@ -817,18 +727,14 @@
                             })
 
                         },
-                        /////
+
 
 
                     },
                     {
                         title: 'Change Concept Name',
                         action:(node_id)=>{
-                            // if(this.config.Citations === true) {
                             this.dialogFormVisible_change_node_name = true;
-                            // }
-
-                            // this.dialogFormVisible_relationship = true;
                             this.node_id = node_id;
 
                         },
@@ -963,9 +869,7 @@
                     url: "https://graphdb.ics.uci.edu/Shibboleth.sso/Session",
                     method:'get'
                 }).then(response =>{
-                    console.log(response);
                     this.username = response.data.attributes[0].values[0];
-                    console.log('shibboleth username',this.username);
                     this.handleShow();
                 });
             }
@@ -975,10 +879,7 @@
             }
 
 
-            console.log('route name',this.$route.name);
-            console.log('config js',this.config, config.admin_users);
 
-            // this.handleShow();
             this.renderGraph(this.info);
             this.readTxt();
             this.centerDialogVisible = false;
@@ -986,26 +887,14 @@
 
         },
 
-        // destroyed() {
 
-        // },
 
         methods: {
 
             initWebSocket(){
                 try {
                 let protocol = this.config.protocol
-                // let protocol = location.protocol === 'https'
-                //     ? 'wss://localhost:8080/connectToWebsocket'
-                //     : 'ws://localhost:8080/connectToWebsocket';
-                // console.log(protocol)
-                // let protocol = 'wss://graphdb.ics.uci.edu:8080/connectToWebsocket'
-
-
-
-
                 this.websocket = new WebSocket(protocol);
-                // this.websocket = new WebSocket(protocol);
                 this.websocket.onmessage = this.websocketonmessage;
                 this.websocket.onopen = this.websocketonopen;
                 this.websocket.onerror = this.websocketonerror;
@@ -1016,24 +905,18 @@
                     }
                 }
             },
-            websocketonopen(){ //连接建立之后执行send方法发送数据
+            websocketonopen(){ //after getting a successful connection
                 console.log('Connection Successful');
             },
-            websocketonerror(){//连接建立失败重连
+            websocketonerror(){//reconnect if the connection fails
                 this.initWebSocket();
             },
-            websocketonmessage(e){ //数据接收
-                // const redata = JSON.parse(e.data);
+            websocketonmessage(e){ //receive data
                 this.returnData = e.data;
-                console.log('backend data',e.data)
-                console.log('return data', this.returnData)
-                console.log(this.returnData === 'X')
                 if(this.returnData !== 'X' && this.returnData !== 'Login Successful') {
-                    console.log('Parse data', JSON.parse(this.returnData));
                     let parseData = JSON.parse(this.returnData);
                     // For Moving Node
                     if (parseData.method === 'moveNode') {
-                        console.log('moveNode');
                         let nodeName = parseData.data.node;
                         let newX = parseData.data.xpos;
                         let newY = parseData.data.ypos;
@@ -1049,8 +932,7 @@
                     }
                     // For Adding Node
                     else if (parseData.method === 'addNode') {
-                        console.log('who',parseData)
-                        console.log('debug', this.info)
+
                         let new_node = {
                             'id': this.info.nodes.length,
                             "type": "node",
@@ -1065,7 +947,7 @@
                         this.info.nodes.push(new_node);
 
                         this.info = this.changeInfoType(this.info.nodes, this.info.links);
-                            // this.updateGraph();
+
                         this.renderGraph(this.info);
 
 
@@ -1095,7 +977,6 @@
 
                         for(let i =this.info.links.length-1; i>=0; i-- )
                         {
-                            // console.log('link index',i,node_id);
                             if(this.info.links[i].source.id === node_id
                                 || this.info.links[i].target.id === node_id)
                             {
@@ -1106,8 +987,6 @@
 
                         for(let i = 0; i < this.info.nodes.length;i++)
                         {
-                            // console.log(i);
-                            // console.log(this.info.nodes[i].id,this.info.nodes[i].index);
                             this.info.nodes[i].id = i;
                             for(let j =0; j<this.info.links.length; j++){
                                 if(this.info.links[j].source.properties.name === this.info.nodes[i].properties.name){
@@ -1121,11 +1000,6 @@
 
                         this.info = this.changeInfoType(this.info.nodes,this.info.links)
                         this.renderGraph(this.info)
-
-
-                        // this.updateGraph();
-
-
 
                     }
                     //for Adding Links
@@ -1154,12 +1028,9 @@
                         this.info.links.push(new_link);
                         this.info = this.changeInfoType(this.info.nodes,this.info.links)
                         this.renderGraph(this.info)
-                        // this.updateGraph();
                     }
                     // for Removing Link
                     else if(parseData.method === 'removeLink'){
-
-
 
                         for(let i =0 ; i< this.info.links.length;i++){
                             if(this.info.links[i].label === parseData.data.label
@@ -1172,7 +1043,6 @@
                         }
                         this.info = this.changeInfoType(this.info.nodes,this.info.links)
                         this.renderGraph(this.info);
-                        // this.updateGraph();
                     }
                     // for Changing link name
                     else if(parseData.method === 'changeLink'){
@@ -1185,7 +1055,6 @@
                         }
                         this.info = this.changeInfoType(this.info.nodes,this.info.links);
                         this.renderGraph(this.info);
-                        // this.updateGraph();
                     }
                 }
 
@@ -1199,35 +1068,7 @@
 
             },
 
-            updateGraph(){
-                let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
-                this.websocketsend(getUserGraph);
-
-                let newNode = {};
-
-                setTimeout(()=>{
-                    let user_graph = JSON.parse(this.returnData);
-                    console.log('test add node',user_graph);
-
-                    let user_nodes = user_graph.nodes;
-
-                    let user_links = user_graph.links;
-                    let change_node_type = user_nodes.map(function (element) {
-                        element.id = Number(element.id);
-                        return element
-                    });
-                    let change_link_type = user_links.map(function (element) {
-                        element.id = Number(element.id);
-                        element.source = Number(element.source);
-                        element.target = Number(element.target);
-                        return element
-                    });
-                    this.info.nodes = change_node_type;
-                    this.info.links = change_link_type;
-                    this.renderGraph(this.info);
-                },100)
-            },
-
+            // change the data type to string for storing them in the database
             changeInfoType(nodes,links){
                 let node_to_string = nodes.map(function (element) {
                     return {'id':element.id, 'type':element.type, 'properties':{'name':element.properties.name},
@@ -1245,22 +1086,13 @@
                         "type": element.type,
                         "citation": element.citation,
                         "label": element.label
-                        // 'x_end':element.x_end,
-                        // 'x_start':element.x_start,
-                        // 'y_end':element.y_end,
-                        // 'y_start':element.y_start,
 
                     }
 
                 });
-
-                // console.log('stringfy node', node_to_string);
-                // console.log('stringfy links', link_to_string);
-
                 let new_info = [];
                 new_info.nodes = node_to_string;
                 new_info.links = link_to_string;
-                // this.info = new_info;
                 return new_info;
             },
 
@@ -1300,7 +1132,6 @@
                     },500)
 
                     setTimeout(()=>{
-                        console.log(JSON.parse(this.returnData));
                         let user_graph = JSON.parse(this.returnData);
                         this.showLogin = false;
                         this.username = this.change_username;
@@ -1310,8 +1141,6 @@
                         this.disable_dbclick = false;
                         let user_nodes = user_graph.nodes;
                         let user_links = user_graph.links;
-                                    // let test = response.data;
-
                         let change_node_type = user_nodes.map(function (element) {
                             element.id = Number(element.id);
                             return element
@@ -1334,109 +1163,12 @@
 
                     },1000)
 
-
-                    // this.$axios({
-                    //     url: '/checkUserCredentials',
-                    //     method: 'post',
-                    //     data: {
-                    //         user: this.change_username,
-                    //         password: this.password
-                    //
-                    //
-                    //     }
-                    //
-                    // }).then(response =>{
-                    //
-                    //     console.log('check the credential',response);
-                    //     if(response.status === 204)
-                    //     {
-                    //
-                    //         this.$message(
-                    //
-                    //             {
-                    //                 type: 'warning',
-                    //                 message: 'Password for '+ this.change_username +' is wrong!'
-                    //             });
-                    //         // this.showLogin = true;
-                    //         this.changeUserVisible = true;
-                    //         // this.username = '';
-                    //         this.password = '';
-                    //         this.change_username = '';
-                    //
-                    //     }
-                    //     else{
-                    //
-                    //         this.$axios({
-                    //             url: '/getUserGraph',
-                    //             method: 'post',
-                    //             data: {
-                    //                 user: this.change_username,
-                    //
-                    //             }
-                    //
-                    //         }).then(response => {
-                    //             if (response.status === 204) {
-                    //                 this.$message(
-                    //                     {
-                    //                         type: 'warning',
-                    //                         message: 'User username does not exist !'
-                    //                     });
-                    //
-                    //                 this.changeUserVisible = true;
-                    //             }
-                    //             this.showLogin = false;
-                    //             this.username = this.change_username;
-                    //             this.change_username = '';
-                    //             this.password = '';
-                    //             this.changeUserVisible = false;
-                    //             this.disable_dbclick = false;
-                    //             let user_nodes = response.data.nodes;
-                    //             let user_links = response.data.links;
-                    //             // let test = response.data;
-                    //
-                    //             let change_node_type = user_nodes.map(function (element) {
-                    //                 element.id = Number(element.id);
-                    //                 return element
-                    //             });
-                    //
-                    //             let change_link_type = user_links.map(function (element) {
-                    //                 element.id = Number(element.id);
-                    //                 element.source = Number(element.source);
-                    //                 element.target = Number(element.target);
-                    //                 return element
-                    //             });
-                    //
-                    //
-                    //             this.info.nodes = change_node_type;
-                    //             this.info.links = change_link_type;
-                    //             this.current_user = response.data.user;
-                    //             this.$message(
-                    //
-                    //                 {
-                    //                     type: 'success',
-                    //                     message: 'Welcome Back, ' + this.current_user
-                    //                 });
-                    //             this.renderGraph(this.info);
-                    //
-                    //             // else {
-                    //             //     this.$router.push({
-                    //             //         name: 'home',
-                    //             //         params: {username: this.username}
-                    //             //     })
-                    //             // }
-                    //         })
-                    //
-                    //     }
-                    //
-                    // });
-
-
                 }
 
             },
 
 
-
+             // the dashboard for the graph statistics
             getGraphStatistics(){
 
                 console.log('haha');
@@ -1445,21 +1177,9 @@
                     name: 'dashboard',
                     params:{
                         username: this.username,
-                        // password: this.password
                     }
                 });
 
-                // let routeUrl =  this.$router.resolve({
-                //     name: 'dashboard',
-                //     query:{
-                //         username: this.username,
-                //         password: this.password
-                //     }
-                //
-                // });
-                // console.log(routeUrl.href);
-                //
-                // window.open(routeUrl.href, '_blank');
             },
 
             instruction(){
@@ -1475,19 +1195,10 @@
 
             readTxt(){
 
-
-                // console.log(linkfile.split('\n'));
-                // let link_name = linkfile.split('\n').map(function (element) {
-                //
-                //     return {'value':element, 'label':element}
-                // });
-                console.log(this.config.relationships);
-
                 let link_name = this.config.relationships.map(function (element) {
                     return {'value':element, 'label':element}
                 });
                 this.link_list = link_name;
-                console.log(this.link_list.length);
                 if(this.link_list.length === 1){
 
                     this.relationship = this.link_list[0].value;
@@ -1508,24 +1219,12 @@
                     this.new_node_name = [];
                     this.disableSelect = false;
 
-                    // this.$axios({
-                    //     url:'https://en.wikipedia.org/w/api.php?action=query&generator=prefixsearch&gpssearch='+this.input+'&gpslimit=10&prop=extracts&exsentences=1&format=json&exintro&origin=*&callback=',
-                    //     method:'get'
-                    // }).then(response=>{
-                    //     response.data = response.data.slice(5);
-                    //     response.data = response.data.slice(0,response.data.length-1);
-                    //     let node_info = JSON.parse(response.data).query.pages;
-                    //     console.log(node_info)
-                    //
-                    // });
-
                     this.$axios({
                         url: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=intitle:+"+this.input+"+&srprop=snippet&format=json&origin=*&callback=",
                         method:'get'
 
                     }).then(response =>{
                         let term = [];
-                        console.log(response.data);
                         response.data = response.data.slice(5);
                         response.data = response.data.slice(0,response.data.length-1);
                         let node_info = JSON.parse(response.data).query.search;
@@ -1537,9 +1236,7 @@
                                 continue;
                             node_info[i].snippet = node_info[i].snippet.replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'')
                             term.push(node_info[i]);
-                            // console.log(node_info[i].snippet.replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,''));
                             this.snippet[node_info[i].title] = node_info[i].snippet;
-                            // console.log(node_info[i].snippet)
                         }
 
                         this.node_list = term.map(function (element) {
@@ -1551,7 +1248,6 @@
                         }else {
                             this.node_value = this.node_list[0].value;
                             this.new_node_name = this.node_list[0].value;
-                            console.log('Current Node value', this.node_value);
                             this.select_snippet = this.node_list[0].snippet;
 
                             this.btnChangeEnable = false;
@@ -1592,7 +1288,6 @@
                 if(flag === false)
                 {
                     this.viewGraph_btn_status = true;
-                    console.log('o')
                 }else {
                     this.disable_submit = true;
 
@@ -2062,7 +1757,6 @@
             searchConcept(){
                 let linklist = [];
                 let nodelist = [];
-                console.log('concept value', this.collective_node_value);
                 this.$axios({
                     url: '/getAllNodeConnections',
                     method: 'post',
@@ -2070,7 +1764,6 @@
                         node:this.collective_node_value
                     }
                 }).then(response => {
-                    console.log(response);
                     linklist = response.data.links.map(function (element) {
                         element.source = Number(element.source);
                         element.target = Number(element.target);
@@ -2086,11 +1779,9 @@
                     this.temp_nodelist = nodelist;
                     this.temp_linklist = linklist;
 
-                    console.log('temp node',this.temp_nodelist);
-                    console.log('temp list',this.temp_linklist);
+
                     this.dialogFormVisible_viewCollective = false;
-                    // this.info.nodes = nodelist;
-                    // this.info.links = linklist;
+
                     this.info.nodes = this.temp_nodelist;
                     this.info.links = this.temp_linklist;
 
@@ -2123,14 +1814,12 @@
             createUser:function(){
 
 
-                console.log('create user function',this.newUsername);
                 let createUser = `{"method":"createNewUser", "data":{"user": \"${this.newUsername}\",
                  "password":\"${this.newPassword}\"}}`;
                 console.log(createUser);
                 this.websocketsend(createUser);
 
                 setTimeout(()=>{
-                    console.log((this.returnData));
                     if(this.returnData === 'User exists'){
                         this.$message(
                             {
@@ -2195,19 +1884,12 @@
 
 
 
-
-
-                console.log('cccc');
-                console.log('handleshow username', this.username);
-                console.log(this.$route.params);
-
                 setTimeout(()=>{
                     let getUserGraph = `{"method":"getUserGraph","data":{"user": \"${this.username}\"}}`;
                     this.websocketsend(getUserGraph);
                 },500)
 
                 setTimeout(()=>{
-                    console.log(JSON.parse(this.returnData));
                     let user_graph = JSON.parse(this.returnData);
                     if(this.config.admin_users.indexOf(this.username)!== -1){
                         this.dashboard_show = true;
@@ -2246,92 +1928,7 @@
 
                 },1000)
 
-                // this.$axios({
-                //     url:'/getUserGraph',
-                //     method:'post',
-                //     data:{user:this.username},
-                //
-                //
-                // }).then(response=>{
-                //     if (response.status === 204){
-                //         alert('Wrong username or password !')
-                //         this.centerDialogVisible=true;
-                //     }
-                //     else {
-                //         if(this.config.admin_users.indexOf(this.username)!== -1){
-                //             this.dashboard_show = true;
-                //         }
-                //
-                //         this.centerDialogVisible=false;
-                //         this.disable_dbclick = false;
-                //         console.log(response);
-                //         this.showLogin = false;
-                //         let user_nodes = response.data.nodes;
-                //         let user_links = response.data.links;
-                //         // let test = response.data;
-                //
-                //         let change_node_type = user_nodes.map(function (element) {
-                //             element.id = Number(element.id);
-                //
-                //             return element
-                //         });
-                //
-                //         let change_link_type = user_links.map(function (element) {
-                //             element.id = Number(element.id);
-                //             element.source = Number(element.source);
-                //             element.target = Number(element.target);
-                //             return element
-                //         });
-                //
-                //
-                //         this.info.nodes = change_node_type;
-                //         this.info.links = change_link_type;
-                //         this.current_user = response.data.user;
-                //         this.$message(
-                //
-                //             {
-                //                 type: 'success',
-                //                 message: 'Welcome Back, ' + this.current_user
-                //             });
 
-
-                        // let test_info = {
-                        //     "links":
-                        //         [{"type":"link","id":0,"label":"inhibits","source":0,"target":1,"citation":"www.1.com"},
-                        //             {"type":"link","id":1,"label":"causes","source":1,"target":2},
-                        //             {"type":"link","id":2,"label":"causes","source":2,"target":0},
-                        //             {"type":"link","id":3,"label":"causes","source":1,"target":3,"citation":"www.1.com"},
-                        //             {"type":"link","id":4,"label":"inhibits","source":3,"target":4,"citation":"www.2.com"},
-                        //             {"type":"link","id":5,"label":"causes","source":4,"target":5,"citation":"www.1.com"},
-                        //             {"type":"link","id":6,"label":"inhibits","source":5,"target":6,"citation":"www.3.com"},
-                        //             {"type":"link","id":7,"label":"causes","source":0,"target":6,"citation":"www.baba.com"},
-                        //             {"type":"link","id":8,"label":"inhibits","source":6,"target":7,"citation":"www.baidu.com"},
-                        //             {"type":"link","id":9,"label":"causes","source":2,"target":8,"citation":"www.xixi.com"}]
-                        //     ,
-                        //     "nodes":
-                        //         [{"id":0,"type":"node","label":"Concept","properties":{"name":"B"},"x":-233.93094779272644 , "y":480.40879504333293},
-                        //             {"id":1,"type":"node","label":"Concept","properties":{"name":"A"},"x": 412.16742175502173, "y":288.3537231763124 },
-                        //             {"id":2,"type":"node","label":"Concept","properties":{"name":"Unicode subscripts and superscripts"},"x":-24.355730040504362 , "y":-168.00840455899814},
-                        //             {"id":3,"type":"node","label":"Concept","properties":{"name":"P"},"x": -265.7761991054809, "y":99.67607753879349},
-                        //             {"id":4,"type":"node","label":"Concept","properties":{"name":"O"},"x":340.69744120313834 , "y":-168.02449472166003},
-                        //             {"id":5,"type":"node","label":"Concept","properties":{"name":"50 (number)"},"x":14.575617913417108 , "y":413.94742531291297},
-                        //             {"id":6,"type":"node","label":"Concept","properties":{"name":"V"},"x":-313.91506028531705 , "y":-168.10370929458034},
-                        //             {"id":7,"type":"node","label":"Concept","properties":{"name":"Fraktur"},"x":300.31972234599897 , "y":79.8999407499341},
-                        //             {"id":8,"type":"node","label":"Concept","properties":{"name":"Palatalization (phonetics)"},"x": 614.2978475991977, "y":312.2183201318606}]
-                        // };
-                        //
-                        // this.info = test_info;
-
-
-
-                        // this.renderGraph(this.info);
-                    // }
-
-                // }).catch(error=>{
-                //     this.showLogin = true;
-                //     this.username = '';
-                //     // this.password = '';
-                // })
 
 
             },
@@ -2351,18 +1948,8 @@
                 this.viewGraph_btn_status = true;
                 this.dashboard_show=false;
                 this.username = '';
-                // this.password = '';
-                // this.info= {
-                //     nodes:[],
-                //     links:[]
-                // };
-                // this.$router.push({name:'login'})
-                // this.centerDialogVisible=true;
-                // this.renderGraph(this.info)
-
                 let url1 = "https://shib.nacs.uci.edu/idp/profile/Logout";
                 let url2 = "https://graphdb.ics.uci.edu/dist/";
-                // let url2 = "https://www.youtube.com/";
 
 
 
@@ -2393,7 +1980,7 @@
 
 
 
-
+// clear all the operations after finishing one operation in order to avoid conflict
             selectClear() {
                 this.node_value = '';
                 this.link_value = '';
@@ -2401,11 +1988,6 @@
                 this.new_link_name = '';
                 this.init_node_value = '';
                 this.collective_node_value = '';
-
-                // this.optionVisible_init_nodes=false;
-                // this.optionVisible_add_nodes=false;
-                // this.optionVisible_change_nodes=false;
-
                 this.optionVisible_add_link=false;
                 this.optionVisible_change_link=false;
                 this.optionVisible_viewGraph = false;
@@ -2433,12 +2015,10 @@
                 else if (this.dialogFormVisible_change_node_name === true){
                     this.new_node_name = val
                     this.select_snippet = this.snippet[this.node_value]
-                    console.log('snippet',this.select_snippet)
                 }
                 else if(this.dialogFormVisible === true){
                     this.node_value = val;
                     this.select_snippet = this.snippet[this.node_value]
-                    console.log('snippet',this.select_snippet)
                 }
                 else if(this.dialogFormVisible_initGraph === true){
                     this.init_node_value = val;
@@ -2459,13 +2039,10 @@
                 this.dialogFormVisible_new_relationship = false;
                 this.dialogFormVisible_relationship  = false;
                 this.temp.length = 0;
-                // this.newPassword = '';
                 this.newUsername = '';
                 this.btnChangeEnable = true;
                 this.dialogFormVisible_initGraph = false;
 
-
-                // this.ifClicked = false;
                 this.selectClear();
 
 
@@ -2482,10 +2059,8 @@
             },
             InitGraph:function()
             {
-                console.log(this.info);
-                console.log(document.getElementById('init'));
+
                 this.btnChangeEnable = true;
-                console.log('add a start node');
                 let init_node= {
                     "id": 0,
                     "type" : "node",
@@ -2494,11 +2069,7 @@
                 };
 
                 this.dialogFormVisible_initGraph  = false;
-
-
                 this.info.nodes.push(init_node);
-
-
                 this.renderGraph(this.info);
                 this.selectClear();
             },
@@ -2507,12 +2078,9 @@
             addNodes(){
 
 
-
-                        // let flag = this.doubleClick(this.info, this.info.nodes, this.node_value, this.select_snippet);
                         let flag = addNodes_by_dbclick(this.username,this.info,this.info.nodes,
                             this.node_value, this.select_snippet,localStorage.getItem('zoom'),this.mouse_x,this.mouse_y,this)
                         this.btnChangeEnable = true;
-                        console.log('flag', flag)
                         if (flag === true) {
                             this.dialogFormVisible = false;
                             this.selectClear();
@@ -2927,10 +2495,7 @@
                     this.disable_submit = true;
                     this.disable_searchConcept = false;
                 }
-                console.log('render data', info);
                 //make all links has if vote localstorage
-
-
 
                 if(this.showLogin === false && this.viewGraph_btn_status === true)
                 {
@@ -2945,20 +2510,14 @@
 
                 let {links, nodes} = info;
 
-                //关系分组
+                //links
                 setLinkGroup(links);
-                console.log('render graph link',links);
                 let nodes_name = '';
                 nodes.map(function (element) {
                     nodes_name = nodes_name.concat(element.properties.name,'%7C');
                     return nodes_name
 
                 });
-
-
-
-
-                // console.log('nodes_name',nodes_name)
 
                 if(nodes !== []) {
                     this.$axios({
@@ -2973,7 +2532,6 @@
                         if(nodes.length !== 0) {
                            wiki = JSON.parse(response.data).query.pages;
                         }
-                        console.log('wiki', wiki);
                         let extract = [];
                         for(let i =0; i<Object.keys(wiki).length;i++){
                             let snippet = String(wiki[Object.keys(wiki)[i]].extract).replace(/<[^>]*>|/g,"").replace(/\(.*?\)/g,'');
@@ -2981,10 +2539,7 @@
                             let title = String(wiki[Object.keys(wiki)[i]].title)
                             extract[title] = snippet
                         }
-                        // console.log('extract',extract)
-                        // for(let i  = 0; i<nodes.length;i++){
-                        //     nodes[i].snippet = extract[nodes[i].properties.name]
-                        // }
+
 
                         for(let i =0; i< Object.keys(extract).length; i++){
                             if(localStorage.hasOwnProperty(Object.keys(extract)[i])){
@@ -3074,57 +2629,28 @@
                 }
 
 
-
-
-
-
-
                 let zoom = d3.behavior.zoom()
                     .scaleExtent([.4, 2])
                     .on("zoom", zoomed)
                     .scale(localStorage.getItem('zoom'));
 
-                console.log('zoom',zoom);
-
-
-
-
-                // let svg_drag = d3.behavior.drag()
-                //     .on('dragstart',null)
-                //     .on('drag',null)
-                //     .on('dragend',()=>{console.log('end')})
-
 
                 let whole_graph = d3.select("#graph");
-
-
 
                 let svg = d3.select("#graph").append("svg")
 
                     .attr("pointer-event", "all")
                     .attr("preserveAspectRatio", "xMidYMid meet")//自适应容器大小
-                    // .attr('width', 921)
-                    // .attr('height', 899)
+
                     .attr("viewBox", "-500 -200 2000 2000")
-                    // .attr("viewBox", "0 0 3000 3000")
                     .call(zoom)
-                    // .call(svg_drag)
                     .on('touchmove',null)
-                    // .on('mousemove',function(evt){
-                    //     let loc = cursorPoint(evt);
-                    //     console.log('svm mouse',loc.x, loc.y);
-                    //
-                    // })
                     .on("dblclick", (node, i)=>{
-                        console.log('svg node',node,i,d3.select(d3.event.target).datum());
-                        console.log('d3 event', d3.event);
-                        console.log('svm mouse',that.mouse_x, that.mouse_y);
 
                         if (d3.event.defaultPrevented) return;
                         clearTimeout(this.clickTimeId);
 
                         if(this.readOnly === true || this.disable_dbclick === true){
-
                             console.log('read mode only')
                         }
 
@@ -3143,7 +2669,6 @@
                     if(localStorage.getItem(key)=== null){
                         localStorage.setItem(key, '00');
                     }
-                    console.log(localStorage)
                 }
 
                 // find the mouse positions of the svg
@@ -3153,7 +2678,6 @@
 
                 function cursorPoint(evt){
                     pt.x = evt.clientX; pt.y = evt.clientY;
-                    // console.log('svm mouse',pt.x, pt.y);
                     return pt.matrixTransform(svg_select.getScreenCTM().inverse());
                 }
 
@@ -3161,13 +2685,8 @@
                     let loc = cursorPoint(evt);
                     that.mouse_x = loc.x;
                     that.mouse_y = loc.y;
-                    // console.log('svm mouse !!!',this.mouse_x, this.mouse_y);
-                    // Use loc.x and loc.y here
+
                 },false);
-
-
-
-                // d3.selectAll('rect').on('mousedown.drag',null);
 
                 let circle_g = svg.selectAll("circle")
                     .data(force.nodes())//表示使用force.nodes数据
@@ -3182,31 +2701,15 @@
                         if (d3.event.defaultPrevented) return;
 
                         this.dragNode = node;
-                        console.log('dragNode',node);
                         clearTimeout(this.clickTimeId);
 
                         this.clickTimeId = setTimeout( ()=> {
                                 if(this.readOnly === true){
-                                    // this.$message(
-                                    //     {
-                                    //         type: 'Warning',
-                                    //         message: 'Read Only Mode'
-                                    //     });
+
                                     console.log('read only mode')
                                 }
                                 else {
 
-
-                                    // this.temp.push(node.index);
-                                    // console.log('liuliu', this.temp);
-                                    // if (this.temp.length === 2 && this.temp[0] !== this.temp[1]) {
-                                    //     this.dialogFormVisible_link = true;
-                                    //
-                                    // }
-                                    // else if (this.temp.length === 2 && this.temp[0] === this.temp[1]) {
-                                    //     this.temp.length = 0
-                                    // }
-                                    // this.singleClick(info, node, temp, this.state2);
                                     clickStyle(node, i, this);
                                 }
                             }
@@ -3216,7 +2719,6 @@
                     .on('mouseover', (node) => {
                         if (d3.event.defaultPrevented) return;
                         this.showdetail_node = true;
-                        // console.log(node);
                         this.detailValue = node;
                         this.detailname = node.properties.name;
                         d3.select('.g_circle_'+ node.index).select('circle')
@@ -3225,11 +2727,8 @@
                         d3.select('.g_circle_'+ node.index).select('tspan')
                             .attr('font-size',25)
 
-                        // showNodeInfo(node, this);
-                        // showCircleBorderOuterArc(node, i);
                     })
                     .on('mouseout',(node)=>{
-                        // this.showdetail_node = false;
                         d3.select('.g_circle_'+ node.index).select('circle')
                             .attr('r',40);
 
@@ -3237,11 +2736,6 @@
                             .attr('font-size',15)
 
                     })
-                    // .on('dblclick',()=>{
-                    //     if (d3.event.defaultPrevented) return;
-                    //     console.log('dblclick')
-                    //
-                    // })
                     .on("dblclick", (node )=>{
 
 
@@ -3269,11 +2763,7 @@
                     .on('contextmenu',(d,node)=>{
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
-                            // this.$message(
-                            //     {
-                            //         type: 'Warning',
-                            //         message: 'Read Only Mode'
-                            //     });
+
                             console.log('read only mode')
                         }
                         else {
@@ -3292,20 +2782,15 @@
 
 
 
-                //单击改变节点颜色 表明选中
+                //click the node to change the color
                 function clickStyle(node, i, _this){
 
-                    console.log(_this.ifClicked);
-                    // _this.ifClicked = true;
 
 
                     circle_g.attr('node', function(n) {
-                        console.log('debug',n.index, node.index)
                         if(n.index === node.index && _this.ifClicked===false ) {
                             d3.select('.g_circle_'+ n.index).select('circle').style('fill','red');
-                            console.log('haha',d3.select('.g_circle_'+ n.index).select('circle'));
                             _this.ifClicked = true;
-                            console.log('新选的 true',_this.ifClicked);
 
                         }
                         else if(n.index === node.index && _this.ifClicked===true )
@@ -3313,11 +2798,9 @@
                             d3.select('.g_circle_'+ n.index).select('circle')
                                 .style('fill', function (node) { return getCircleColor(node);});
                             _this.ifClicked = false;
-                            console.log('重复选的颜色变回去 false',_this.ifClicked);
 
                         }
                         else if(n.index !== node.index) {
-                            console.log('node are different');
                             d3.select('.g_circle_'+ n.index)
                                 .select('circle')
                                 .style('fill', function (node) { return getCircleColor(node);})
@@ -3329,14 +2812,13 @@
 
 
 
-                //圆圈
+                //nodes attributes
                 let circle = circle_g.append("circle")
                     .style("stroke-width", "2px")
                     .attr("r", 40)//设置圆圈半径
                     .style("fill", function (node) { return getCircleColor(node); })
 
                 ;
-                console.log('circle',circle)
 
                 let text = circle_g.append("text")
                     .attr("dy", ".35em")
@@ -3344,7 +2826,7 @@
                     .style('fill', "black")
                     .attr('x',function(d){ appendCircleText(d, this); });
 
-                //圆圈的提示文字
+                //texts in the circles
                 circle.append("svg:title").text(function(node) {
                     switch (node.type) {
                         case 'node': return node.properties.name;
@@ -3356,49 +2838,49 @@
                         case 'node': return node.properties.name;
                     }
                 });
-                //设置连接线
+                //make link
                 let defs = svg.append("g").append("defs");
 
                 defs.append("marker")
                     .attr("id", "end")
-                    .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
+                    .attr("markerUnits","strokeWidth")
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 20)//标识的大小
+                    .attr("markerWidth", 20)
                     .attr("markerHeight", 20)
-                    .attr("viewBox", "0 -4 12 15")//坐标系的区域
-                    .attr("refX", 0)//箭头坐标
+                    .attr("viewBox", "0 -4 12 15")
+                    .attr("refX", 0)
                     .attr("refY", 0)
-                    .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
+                    .attr("orient", 'auto')
                     .append("svg:path")
-                    .attr("stroke-width",7)//箭头宽度
-                    .attr("d", "M0,-5L10,0L0,5")//箭头的路径
-                    .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
+                    .attr("stroke-width",7)
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .attr('fill', 'rgba(0,0,0, 0.7)');
 
                 defs.append("marker")
                     .attr("id", "start")
-                    .attr("markerUnits","strokeWidth")//设置为strokeWidth箭头会随着线的粗细发生变化
+                    .attr("markerUnits","strokeWidth")
                     .attr("markerUnits", "userSpaceOnUse")
-                    .attr("markerWidth", 20)//标识的大小
+                    .attr("markerWidth", 20)
                     .attr("markerHeight", 20)
-                    .attr("viewBox", "0 -4 12 15")//坐标系的区域
-                    .attr("refX", 0)//箭头坐标
+                    .attr("viewBox", "0 -4 12 15")
+                    .attr("refX", 0)
                     .attr("refY", 0)
-                    .attr("orient", 'auto')//绘制方向，可设定为：auto（自动确认方向）和 角度值
+                    .attr("orient", 'auto')
                     .append("svg:path")
-                    .attr("stroke-width",7)//箭头宽度
-                    .attr("d", "M0,0L10,-5L10,5")//箭头的路径
-                    .attr('fill', 'rgba(0,0,0, 0.7)');//箭头颜色
+                    .attr("stroke-width",7)
+                    .attr("d", "M0,0L10,-5L10,5")
+                    .attr('fill', 'rgba(0,0,0, 0.7)');
 
 
 
-
+                //links attributes
                 const edges_line = svg.append("g").selectAll(".edgepath")
                     .data(force.links())
                     .enter()
                     .append("path")
 
                     .style("stroke", 'black')
-                    .style("stroke-width", 2)//线条粗细
+                    .style("stroke-width", 2)
                     .style("fill-opacity",0)
                     .style("cursor","pointer")
                     .attr("id", function (d, i) { return 'edgepath' + i; })
@@ -3409,15 +2891,10 @@
                         edges_line.style("stroke-width", 3);
                         edges_text.selectAll('textPath').attr("font-size", 20);
                     })
-                    // .on('click', (link) => { this.deleteLine(this.info,link); })
                     .on('contextmenu',(d,link)=>{
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
-                            // this.$message(
-                            //     {
-                            //         type: 'Warning',
-                            //         message: 'Read Only Mode'
-                            //     });
+
                             console.log('read only mode')
                         }else {
                             Menu(this.menu_edge)(d, d3.event, link)
@@ -3444,28 +2921,18 @@
 
                     })
 
-                // .attr("x",250)
-                // .attr('y',25)
-                // .attr('text-anchor',"middle")
-
 
                 function edge_text_Position(){
 
                     return 'rotate(180,40,5)'
                 }
 
-
-
-
-                //设置线条上的文字
                 edges_text.append('textPath')
                     .attr('xlink:href', function (d, i) { return '#edgepath' + i })
-                    // .attr("pointer-events", "none")
                     .attr("font-size", 20)
 
                     .text(function (d ) {
                         let circleText = '';
-                        // console.log('text relationship', d, that);
                         if(d.label && d.label.length > 50){
                             if(that.config.Citations === false) {
                                 circleText =  d.label.substring(0, 50) + '...)';
@@ -3507,12 +2974,6 @@
                         console.log('huahua',d,link);
                         if (d3.event.defaultPrevented) return;
                         if(this.readOnly === true){
-
-                            // this.$message(
-                            //     {
-                            //         type: 'Warning',
-                            //         message: 'Read Only Mode'
-                            //     });
                             console.log('read only mode')
 
                         }
@@ -3525,38 +2986,16 @@
 
 
 
-                function zoomed() {//svg下的g标签移动大小
+                function zoomed() {//zoom function
 
-                    // let _this = this
-                    // _this.zoom_scale = d3.event.scale;
-                    // console.log('scale',this.zoom_scale,_this.zoom_scale)
-                    // console.log(d3.event.scale)
 
                     localStorage.setItem('zoom', d3.event.scale);
-                    // svg.selectAll("g")
-                    //     .attr("transform","translate("+d3.event.translate+")scale(" +  d3.event.scale + ")");
 
-
-                    // that.zoom_scale = localStorage.getItem('zoom');
-                    // that.zoom_scale =  d3.event.scale;
                     svg.selectAll("g").attr("transform", "scale(" +  d3.event.scale + ")");
-                    //
-                    // localStorage.setItem('zoom', that.zoom_scale);
 
-
-                // console.log('local storage',localStorage.valueOf())
-                    // svg.attr("transform", "scale(" +d3.event.scale + ")");
-                    // console.log(d3.event)
-                    // svg.attr("transform", "translate(" +
-                    //     d3.event.transform.x +
-                    //     "," +
-                    //     d3.event.transform.y +
-                    //     ") "
-                    // );
 
                 }
 
-                // console.log('edge line',edges_line);
 
                 function getMarkerArrow(i) {
                     svg.append("defs").append("marker")   //箭头
@@ -3601,7 +3040,7 @@
 
 
 
-                function drag(_this){//拖拽函数
+                function drag(_this){//drag function to control the drag action of nodes
 
                     const mouse_line = svg.append("g").append("path")
                         .attr('id','mouse_link')
@@ -3615,9 +3054,7 @@
                         d3.event.sourceEvent.stopPropagation();
                         _this.select_circle = 'g_circle_' + String(i);
 
-                        // console.log('start node',d);
                         _this.if_drag = true;
-                        console.log(_this.if_drag)
 
 
                         if(_this.ifClicked===true ) {
@@ -3628,27 +3065,15 @@
                             force.stop();
                             _this.original_dx =  d.px
                             _this.original_dy = d.py;
-                            console.log('start position',_this.original_dx, _this.original_dy)
 
                         }
 
-                        d3.event.sourceEvent.stopPropagation(); //取消默认事件
-                        d.fixed = true;//拖拽开始后设定被拖拽对象为固定
+                        d3.event.sourceEvent.stopPropagation();
+                        d.fixed = true;
 
                     })
 
                         .on('drag', (d,i) =>{
-
-                            // .attr('x',d.x = d3.event.x)
-                            // .attr('y',d.y = d3.event.y)
-                            // _this.select_circle = 'g_circle_' + String(i);
-                            // console.log(_this.select_circle)
-                            // d3.select('.'+_this.select_circle).select('circle')
-                            //     .attr('transform',function(d){
-                            //     return "translate(" + _this.mouse_x  + "," + _this.mouse_y + ")";
-                            // })
-
-                            // console.log(_this.mouse_x)
 
 
 
@@ -3680,16 +3105,12 @@
                                         let end_x = d3.mouse(d3.event.sourceEvent.srcElement)[0] /  localStorage.getItem('zoom');
                                         let end_y = d3.mouse(d3.event.sourceEvent.srcElement)[1]/  localStorage.getItem('zoom');
 
-                                        // console.log(d3.mouse(d3.event.sourceEvent.srcElement)[0],d3.mouse(d3.event.sourceEvent.srcElement)[1], localStorage.getItem('zoom'))
 
                                         return ('M' + d.x + ' '
                                             + d.y + "L" + + end_x
                                             + ' ' + end_y );//绘制直线
                                     }
                                     else {
-
-                                        // d3.select('.g_circle_'+ d3.select(d3.event.sourceEvent.srcElement).datum().index)
-                                        //     .select('circle').style('fill','red');
 
 
                                         return ('M' + _this.mouseLinkLineStartLoc[0] + ' ' + _this.mouseLinkLineStartLoc[1] +
@@ -3713,46 +3134,29 @@
 
 
                         .on('dragend',(d)=>{
-                            console.log(d)
+
                             _this.if_drag = false;
-                            console.log(_this.if_drag)
-                            // console.log('mouse',((d3.event.sourceEvent.target)))
+
                             if(_this.ifClicked===true) {
-                                // console.log('drag end', _this.original_dx, _this.original_dy)
                                 d.px = _this.original_dx;
                                 d.py = _this.original_dy;
-                                // console.log(d3.mouse(d3.event.sourceEvent.target));
-                                // console.log(d3.event)
-                                // console.log(d3.event.sourceEvent.target);
                                 let data = d3.select(d3.event.sourceEvent.srcElement).datum()
-                                // console.log('data',d3.event.sourceEvent.srcElement)
-                                // console.log('datum',data);
-
-
                                 _this.end  = data;
                                 _this.start = d;
 
 
-
                                 if(data!==undefined && _this.end.type!=='link') {
-                                    // console.log('clicked',_this.ifClicked);
                                     if(_this.start.index === _this.end.index)
                                     {
-                                        // d3.select('.g_circle_'+ d.index).select('circle')
-                                        //     .style('fill', function (node) { return getCircleColor(node);});
+
                                         mouse_line.style('opacity', '0');
                                         mouse_line.attr('d', function () {
                                             return ('M' + -2000 + ' '
                                                 + -2000 );//绘制直线
                                         })
 
-
-                                        // _this.ifClicked = false;
                                     }
                                     else {
-                                        // console.log('start', _this.start.properties.name, _this.start.type);
-                                        // console.log('end', _this.end.properties.name, _this.end.type);
-
 
                                         if(_this.config.Citations === true){
 
@@ -3800,7 +3204,6 @@
                               "ypos":\"${d.y}\"}}`;
 
                             _this.websocketsend(moveNode)
-                            // _this.submitData();
 
 
                         });
@@ -3816,9 +3219,9 @@
                         'Manufacturer': '#DDBA9E',
                         'IotInfrastructure': '#6ca5dd',
                         'DeviceAdmin': '#50DD87',
-                    };//圆圈背景色
+                    };
                     return "#FF9D00";
-                    // return color[node.label] || '#C477E9';
+
                 }
 
                 function appendCircleText(d, _this) {
@@ -3836,7 +3239,7 @@
                     } else if (d.label === 'DeviceAdmin') {
                         circleText = d.name;
                     }
-                    //如果小于四个字符，不换行
+
                     if(circleText && circleText.length > 20){
                         circleText = circleText.substring(0,20) + '...'+ circleText.substring(20,circleText.length);
 
@@ -3846,22 +3249,20 @@
                         .text(function(){ return circleText; });
                 }
 
-
+                // the simulations of the graph, update the change of nodes and links (positions)
                 function tick() {
 
-                    circle.attr("transform", transform1);//圆圈
+                    circle.attr("transform", transform1);//nodes
 
 
-                    text.attr("transform", transform2);//顶点文字
+                    text.attr("transform", transform2);//nodes' texts
 
                     edges_line.attr('d', function (d) {
                         if(that.if_drag === true){
                             if(d.source.properties.name === d3.select('.'+that.select_circle).select('circle').data()[0].properties.name){
-                                // console.log('source move',d)
                                 return getNodesLine(d,localStorage.getItem('zoom'),that.if_drag,'source',that.mouse_x,that.mouse_y);//路径
                             }
                              else  if( d.target.properties.name === d3.select('.'+that.select_circle).select('circle').data()[0].properties.name ){
-                                // console.log('target move',d)
                                    return getNodesLine(d,localStorage.getItem('zoom'),that.if_drag,'target',that.mouse_x,that.mouse_y);//路径
                             }
                         }
@@ -3869,7 +3270,7 @@
 
                             return getNodesLine(d, localStorage.getItem('zoom'), that.if_drag, 'null', that.mouse_x, that.mouse_y);
 
-                        //路径
+
                     });
 
 
@@ -3893,6 +3294,9 @@
 
                 //设置圆圈和文字的坐标
                 function transform1(d,i) {
+                        // in this code, there is an issue mentions in the github
+                        // the comment code is trying to keep the previous node positions when we are dragging another node
+
 
 
 
@@ -3924,39 +3328,6 @@
                         // }
 
 
-                    // if(that.if_drag === true && nodeName === that.select_circle){
-                    //     console.log('scale',localStorage.getItem('zoom'))
-                    //     d.x  = that.mouse_x/localStorage.getItem('zoom');
-                    //     d.y = that.mouse_y/localStorage.getItem('zoom')
-                    //     localStorage.setItem('lastMove', String(i));
-                    //     localStorage.setItem('newX',String(d.x));
-                    //     localStorage.setItem('newY',String(d.y));
-                    //
-                    //
-                    //
-                    //     console.log('start',i,d.x,d.y)
-                    //
-                    //
-                    //     return "translate(" + d.x  + "," + d.y + ")";
-                    // }
-                    // else if(that.if_drag === true && nodeName !== that.select_circle){
-                    //
-                    //     console.log('not select',i,d.x,d.y)
-                    //     return "translate(" + d.x  + "," + d.y + ")";
-                    // }
-                    // else{
-                    //
-                    //     if(String(i) === localStorage.getItem('lastMove')){
-                    //         d.x = localStorage.getItem('newX')
-                    //         d.y = localStorage.getItem('newY')
-                    //         return "translate(" + d.x  + "," + d.y + ")";
-                    //     }
-                    //     else {
-                    //
-                    //         return "translate(" + d.x + "," + d.y + ")";
-                    //     }
-                    //
-                    // }
 
                 }
 
@@ -3989,31 +3360,10 @@
 
 
 
-                    // let nodeName = 'g_circle_' + String(i);
-                    // if(that.if_drag === true && nodeName === that.select_circle){
-                    //     d.x  = that.mouse_x/localStorage.getItem('zoom');
-                    //     d.y = that.mouse_y/localStorage.getItem('zoom')
-                    //     return "translate(" + d.x  + "," + d.y + ")";
-                    // }
-                    // else if(that.if_drag === true && nodeName !== that.select_circle){
-                    //
-                    //     return "translate(" + d.x  + "," + d.y + ")";
-                    // }else{
-                    //     if(String(i) === localStorage.getItem('lastMove')){
-                    //         d.x = localStorage.getItem('newX')
-                    //         d.y = localStorage.getItem('newY')
-                    //         return "translate(" + d.x  + "," + d.y + ")";
-                    //     }
-                    //     else {
-                    //         return "translate(" + d.x + "," + d.y + ")";
-                    //     }
-                    //
-                    // }
-
                 }
 
 
-
+                    // right click on nodes or links to open the menu
                 function Menu (menu, openCallback) {
 
                     d3.event.preventDefault();
@@ -4058,9 +3408,7 @@
                             let key = JSON.stringify({'source':select.source.properties.name,
                                 'target':select.target.properties.name,'label':select.label});
 
-                            console.log('menu',select)
-                            console.log(localStorage.getItem(JSON.stringify({'source':select.source.properties.name,
-                                'target':select.target.properties.name,'label':select.label})))
+                            // vote system
                             // 00 means no neg and no pos
                             // 10 means 1 neg and no pos
                             // 01 means no neg and 1 pos
@@ -4082,7 +3430,6 @@
                                     d3.select('.Agree').disable = false;
                                     list.select('.Agree').style('color','green')
                                 }
-                                console.log('Disagree')
                                 d3.select('.Disagree').html('Disagree' + ' '+  String(vote_neg))
                             })
 
@@ -4109,12 +3456,9 @@
                                     list.select('.Disagree').style('color','red')
 
                                 }
-                                console.log('Agree')
                                 d3.select('.Agree').html('Agree' + ' '+  String(vote_pos))
                                 })
 
-
-                            // list.selectAll('button').style('font-weight','bold')
                         };
 
                         // the openCallback allows an action to fire before the menu is displayed
@@ -4238,9 +3582,6 @@
             },
 
             singleClick(info, node,input){
-                // let temp = [];
-
-                // let source = node.id;
 
                 let link_name_set = [];
                 if(this.temp.length ===2 && this.temp[0] !== this.temp[1] )
@@ -4258,8 +3599,6 @@
 
                     };
 
-
-
                         info.links.push(new_link);
                         console.log('new link added', info);
                         this.temp.length = 0;
@@ -4276,14 +3615,12 @@
                     this.renderGraph(info)
                 }
 
-                console.log('current select node id',this.temp)
 
 
             },
 
 
             submitData() {
-                console.log('submit data', this.info);
 
                 this.upload_nodes = this.info.nodes.map(function (element) {
                     return {
@@ -4315,20 +3652,12 @@
                         "type": element.type, "id": String(element.id), "label": element.label,
                         "source": String(element.source.id), "target": String(element.target.id),
                         "citation": element.citation,
-                        // "x_start":String(element.x_start),
-                        // "x_end":String(element.x_end),
-                        // "y_start":String(element.y_start),
-                        // "y_end" : String(element.y_end)
+
                     }
                 });
-                //
-                console.log(this.current_user);
-                console.log('nn', JSON.stringify(this.upload_nodes));
-                console.log('nn', JSON.stringify(this.upload_links));
 
                 let flag = true;
                 let noWeight_node = [];
-                console.log('testtest',this.info);
                 for (let i = 0; i < this.info.nodes.length; i++) {
                     if (this.info.nodes[i].weight === 0) {
                         flag = false;
@@ -4344,7 +3673,6 @@
                     return false;
                 }
                 else{
-                    console.log('submit user', this.current_user);
 
                     this.$axios({
 
@@ -4362,9 +3690,7 @@
 
 
                     }).then(response => {
-                        console.log('pp', JSON.stringify(this.upload_nodes));
-                        console.log('pp', JSON.stringify(this.upload_links));
-                        console.log('success', response)
+
                         this.$message({
                             'type':'success',
                             'message':'Saved Successfully!'
