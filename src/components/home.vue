@@ -2969,7 +2969,7 @@
                     // .attr('width', 921)
                     // .attr('height', 899)
                     //.attr("viewBox", "-500 -200 2000 2000")
-                    .attr(“viewBox”, “-1100 -1000 2200 2000")
+                    .attr("viewBox", "-1100 -1000 2200 2000")
                     // .attr("viewBox", "0 0 1000 1000")
                     .call(zoom)
 
