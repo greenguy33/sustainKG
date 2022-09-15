@@ -3369,7 +3369,7 @@
                                 if(d.citation === undefined){
                                     circleText = d.label;
                                 }else {
-                                    circleText = d.label + ' (' + d.citation + ')';
+                                    circleText = d.label + ' (' + d.citation.substring(0, 50) + '...)';
                                 }
                             }
                         }
