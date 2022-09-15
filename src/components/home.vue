@@ -7,7 +7,6 @@
         <el-header style="text-align: right;height:40px;">
 
 
-
             <div class="grid-content " >
                 <template >
                     <!--<el-button size="medium" type="text" style="margin-right: 700px; color:red" v-show="!viewGraph_btn_status">The graph is a subset!</el-button>-->
@@ -1019,7 +1018,7 @@
 
                         },
 
-                    },
+                    }/*,
                     {
                         title: 'Change citation URL',
                         action:(link_id)=>
@@ -1035,7 +1034,7 @@
 
                         }
 
-                    }
+                    }*/
                 ],
 
 
