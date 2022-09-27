@@ -886,7 +886,7 @@
                         },
 
                     },
-                    {
+                    /*{
                         title: 'Change citation URL',
                         action:(link_id)=>
                         {
@@ -901,7 +901,7 @@
 
                         }
 
-                    }
+                    }*/
                 ],
 
 
