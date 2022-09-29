@@ -11,7 +11,7 @@ let config = {
     // concepts : [],
     //concepts : concepts.txt,
     Voting : false,
-    Citations : false,
+    Citations : true,
     Collaborative : false,
     useShibboleth : true
 
